@@ -50,15 +50,6 @@ var CUSTOM_IMAGES = {
     'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMTZweCIgaGVpZ2h0PSIxNnB4IiB2aWV3Qm94PSIwIDAgMTYgMTYiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8IS0tIEdlbmVyYXRvcjogU2tldGNoIDU1LjIgKDc4MTgxKSAtIGh0dHBzOi8vc2tldGNoYXBwLmNvbSAtLT4KICAgIDx0aXRsZT5ibG9ja2x5L2Nsb3NlPC90aXRsZT4KICAgIDxkZXNjPkNyZWF0ZWQgd2l0aCBTa2V0Y2guPC9kZXNjPgogICAgPGcgaWQ9IlVJIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0iVUkta2l0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNDIuMDAwMDAwLCAtODU3NC4wMDAwMDApIiBmaWxsPSIjRkZGRkZGIj4KICAgICAgICAgICAgPGcgaWQ9ImJsb2NrbHktaWNvbnMiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0wLjAwMDAwMCwgNzIwNi4wMDAwMDApIj4KICAgICAgICAgICAgICAgIDxnIGlkPSJtb3Rvci1jb3B5LTIiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI0LjAwMDAwMCwgMTM1NS4wMDAwMDApIj4KICAgICAgICAgICAgICAgICAgICA8ZyBpZD0iYmxvY2tseS9kaWNlIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxNy4wMDAwMDAsIDEyLjAwMDAwMCkiPgogICAgICAgICAgICAgICAgICAgICAgICA8ZyBpZD0iR3JvdXAtOSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMS4wMDAwMDAsIDEuMDAwMDAwKSI+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8cGF0aCBkPSJNNy43ODUwNjY2NywzLjMzMzQgQzcuMDUxMDY2NjcsMy4zMzM0IDYuNDUxNzMzMzMsMy4wMzM0IDYuNDUxNzMzMzMsMi42NjY3MzMzMyBDNi40NTE3MzMzMywyLjMwMDA2NjY3IDcuMDUxMDY2NjcsMi4wMDAwNjY2NyA3Ljc4NTA2NjY3LDIuMDAwMDY2NjcgQzguNTE4NCwyLjAwMDA2NjY3IDkuMTE4NCwyLjMwMDA2NjY3IDkuMTE4NCwyLjY2NjczMzMzIEM5LjExODQsMy4wMzM0IDguNTE4NCwzLjMzMzQgNy43ODUwNjY2NywzLjMzMzQgTTE0LjEzODQsMi4zNDY3MzMzMyBMOC41MTg0LDAuMTQwMDY2NjY3IEM4LjI4NTA2NjY3LDAuMDQ2NzMzMzMzMyA4LjAzMTczMzMzLDYuNjY2NjY2NjdlLTA1IDcuNzg1MDY2NjcsNi42NjY2NjY2N2UtMDUgQzcuNTM4NCw2LjY2NjY2NjY3ZS0wNSA3LjI4NTA2NjY3LDAuMDQ2NzMzMzMzMyA3LjA1MTA2NjY3LDAuMTQwMDY2NjY3IEwxLjQzMTczMzMzLDIuMzQ2NzMzMzMgQzEuMDMxNzMzMzMsMi41MDY3MzMzMyAxLjAyNDQsMy4wNzM0IDEuNDI1MDY2NjcsMy4yNDY3MzMzMyBMNy4zOTE3MzMzMyw1Ljc3MzQgQzcuNTE4NCw1LjgyNjczMzMzIDcuNjUxNzMzMzMsNS44NTM0IDcuNzg1MDY2NjcsNS44NTM0IEM3LjkxODQsNS44NTM0IDguMDUxMDY2NjcsNS44MjY3MzMzMyA4LjE3ODQsNS43NzM0IEwxNC4xNDUwNjY3LDMuMjQ2NzMzMzMgQzE0LjU0NTA2NjcsMy4wNzM0IDE0LjUzODQsMi41MDY3MzMzMyAxNC4xMzg0LDIuMzQ2NzMzMzMiIGlkPSJGaWxsLTEiPjwvcGF0aD4KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik00LjY2NjYsMTMuMjI0IEM0LjI5OTkzMzMzLDEzLjExMDY2NjcgMy45OTk5MzMzMywxMi41NjQgMy45OTk5MzMzMywxMi4wMTA2NjY3IEMzLjk5OTkzMzMzLDExLjUzMDY2NjcgNC4yMjY2LDExLjE5NzMzMzMgNC41MzMyNjY2NywxMS4yMDQgQzQuNTczMjY2NjcsMTEuMjA0IDQuNjE5OTMzMzMsMTEuMjEwNjY2NyA0LjY2NjYsMTEuMjI0IEM1LjAzMzI2NjY3LDExLjMzNzMzMzMgNS4zMzMyNjY2NywxMS44NzczMzMzIDUuMzMzMjY2NjcsMTIuNDMwNjY2NyBDNS4zMzMyNjY2NywxMi45ODQgNS4wMzMyNjY2NywxMy4zMzczMzMzIDQuNjY2NiwxMy4yMjQgTTEuOTk5OTMzMzMsNy44OTA2NjY2NyBDMS42MzMyNjY2Nyw3Ljc3NzMzMzMzIDEuMzMzMjY2NjcsNy4yMzA2NjY2NyAxLjMzMzI2NjY3LDYuNjc3MzMzMzMgQzEuMzMzMjY2NjcsNi4xOTczMzMzMyAxLjU1OTkzMzMzLDUuODY0IDEuODY2Niw1Ljg3MDY2NjY3IEMxLjkwNjYsNS44NzA2NjY2NyAxLjk1MzI2NjY3LDUuODc3MzMzMzMgMS45OTk5MzMzMyw1Ljg5MDY2NjY3IEMyLjM2NjYsNi4wMDQgMi42NjY2LDYuNTQ0IDIuNjY2Niw3LjA5NzMzMzMzIEMyLjY2NjYsNy42NTA2NjY2NyAyLjM2NjYsOC4wMDQgMS45OTk5MzMzMyw3Ljg5MDY2NjY3IE02LjQ3OTkzMzMzLDYuNDI0IEwwLjkxMzI2NjY2Nyw0LjA2NCBDMC44MDY2LDQuMDE3MzMzMzMgMC42OTMyNjY2NjcsNC4wMDQgMC41ODY2LDQuMDE3MzMzMzMgQzAuMjczMjY2NjY3LDQuMDUwNjY2NjcgLTYuNjY2NjY2NjdlLTA1LDQuMzE3MzMzMzMgLTYuNjY2NjY2NjdlLTA1LDQuNjcwNjY2NjcgTC02LjY2NjY2NjY3ZS0wNSwxMS4zNzA2NjY3IEMtNi42NjY2NjY2N2UtMDUsMTIuMTM3MzMzMyAwLjQyNjYsMTIuODI0IDEuMTEzMjY2NjcsMTMuMTY0IEMxLjExMzI2NjY3LDEzLjE2NCA0LjE5OTkzMzMzLDE0LjY4NCA2LjAyNjYsMTUuNTc3MzMzMyBDNi42MzMyNjY2NywxNS44NzA2NjY3IDcuMzMzMjY2NjcsMTUuNDMwNjY2NyA3LjMzMzI2NjY3LDE0Ljc1NzMzMzMgTDcuMzMzMjY2NjcsNy43MTA2NjY2NyBDNy4zMzMyNjY2Nyw3LjE1MDY2NjY3IDYuOTk5OTMzMzMsNi42NDQgNi40Nzk5MzMzMyw2LjQyNCIgaWQ9IkZpbGwtMyI+PC9wYXRoPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgPHBhdGggZD0iTTEzLjU2OTYsOC4xMzA5MzMzMyBDMTMuMjAyOTMzMyw4LjI0NDI2NjY3IDEyLjkwMjkzMzMsNy44OTA5MzMzMyAxMi45MDI5MzMzLDcuMzM3NiBDMTIuOTAyOTMzMyw2Ljc4NDI2NjY3IDEzLjIwMjkzMzMsNi4yNDQyNjY2NyAxMy41Njk2LDYuMTMwOTMzMzMgQzEzLjYxNjI2NjcsNi4xMTc2IDEzLjY2MzYsNi4xMTA5MzMzMyAxMy43MDI5MzMzLDYuMTA0MjY2NjcgQzE0LjAwOTYsNi4xMDQyNjY2NyAxNC4yMzYyNjY3LDYuNDM3NiAxNC4yMzYyNjY3LDYuOTE3NiBDMTQuMjM2MjY2Nyw3LjQ3MDkzMzMzIDEzLjkzNjkzMzMsOC4wMTA5MzMzMyAxMy41Njk2LDguMTMwOTMzMzMgTTEzLjU2OTYsMTEuODkwOTMzMyBDMTMuMjAyOTMzMywxMi4wMDQyNjY3IDEyLjkwMjkzMzMsMTEuNjUwOTMzMyAxMi45MDI5MzMzLDExLjA5NzYgQzEyLjkwMjkzMzMsMTAuNTUwOTMzMyAxMy4yMDI5MzMzLDEwLjAwNDI2NjcgMTMuNTY5Niw5Ljg5MDkzMzMzIEMxMy42MTYyNjY3LDkuODc3NiAxMy42NjM2LDkuODcwOTMzMzMgMTMuNzAyOTMzMyw5Ljg3MDkzMzMzIEMxNC4wMDk2LDkuODY0MjY2NjcgMTQuMjM2MjY2NywxMC4xOTc2IDE0LjIzNjI2NjcsMTAuNjc3NiBDMTQuMjM2MjY2NywxMS4yMzA5MzMzIDEzLjkzNjkzMzMsMTEuNzc3NiAxMy41Njk2LDExLjg5MDkzMzMgTTEwLjkwMjkzMzMsOS4yMjQyNjY2NyBDMTAuNTM2MjY2Nyw5LjMzNzYgMTAuMjM2MjY2Nyw4Ljk4NDI2NjY3IDEwLjIzNjI2NjcsOC40MzA5MzMzMyBDMTAuMjM2MjY2Nyw3Ljg4NDI2NjY3IDEwLjUzNjI2NjcsNy4zMzc2IDEwLjkwMjkzMzMsNy4yMjQyNjY2NyBDMTAuOTQ5Niw3LjIxMDkzMzMzIDEwLjk5NjkzMzMsNy4yMDQyNjY2NyAxMS4wMzYyNjY3LDcuMjA0MjY2NjcgQzExLjM0MjkzMzMsNy4xOTc2IDExLjU2OTYsNy41MzA5MzMzMyAxMS41Njk2LDguMDEwOTMzMzMgQzExLjU2OTYsOC41NjQyNjY2NyAxMS4yNzAyNjY3LDkuMTEwOTMzMzMgMTAuOTAyOTMzMyw5LjIyNDI2NjY3IE0xMC45MDI5MzMzLDEzLjIyNDI2NjcgQzEwLjUzNjI2NjcsMTMuMzM3NiAxMC4yMzYyNjY3LDEyLjk4NDI2NjcgMTAuMjM2MjY2NywxMi40MzA5MzMzIEMxMC4yMzYyNjY3LDExLjg4NDI2NjcgMTAuNTM2MjY2NywxMS4zMzc2IDEwLjkwMjkzMzMsMTEuMjI0MjY2NyBDMTAuOTQ5NiwxMS4yMTA5MzMzIDEwLjk5NjkzMzMsMTEuMjA0MjY2NyAxMS4wMzYyNjY3LDExLjIwNDI2NjcgQzExLjM0MjkzMzMsMTEuMTk3NiAxMS41Njk2LDExLjUzMDkzMzMgMTEuNTY5NiwxMi4wMTA5MzMzIEMxMS41Njk2LDEyLjU2NDI2NjcgMTEuMjcwMjY2NywxMy4xMTA5MzMzIDEwLjkwMjkzMzMsMTMuMjI0MjY2NyBNMTQuOTgyOTMzMyw0LjAxNzYgQzE0Ljg3NjkzMzMsNC4wMDQyNjY2NyAxNC43NjI5MzMzLDQuMDE3NiAxNC42NTY5MzMzLDQuMDY0MjY2NjcgTDkuMDg5Niw2LjQyNDI2NjY3IEM4LjU2OTYsNi42NDQyNjY2NyA4LjIzNjI2NjY3LDcuMTUwOTMzMzMgOC4yMzYyNjY2Nyw3LjcxMDkzMzMzIEw4LjIzNjI2NjY3LDE0Ljc1NzYgQzguMjM2MjY2NjcsMTUuNDMwOTMzMyA4LjkzNjkzMzMzLDE1Ljg3MDkzMzMgOS41NDM2LDE1LjU3NzYgQzExLjM2OTYsMTQuNjg0MjY2NyAxNC40NTYyNjY3LDEzLjE2NDI2NjcgMTQuNDU2MjY2NywxMy4xNjQyNjY3IEMxNS4xNDI5MzMzLDEyLjgyNDI2NjcgMTUuNTY5NiwxMi4xMzc2IDE1LjU2OTYsMTEuMzcwOTMzMyBMMTUuNTY5Niw0LjY3MDkzMzMzIEMxNS41Njk2LDQuMzE3NiAxNS4yOTY5MzMzLDQuMDUwOTMzMzMgMTQuOTgyOTMzMyw0LjAxNzYiIGlkPSJGaWxsLTYiPjwvcGF0aD4KICAgICAgICAgICAgICAgICAgICAgICAgPC9nPgogICAgICAgICAgICAgICAgICAgIDwvZz4KICAgICAgICAgICAgICAgIDwvZz4KICAgICAgICAgICAgPC9nPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+'
 };
 
-// Helper methods
-function getDirectionLabelText(directionID) {
-  if (directionID === 'Motor.DIRECTION_RIGHT' || directionID === 'Motor.DIRECTION_LEFT') {
-    return 'turn';
-  }
-
-  return 'drive';
-}
-
 function createShadowElement(workspace, blockType, input, defaultValue) {
   var shadowBlock = workspace.newBlock(blockType);
   shadowBlock.setShadow(true);
@@ -71,7 +62,7 @@ function createShadowElement(workspace, blockType, input, defaultValue) {
 
 function roundNumber(event, block, workspace) {
   if (event instanceof Blockly.Events.Change) {
-    var childBlockIDs = block.childBlocks_.map(function(block) {
+    var childBlockIDs = block.childBlocks_.map(function (block) {
       return block.id;
     });
 
@@ -86,10 +77,10 @@ function roundNumber(event, block, workspace) {
 
 // Terminate program
 Blockly.Blocks['block_terminate_program'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.STOP, 15, 15, '*'), 'STOP_IMAGE')
-        .appendField('terminate program');
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.STOP, 15, 15, '*'), 'STOP_IMAGE')
+      .appendField('terminate program');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setStyle('loop_blocks');
@@ -100,10 +91,10 @@ Blockly.Blocks['block_terminate_program'] = {
 
 // Terminate all
 Blockly.Blocks['block_terminate_all'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.STOP_ALL, 15, 15, '*'), 'STOP_IMAGE')
-        .appendField('terminate all');
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.STOP_ALL, 15, 15, '*'), 'STOP_IMAGE')
+      .appendField('terminate all');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setStyle('loop_blocks');
@@ -114,10 +105,10 @@ Blockly.Blocks['block_terminate_all'] = {
 
 // Block wait
 Blockly.Blocks['block_wait'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.WAIT, 15, 15, '*'), 'WAIT_IMAGE')
-        .appendField('wait');
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.WAIT, 15, 15, '*'), 'WAIT_IMAGE')
+      .appendField('wait');
 
     var limitValueInput = this.appendValueInput('WAIT').setCheck('Number');
     createShadowElement(this.workspace, 'math_number', limitValueInput, '1');
@@ -134,13 +125,13 @@ Blockly.Blocks['block_wait'] = {
 
 // Block global timer
 Blockly.Blocks['block_global_timer'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(
-            new Blockly.FieldImage(CUSTOM_IMAGES.GLOBAL_TIMER, 15, 15, '*'),
-            'GLOBAL_TIMER_IMAGE'
-        )
-        .appendField('read global timer in sec');
+      .appendField(
+        new Blockly.FieldImage(CUSTOM_IMAGES.GLOBAL_TIMER, 15, 15, '*'),
+        'GLOBAL_TIMER_IMAGE'
+      )
+      .appendField('read global timer in sec');
     this.setOutput(true, 'Number');
     this.setStyle('time_blocks');
     this.setTooltip('');
@@ -150,16 +141,16 @@ Blockly.Blocks['block_global_timer'] = {
 
 // Block repeat forever
 Blockly.Blocks['block_repeat_forever'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(
-            new Blockly.FieldImage(CUSTOM_IMAGES.REPEAT_FOREVER, 15, 15, '*'),
-            'REPEAT_FOREVER_IMAGE'
-        )
-        .appendField('repeat forever');
+      .appendField(
+        new Blockly.FieldImage(CUSTOM_IMAGES.REPEAT_FOREVER, 15, 15, '*'),
+        'REPEAT_FOREVER_IMAGE'
+      )
+      .appendField('repeat forever');
     this.appendStatementInput('STATEMENT')
-        .setCheck(null)
-        .appendField('do');
+      .setCheck(null)
+      .appendField('do');
     this.setInputsInline(false);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -171,10 +162,10 @@ Blockly.Blocks['block_repeat_forever'] = {
 
 // Block break
 Blockly.Blocks['block_break'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.BREAK, 15, 15, '*'), 'BREAK_IMAGE')
-        .appendField('break');
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.BREAK, 15, 15, '*'), 'BREAK_IMAGE')
+      .appendField('break');
     this.setInputsInline(false);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -186,17 +177,17 @@ Blockly.Blocks['block_break'] = {
 
 // Block repeat while
 Blockly.Blocks['block_repeat_while'] = {
-  init: function() {
+  init: function () {
     this.appendValueInput('CONDITION')
-        .setCheck('Boolean')
-        .appendField(
-            new Blockly.FieldImage(CUSTOM_IMAGES.REPEAT_WHILE, 15, 15, '*'),
-            'REPEAT_WHILE_IMAGE'
-        )
-        .appendField('repeat while');
+      .setCheck('Boolean')
+      .appendField(
+        new Blockly.FieldImage(CUSTOM_IMAGES.REPEAT_WHILE, 15, 15, '*'),
+        'REPEAT_WHILE_IMAGE'
+      )
+      .appendField('repeat while');
     this.appendStatementInput('STATEMENT')
-        .setCheck(null)
-        .appendField('do');
+      .setCheck(null)
+      .appendField('do');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setStyle('loop_blocks');
@@ -207,19 +198,19 @@ Blockly.Blocks['block_repeat_while'] = {
 
 // Block block_repeat_until
 Blockly.Blocks['block_repeat_until'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(
-            new Blockly.FieldImage(CUSTOM_IMAGES.REPEAT_UNTIL, 15, 15, '*'),
-            'REPEAT_UNTIL_IMAGE'
-        )
-        .appendField('repeat');
+      .appendField(
+        new Blockly.FieldImage(CUSTOM_IMAGES.REPEAT_UNTIL, 15, 15, '*'),
+        'REPEAT_UNTIL_IMAGE'
+      )
+      .appendField('repeat');
     this.appendStatementInput('STATEMENT')
-        .setCheck(null)
-        .appendField('do');
+      .setCheck(null)
+      .appendField('do');
     this.appendValueInput('CONDITION')
-        .setCheck('Boolean')
-        .appendField('until');
+      .setCheck('Boolean')
+      .appendField('until');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setStyle('loop_blocks');
@@ -230,63 +221,61 @@ Blockly.Blocks['block_repeat_until'] = {
 
 // Block block_repeat_n_times
 Blockly.Blocks['controls_repeat_ext2'] = {
-  init: function() {
+  init: function () {
     var forValueInput = this.appendValueInput('TIMES')
-        .setCheck('Number')
-        .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.REPEAT, 15, 15, '*'))
-        .appendField('repeat');
+      .setCheck('Number')
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.REPEAT, 15, 15, '*'))
+      .appendField('repeat');
     createShadowElement(this.workspace, 'math_number', forValueInput);
     this.appendDummyInput().appendField('times');
     this.appendStatementInput('DO')
-        .setCheck(null)
-        .appendField('do');
+      .setCheck(null)
+      .appendField('do');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setStyle('loop_blocks');
     this.setTooltip('');
     this.setHelpUrl('');
   },
-  onchange: function(event) {
+  onchange: function (event) {
     roundNumber(event, this, this.workspace);
   }
 };
 
 // Block block_drive
 Blockly.Blocks['block_drive'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(
-            new Blockly.FieldImage(CUSTOM_IMAGES.DIRECTION_FWD, 15, 15, '*'),
-            'DIRECTION_IMAGE'
-        )
-        .appendField('drive', 'DIRECTION_LABEL')
-        .appendField(
-            new Blockly.FieldDropdown([
-              ['forward', 'Motor.DIRECTION_FWD'],
-              ['left', 'Motor.DIRECTION_LEFT'],
-              ['right', 'Motor.DIRECTION_RIGHT'],
-              ['backward', 'Motor.DIRECTION_BACK']
-            ]),
-            'DIRECTION_SELECTOR'
-        );
+      .appendField(
+        new Blockly.FieldImage(CUSTOM_IMAGES.DIRECTION_FWD, 15, 15, '*'),
+        'DIRECTION_IMAGE'
+      )
+      .appendField('drive', 'DIRECTION_LABEL')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['forward', 'Motor.DIRECTION_FWD'],
+          ['backward', 'Motor.DIRECTION_BACK']
+        ]),
+        'DIRECTION_SELECTOR'
+      );
 
     var rotationValueInput = this.appendValueInput('ROTATION').setCheck('Number');
     createShadowElement(this.workspace, 'math_number', rotationValueInput, 3);
 
     this.appendDummyInput().appendField(
-        new Blockly.FieldDropdown([['sec', 'Motor.UNIT_SEC'], ['rotation', 'Motor.UNIT_ROT']]),
-        'UNIT_ROTATION_SELECTOR'
+      new Blockly.FieldDropdown([['sec', 'Motor.UNIT_SEC'], ['rotation', 'Motor.UNIT_ROT']]),
+      'UNIT_ROTATION_SELECTOR'
     );
 
     var speedValueInput = this.appendValueInput('SPEED_SLIDER').setCheck('Number');
-    createShadowElement(this.workspace, 'math_number', speedValueInput, 170);
+    createShadowElement(this.workspace, 'math_number', speedValueInput, 150);
 
     this.appendDummyInput().appendField(
-        new Blockly.FieldDropdown([
-          ['rpm', 'Motor.UNIT_SPEED_RPM'],
-          ['power', 'Motor.UNIT_SPEED_PWR']
-        ]),
-        'UNIT_SPEED_SELECTOR'
+      new Blockly.FieldDropdown([
+        ['rpm', 'Motor.UNIT_SPEED_RPM'],
+        ['power', 'Motor.UNIT_SPEED_PWR']
+      ]),
+      'UNIT_SPEED_SELECTOR'
     );
 
     this.setPreviousStatement(true, null);
@@ -295,13 +284,12 @@ Blockly.Blocks['block_drive'] = {
     this.setTooltip('');
     this.setHelpUrl('');
   },
-  onchange: function(event) {
+  onchange: function (event) {
     if (event instanceof Blockly.Events.Create) {
-      var blocks = this.workspace.getBlocksByType('block_drive');      
+      var blocks = this.workspace.getBlocksByType('block_drive');
       for (var i = 0; i < blocks.length; i++) {
         var driveBlock = blocks[i];
 
-        var labelField = driveBlock.getField('DIRECTION_LABEL');
         var directionSelector =
           driveBlock !== null ? driveBlock.getField('DIRECTION_SELECTOR') : null;
         if (directionSelector) {
@@ -309,28 +297,23 @@ Blockly.Blocks['block_drive'] = {
           if (imageField) {
             imageField.setValue(CUSTOM_IMAGES[directionSelector.getValue().replace('Motor.', '')]);
           }
-          if (labelField) {
-            labelField.setText(getDirectionLabelText(directionSelector.getValue()));
-          }
         }
       }
     }
 
-    if (event instanceof Blockly.Events.Change) {      
+    if (event instanceof Blockly.Events.Change) {
       if (event.name === 'DIRECTION_SELECTOR') {
         var driveBlock = this.workspace.getBlockById(event.blockId);
         var imageField = driveBlock.getField('DIRECTION_IMAGE');
-        
+
         imageField.setValue(CUSTOM_IMAGES[event.newValue.replace('Motor.', '')]);
-        var labelField = driveBlock.getField('DIRECTION_LABEL');
-        labelField.setText(getDirectionLabelText(event.newValue));
       }
 
       if (event.name === 'UNIT_SPEED_SELECTOR') {
         var driveBlock = this.workspace.getBlockById(event.blockId);
         var selectedSpeedOption = driveBlock.getField('UNIT_SPEED_SELECTOR').getValue();
         var maxValue = 170;
-        
+
         if (selectedSpeedOption === 'Motor.UNIT_SPEED_PWR') {
           maxValue = 100;
         }
@@ -339,7 +322,7 @@ Blockly.Blocks['block_drive'] = {
         // 2nd children is the speed shadow value, 1st input is the FieldNumber
         var unitRpm = chidrens[1].inputList[0];
         var shadowValue = unitRpm.fieldRow[0];
-        
+
         var currentValue = shadowValue.getValue();
 
         if (currentValue >= maxValue) {
@@ -350,42 +333,109 @@ Blockly.Blocks['block_drive'] = {
   }
 };
 
+// Block turn
+Blockly.Blocks['block_turn'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldImage(CUSTOM_IMAGES.DIRECTION_LEFT, 15, 15, '*'),
+        'DIRECTION_IMAGE'
+      )
+      .appendField('turn', 'DIRECTION_LABEL')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['left', 'Motor.DIRECTION_LEFT'],
+          ['right', 'Motor.DIRECTION_RIGHT']
+        ]),
+        'DIRECTION_SELECTOR'
+      );
+
+    var rotationValueInput = this.appendValueInput('ROTATION').setCheck('Number');
+    createShadowElement(this.workspace, 'math_number', rotationValueInput, 3);
+
+    this.appendDummyInput().appendField(
+      new Blockly.FieldDropdown([
+        ['degrees', 'Motor.UNIT_TURN_ANGLE'],
+        ['sec', 'Motor.UNIT_SEC']
+      ]),
+      'UNIT_ROTATION_SELECTOR'
+    );
+
+    var speedValueInput = this.appendValueInput('SPEED_SLIDER').setCheck('Number');
+    createShadowElement(this.workspace, 'math_number', speedValueInput, 150);
+
+    this.appendDummyInput().appendField('rpm', 'SPEED_LABEL');
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('motor_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
+  },
+  onchange: function (event) {
+    if (event instanceof Blockly.Events.Create) {
+      var blocks = this.workspace.getBlocksByType('block_turn');
+      for (var i = 0; i < blocks.length; i++) {
+        var driveBlock = blocks[i];
+
+        var directionSelector =
+          driveBlock !== null ? driveBlock.getField('DIRECTION_SELECTOR') : null;
+        if (directionSelector) {
+          var imageField = driveBlock.getField('DIRECTION_IMAGE');
+          if (imageField) {
+            imageField.setValue(CUSTOM_IMAGES[directionSelector.getValue().replace('Motor.', '')]);
+          }
+        }
+      }
+    }
+
+    if (event instanceof Blockly.Events.Change) {
+      if (event.name === 'DIRECTION_SELECTOR') {
+        var driveBlock = this.workspace.getBlockById(event.blockId);
+        var imageField = driveBlock.getField('DIRECTION_IMAGE');
+
+        imageField.setValue(CUSTOM_IMAGES[event.newValue.replace('Motor.', '')]);
+      }
+    }
+  }
+};
+
 // Block block_motor
 Blockly.Blocks['block_motor'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.ENGINE, 15, 15, '*'), 'ENGINE_IMAGE')
-        .appendField('move motor')
-        .appendField(new Blockly.FieldTextInput('motor1'), 'NAME_INPUT')
-        .appendField(
-            new Blockly.FieldDropdown([
-              ['↩️', 'Motor.DIR_CW'],
-              ['↪️', 'Motor.DIR_CCW']
-            ]),
-            'DIRECTION_SELECTOR'
-        );
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.ENGINE, 15, 15, '*'), 'ENGINE_IMAGE')
+      .appendField('move motor')
+      .appendField(new Blockly.FieldTextInput('motor1'), 'NAME_INPUT')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['↩️', 'Motor.DIR_CW'],
+          ['↪️', 'Motor.DIR_CCW']
+        ]),
+        'DIRECTION_SELECTOR'
+      );
 
     var amountValueInput = this.appendValueInput('AMOUNT').setCheck('Number');
     createShadowElement(this.workspace, 'math_number', amountValueInput, 3);
 
     this.appendDummyInput().appendField(
-        new Blockly.FieldDropdown([
-          ['sec', 'Motor.UNIT_SEC'],
-          ['degree', 'Motor.UNIT_DEG'],
-          ['numOfRot', 'Motor.UNIT_ROT']
-        ]),
-        'UNIT_AMOUNT_SELECTOR'
+      new Blockly.FieldDropdown([
+        ['sec', 'Motor.UNIT_SEC'],
+        ['degree', 'Motor.UNIT_DEG'],
+        ['numOfRot', 'Motor.UNIT_ROT']
+      ]),
+      'UNIT_AMOUNT_SELECTOR'
     );
 
     var limitValueInput = this.appendValueInput('LIMIT_SLIDER').setCheck('Number');
     createShadowElement(this.workspace, 'math_number', limitValueInput, 170);
 
     this.appendDummyInput().appendField(
-        new Blockly.FieldDropdown([
-          ['rpm', 'Motor.UNIT_SPEED_RPM'],
-          ['power', 'Motor.UNIT_SPEED_PWR']
-        ]),
-        'UNIT_LIMIT_SELECTOR'
+      new Blockly.FieldDropdown([
+        ['rpm', 'Motor.UNIT_SPEED_RPM'],
+        ['power', 'Motor.UNIT_SPEED_PWR']
+      ]),
+      'UNIT_LIMIT_SELECTOR'
     );
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -393,13 +443,13 @@ Blockly.Blocks['block_motor'] = {
     this.setTooltip('');
     this.setHelpUrl('');
   },
-  onchange: function(event) {
+  onchange: function (event) {
     if (event instanceof Blockly.Events.Change) {
       if (event.name === 'UNIT_LIMIT_SELECTOR') {
         var driveBlock = this.workspace.getBlockById(event.blockId);
         var selectedSpeedOption = driveBlock.getField('UNIT_LIMIT_SELECTOR').getValue();
         var maxValue = 170;
-        
+
         if (selectedSpeedOption === 'Motor.UNIT_SPEED_PWR') {
           maxValue = 100;
         }
@@ -408,7 +458,7 @@ Blockly.Blocks['block_motor'] = {
         // 2nd children is the speed shadow value, 1st input is the FieldNumber
         var unitRpm = chidrens[1].inputList[0];
         var shadowValue = unitRpm.fieldRow[0];
-        
+
         var currentValue = shadowValue.getValue();
 
         if (currentValue >= maxValue) {
@@ -421,27 +471,27 @@ Blockly.Blocks['block_motor'] = {
 
 // Block block_motor
 Blockly.Blocks['spin_motor'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.SPIN, 15, 15, '*'), 'SPIN_IMAGE')
-        .appendField('spin motor')
-        .appendField(new Blockly.FieldTextInput('motor1'), 'NAME_INPUT')
-        .appendField(
-            new Blockly.FieldDropdown([
-              ['↩️', 'Motor.DIR_CW'],
-              ['↪️', 'Motor.DIR_CCW']
-            ]),
-            'DIRECTION_SELECTOR'
-        );
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.SPIN, 15, 15, '*'), 'SPIN_IMAGE')
+      .appendField('spin motor')
+      .appendField(new Blockly.FieldTextInput('motor1'), 'NAME_INPUT')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['↩️', 'Motor.DIR_CW'],
+          ['↪️', 'Motor.DIR_CCW']
+        ]),
+        'DIRECTION_SELECTOR'
+      );
 
     var rotationValueInput = this.appendValueInput('ROTATION_SLIDER').setCheck('Number');
     createShadowElement(this.workspace, 'math_number', rotationValueInput, 170);
     this.appendDummyInput().appendField(
-        new Blockly.FieldDropdown([
-          ['rpm', 'Motor.UNIT_SPEED_RPM'],
-          ['power', 'Motor.UNIT_SPEED_PWR']
-        ]),
-        'UNIT_SPEED_SELECTOR'
+      new Blockly.FieldDropdown([
+        ['rpm', 'Motor.UNIT_SPEED_RPM'],
+        ['power', 'Motor.UNIT_SPEED_PWR']
+      ]),
+      'UNIT_SPEED_SELECTOR'
     );
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -449,23 +499,23 @@ Blockly.Blocks['spin_motor'] = {
     this.setTooltip('');
     this.setHelpUrl('');
   },
-  onchange: function(event) {
+  onchange: function (event) {
     if (event instanceof Blockly.Events.Change) {
       if (event.name === 'UNIT_SPEED_SELECTOR') {
         var driveBlock = this.workspace.getBlockById(event.blockId);
         var selectedSpeedOption = driveBlock.getField('UNIT_SPEED_SELECTOR').getValue();
         var maxValue = 170;
-        
+
         if (selectedSpeedOption === 'Motor.UNIT_SPEED_PWR') {
           maxValue = 100;
         }
 
         var chidrens = driveBlock.getChildren();
-        
+
         // 2nd children is the speed shadow value, 1st input is the FieldNumber
         var unitRpm = chidrens[0].inputList[0];
         var shadowValue = unitRpm.fieldRow[0];
-        
+
         var currentValue = shadowValue.getValue();
 
         if (currentValue >= maxValue) {
@@ -478,18 +528,18 @@ Blockly.Blocks['spin_motor'] = {
 
 // Block block_stop_motor
 Blockly.Blocks['block_stop_motor'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.STOP, 15, 15, '*'), 'STOP_IMAGE')
-        .appendField('stop motor')
-        .appendField(new Blockly.FieldTextInput('motor1'), 'NAME_INPUT')
-        .appendField(
-            new Blockly.FieldDropdown([
-              ['Stop & hold', 'Motor.ACTION_STOP_AND_HOLD'],
-              ['Release', 'Motor.ACTION_RELEASE']
-            ]),
-            'STOP_ACTION_SELECTOR'
-        );
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.STOP, 15, 15, '*'), 'STOP_IMAGE')
+      .appendField('stop motor')
+      .appendField(new Blockly.FieldTextInput('motor1'), 'NAME_INPUT')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['Stop & hold', 'Motor.ACTION_STOP_AND_HOLD'],
+          ['Release', 'Motor.ACTION_RELEASE']
+        ]),
+        'STOP_ACTION_SELECTOR'
+      );
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setStyle('motor_blocks');
@@ -500,17 +550,17 @@ Blockly.Blocks['block_stop_motor'] = {
 
 // Block block_stop_all_motors
 Blockly.Blocks['block_stop_all_motors'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.STOP_ALL, 15, 15, '*'), 'STOP_ALL_IMAGE')
-        .appendField('stop all motors')
-        .appendField(
-            new Blockly.FieldDropdown([
-              ['Stop & hold', 'Motor.ACTION_STOP_AND_HOLD'],
-              ['Release', 'Motor.ACTION_RELEASE']
-            ]),
-            'STOP_ALL_ACTION_SELECTOR'
-        );
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.STOP_ALL, 15, 15, '*'), 'STOP_ALL_IMAGE')
+      .appendField('stop all motors')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['Stop & hold', 'Motor.ACTION_STOP_AND_HOLD'],
+          ['Release', 'Motor.ACTION_RELEASE']
+        ]),
+        'STOP_ALL_ACTION_SELECTOR'
+      );
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setStyle('motor_blocks');
@@ -521,13 +571,13 @@ Blockly.Blocks['block_stop_all_motors'] = {
 
 // Block block_ultrasonic_sensor
 Blockly.Blocks['block_ultrasonic_sensor'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(
-            new Blockly.FieldImage(CUSTOM_IMAGES.ULTRASONIC, 15, 15, '*'),
-            'ULTRASONIC_IMAGE'
-        )
-        .appendField(new Blockly.FieldTextInput('distance'), 'NAME_INPUT');
+      .appendField(
+        new Blockly.FieldImage(CUSTOM_IMAGES.ULTRASONIC, 15, 15, '*'),
+        'ULTRASONIC_IMAGE'
+      )
+      .appendField(new Blockly.FieldTextInput('distance'), 'NAME_INPUT');
     this.setOutput(true, 'Number');
     this.setStyle('colour_blocks');
     this.setTooltip('');
@@ -537,11 +587,11 @@ Blockly.Blocks['block_ultrasonic_sensor'] = {
 
 // Block block_bumper
 Blockly.Blocks['block_bumper'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.BUMPER, 15, 15, '*'), 'BUMPER_IMAGE')
-        .appendField(new Blockly.FieldTextInput('bumper'), 'NAME_INPUT')
-        .appendField('pressed');
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.BUMPER, 15, 15, '*'), 'BUMPER_IMAGE')
+      .appendField(new Blockly.FieldTextInput('bumper'), 'NAME_INPUT')
+      .appendField('pressed');
 
     this.setOutput(true, 'Boolean');
     this.setStyle('colour_blocks');
@@ -552,18 +602,18 @@ Blockly.Blocks['block_bumper'] = {
 
 // Block block_tilt
 Blockly.Blocks['block_tilt'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField('Tilt control')
-        .appendField(
-            new Blockly.FieldDropdown([
-              ['forward', 'Sensor.TILT_FWD'],
-              ['left', 'Sensor.TILT_LEFT'],
-              ['right', 'Sensor.TILT_RIGHT'],
-              ['backward', 'Sensor.TILT_BACK']
-            ]),
-            'DIRECTION_TILT_SELECTOR'
-        );
+      .appendField('Tilt control')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['forward', 'Sensor.TILT_FWD'],
+          ['left', 'Sensor.TILT_LEFT'],
+          ['right', 'Sensor.TILT_RIGHT'],
+          ['backward', 'Sensor.TILT_BACK']
+        ]),
+        'DIRECTION_TILT_SELECTOR'
+      );
     this.setOutput(true, 'Boolean');
     this.setColour(230);
     this.setTooltip('');
@@ -573,43 +623,43 @@ Blockly.Blocks['block_tilt'] = {
 
 // Block block_play_note
 Blockly.Blocks['block_play_note'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.TUNE, 15, 15, '*'), 'TUNE_IMAGE')
-        .appendField('play note')
-        .appendField('Octave:')
-        .appendField(
-            new Blockly.FieldDropdown([
-              ['1st', 'Sound.OCTAVE_1'],
-              ['2nd', 'Sound.OCTAVE_2'],
-              ['3rd', 'Sound.OCTAVE_3'],
-              ['4th', 'Sound.OCTAVE_4'],
-              ['5th', 'Sound.OCTAVE_5'],
-              ['6th', 'Sound.OCTAVE_6'],
-              ['7th', 'Sound.OCTAVE_7'],
-              ['8th', 'Sound.OCTAVE_8']
-            ]),
-            'OCTAVE_SELECTOR'
-        )
-        .appendField('Key:')
-        .appendField(
-            new Blockly.FieldDropdown([
-              ['C', 'Sound.OPTION_C'],
-              ['C# / Db', 'Sound.OPTION_CS'],
-              ['D', 'Sound.OPTION_D'],
-              ['D# / Eb', 'Sound.OPTION_DS'],
-              ['E', 'Sound.OPTION_E'],
-              ['F', 'Sound.OPTION_F'],
-              ['F# / Gb', 'Sound.OPTION_FS'],
-              ['G', 'Sound.OPTION_G'],
-              ['G# / Ab', 'Sound.OPTION_GS'],
-              ['A', 'Sound.OPTION_A'],
-              ['A# / Bb', 'Sound.OPTION_AS'],
-              ['B', 'Sound.OPTION_B']
-            ]),
-            'KEY_SELECTOR'
-        )
-        .appendField('Duration:');
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.TUNE, 15, 15, '*'), 'TUNE_IMAGE')
+      .appendField('play note')
+      .appendField('Octave:')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['1st', 'Sound.OCTAVE_1'],
+          ['2nd', 'Sound.OCTAVE_2'],
+          ['3rd', 'Sound.OCTAVE_3'],
+          ['4th', 'Sound.OCTAVE_4'],
+          ['5th', 'Sound.OCTAVE_5'],
+          ['6th', 'Sound.OCTAVE_6'],
+          ['7th', 'Sound.OCTAVE_7'],
+          ['8th', 'Sound.OCTAVE_8']
+        ]),
+        'OCTAVE_SELECTOR'
+      )
+      .appendField('Key:')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['C', 'Sound.OPTION_C'],
+          ['C# / Db', 'Sound.OPTION_CS'],
+          ['D', 'Sound.OPTION_D'],
+          ['D# / Eb', 'Sound.OPTION_DS'],
+          ['E', 'Sound.OPTION_E'],
+          ['F', 'Sound.OPTION_F'],
+          ['F# / Gb', 'Sound.OPTION_FS'],
+          ['G', 'Sound.OPTION_G'],
+          ['G# / Ab', 'Sound.OPTION_GS'],
+          ['A', 'Sound.OPTION_A'],
+          ['A# / Bb', 'Sound.OPTION_AS'],
+          ['B', 'Sound.OPTION_B']
+        ]),
+        'KEY_SELECTOR'
+      )
+      .appendField('Duration:');
     this.appendValueInput('DURATION').setCheck('Number');
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
@@ -622,7 +672,7 @@ Blockly.Blocks['block_play_note'] = {
 
 // Block block_stop_playback
 Blockly.Blocks['block_stop_playback'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput().appendField('Stop playback');
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
@@ -635,20 +685,20 @@ Blockly.Blocks['block_stop_playback'] = {
 
 // Block block_set_led
 Blockly.Blocks['block_set_led'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput().appendField(
-        new Blockly.FieldImage(CUSTOM_IMAGES.LIGHT, 15, 15, '*'),
-        'LIGHT_IMAGE'
+      new Blockly.FieldImage(CUSTOM_IMAGES.LIGHT, 15, 15, '*'),
+      'LIGHT_IMAGE'
     );
 
     var ledValueInput = this.appendValueInput('LED')
-        .setCheck('Number')
-        .appendField('set LED');
+      .setCheck('Number')
+      .appendField('set LED');
     createShadowElement(this.workspace, 'math_number', ledValueInput, '1');
 
     var colorValueInput = this.appendValueInput('COLOR')
-        .setCheck('Colour')
-        .appendField('color');
+      .setCheck('Colour')
+      .appendField('color');
     createShadowElement(this.workspace, 'colour_picker', colorValueInput);
 
     this.setInputsInline(true);
@@ -662,15 +712,15 @@ Blockly.Blocks['block_set_led'] = {
 
 // Block block_set_led
 Blockly.Blocks['block_set_multiple_led'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.LIGHTS, 15, 15, '*'), 'LIGHT_IMAGE')
-        .appendField('set LEDs')
-        .appendField(new Blockly.FieldTextInput('1,2,3'), 'LED_IDS');
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.LIGHTS, 15, 15, '*'), 'LIGHT_IMAGE')
+      .appendField('set LEDs')
+      .appendField(new Blockly.FieldTextInput('1,2,3'), 'LED_IDS');
 
     var colorValueInput = this.appendValueInput('COLOR')
-        .setCheck('Colour')
-        .appendField('color');
+      .setCheck('Colour')
+      .appendField('color');
 
     createShadowElement(this.workspace, 'colour_picker', colorValueInput);
 
@@ -685,10 +735,10 @@ Blockly.Blocks['block_set_multiple_led'] = {
 
 // Block for random int.
 Blockly.Blocks['math_random_int2'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput().appendField(
-        new Blockly.FieldImage(CUSTOM_IMAGES.DICE, 18, 18, '*'),
-        'DICE_IMAGE'
+      new Blockly.FieldImage(CUSTOM_IMAGES.DICE, 18, 18, '*'),
+      'DICE_IMAGE'
     );
 
     var fromValueInput = this.appendValueInput('FROM').setCheck('Number');
@@ -705,21 +755,21 @@ Blockly.Blocks['math_random_int2'] = {
     this.setTooltip('%{BKY_MATH_RANDOM_INT_TOOLTIP}');
     this.setHelpUrl('%{BKY_MATH_RANDOM_INT_HELPURL}');
   },
-  onchange: function(event) {
+  onchange: function (event) {
     roundNumber(event, this, this.workspace);
   }
 };
 
 // Block for rounding functions.
 Blockly.Blocks['math_round2'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput().appendField(
-        new Blockly.FieldDropdown([
-          ['%{BKY_MATH_ROUND_OPERATOR_ROUND}', 'ROUND'],
-          ['%{BKY_MATH_ROUND_OPERATOR_ROUNDUP}', 'ROUNDUP'],
-          ['%{BKY_MATH_ROUND_OPERATOR_ROUNDDOWN}', 'ROUNDDOWN']
-        ]),
-        'OPERATOR_SELECTOR'
+      new Blockly.FieldDropdown([
+        ['%{BKY_MATH_ROUND_OPERATOR_ROUND}', 'ROUND'],
+        ['%{BKY_MATH_ROUND_OPERATOR_ROUNDUP}', 'ROUNDUP'],
+        ['%{BKY_MATH_ROUND_OPERATOR_ROUNDDOWN}', 'ROUNDDOWN']
+      ]),
+      'OPERATOR_SELECTOR'
     );
 
     var rightValueInput = this.appendValueInput('NUM').setCheck('Number');
@@ -735,19 +785,19 @@ Blockly.Blocks['math_round2'] = {
 
 // Block for repeat n times (external number).
 Blockly.Blocks['math_arithmetic2'] = {
-  init: function() {
+  init: function () {
     var leftValueInput = this.appendValueInput('A').setCheck('Number');
     createShadowElement(this.workspace, 'math_number', leftValueInput);
 
     this.appendDummyInput().appendField(
-        new Blockly.FieldDropdown([
-          ['+', 'ADD'],
-          ['-', 'MINUS'],
-          ['*', 'MULTIPLY'],
-          ['/', 'DIVIDE'],
-          ['%', 'MODULO']
-        ]),
-        'OPERATOR_SELECTOR'
+      new Blockly.FieldDropdown([
+        ['+', 'ADD'],
+        ['-', 'MINUS'],
+        ['*', 'MULTIPLY'],
+        ['/', 'DIVIDE'],
+        ['%', 'MODULO']
+      ]),
+      'OPERATOR_SELECTOR'
     );
 
     var rightValueInput = this.appendValueInput('B').setCheck('Number');
@@ -763,7 +813,7 @@ Blockly.Blocks['math_arithmetic2'] = {
 
 // Block logic_and
 Blockly.Blocks['logic_and'] = {
-  init: function() {
+  init: function () {
     var leftValueInput = this.appendValueInput('LEFT').setCheck('Boolean');
     createShadowElement(this.workspace, 'logic_boolean', leftValueInput);
 
@@ -782,7 +832,7 @@ Blockly.Blocks['logic_and'] = {
 
 // Block logic_and
 Blockly.Blocks['logic_or'] = {
-  init: function() {
+  init: function () {
     var leftValueInput = this.appendValueInput('LEFT').setCheck('Boolean');
     createShadowElement(this.workspace, 'logic_boolean', leftValueInput);
 
@@ -801,7 +851,7 @@ Blockly.Blocks['logic_or'] = {
 
 // Block logic_and
 Blockly.Blocks['logic_not'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput().appendField('not');
 
     var rightValueInput = this.appendValueInput('RIGHT').setCheck('Boolean');
@@ -816,14 +866,14 @@ Blockly.Blocks['logic_not'] = {
 };
 
 Blockly.Blocks['math_trig2'] = {
-  init: function() {
+  init: function () {
     this.setStyle('math_blocks');
     var amountValueInput = this.appendValueInput('RIGHT')
-        .setCheck('Number')
-        .appendField(
-            new Blockly.FieldDropdown([['sin', 'sin'], ['cos', 'cos'], ['tan', 'tan']]),
-            'MATH_TRIG_SELECTOR'
-        );
+      .setCheck('Number')
+      .appendField(
+        new Blockly.FieldDropdown([['sin', 'sin'], ['cos', 'cos'], ['tan', 'tan']]),
+        'MATH_TRIG_SELECTOR'
+      );
     createShadowElement(this.workspace, 'math_number', amountValueInput);
     this.setInputsInline(true);
     this.setOutput(true, 'Number');
@@ -833,16 +883,16 @@ Blockly.Blocks['math_trig2'] = {
 };
 
 Blockly.Blocks['if_then_else'] = {
-  init: function() {
+  init: function () {
     this.appendValueInput('COND')
-        .setCheck('Boolean')
-        .appendField('if');
+      .setCheck('Boolean')
+      .appendField('if');
     this.appendStatementInput('IN_IF')
-        .setCheck(null)
-        .appendField('then');
+      .setCheck(null)
+      .appendField('then');
     this.appendStatementInput('IN_ELSE')
-        .setCheck(null)
-        .appendField('else');
+      .setCheck(null)
+      .appendField('else');
     this.setInputsInline(false);
     this.setStyle('logic_blocks');
     this.setPreviousStatement(true, null);
@@ -853,13 +903,13 @@ Blockly.Blocks['if_then_else'] = {
 };
 
 Blockly.Blocks['if_then'] = {
-  init: function() {
+  init: function () {
     this.appendValueInput('COND')
-        .setCheck('Boolean')
-        .appendField('if');
+      .setCheck('Boolean')
+      .appendField('if');
     this.appendStatementInput('IN_IF')
-        .setCheck(null)
-        .appendField('then');
+      .setCheck(null)
+      .appendField('then');
     this.setInputsInline(false);
     this.setStyle('logic_blocks');
     this.setPreviousStatement(true, null);
@@ -870,31 +920,31 @@ Blockly.Blocks['if_then'] = {
 };
 
 Blockly.Blocks['play_tune'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.TUNE, 15, 15, '*'), 'TUNE_IMAGE')
-        .appendField('play tune')
-        .appendField(
-            new Blockly.FieldDropdown([
-              ['🔉', 'siren'],
-              ['😸', 'cat'],
-              ['📯', 'car_horn'],
-              ['🤖', 'robot'],
-              ['📟', 'robot2'],
-              ['🛑', 'buzzer'],
-              ['😱', 'oh_no'],
-              ['🤠', 'yee_haw'],
-              ['🏍', 'engine_revving'],
-              ['🎉', 'ta_da'],
-              ['🙊', 'uh_oh'],
-              ['🔔', 'bell'],
-              ['🐤', 'duck'],
-              ['⏰', 'alarm_clock'],
-              ['🐯', 'lion'],
-              ['🐶', 'dog']
-            ]),
-            'IN_SOUND'
-        );
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.TUNE, 15, 15, '*'), 'TUNE_IMAGE')
+      .appendField('play tune')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['🔉', 'siren'],
+          ['😸', 'cat'],
+          ['📯', 'car_horn'],
+          ['🤖', 'robot'],
+          ['📟', 'robot2'],
+          ['🛑', 'buzzer'],
+          ['😱', 'oh_no'],
+          ['🤠', 'yee_haw'],
+          ['🏍', 'engine_revving'],
+          ['🎉', 'ta_da'],
+          ['🙊', 'uh_oh'],
+          ['🔔', 'bell'],
+          ['🐤', 'duck'],
+          ['⏰', 'alarm_clock'],
+          ['🐯', 'lion'],
+          ['🐶', 'dog']
+        ]),
+        'IN_SOUND'
+      );
     this.setColour('#f8bc08');
     this.setInputsInline(false);
     this.setPreviousStatement(true, null);
@@ -906,7 +956,7 @@ Blockly.Blocks['play_tune'] = {
 
 // Block for composing a colour from RGB components.
 Blockly.Blocks['colour_rgb2'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput().appendField('color with red');
 
     var redValueInput = this.appendValueInput('RED').setCheck('Number');
@@ -930,18 +980,18 @@ Blockly.Blocks['colour_rgb2'] = {
 
 // Block for repeat n times (external number).
 Blockly.Blocks['logic_compare2'] = {
-  init: function() {
+  init: function () {
     this.appendValueInput('A').setCheck('Number');
     this.appendDummyInput().appendField(
-        new Blockly.FieldDropdown([
-          ['==', 'EQ'],
-          ['!=', 'NEQ'],
-          ['<', 'LT'],
-          ['<=', 'LTE'],
-          ['>', 'GT'],
-          ['>=', 'GTE']
-        ]),
-        'LOGIC_SELECTOR'
+      new Blockly.FieldDropdown([
+        ['==', 'EQ'],
+        ['!=', 'NEQ'],
+        ['<', 'LT'],
+        ['<=', 'LTE'],
+        ['>', 'GT'],
+        ['>=', 'GTE']
+      ]),
+      'LOGIC_SELECTOR'
     );
     this.appendValueInput('B').setCheck('Number');
     this.setInputsInline(true);

@@ -56,10 +56,9 @@ function calculateMinMaxValueForSlider(sourceBlock) {
   var parentInputList = sourceBlock.getParent().inputList;
   var lastField = parentInputList[parentInputList.length - 1].fieldRow[0];
   var fieldValue = lastField.getValue();
-
   return {
     min: 0,
-    max: fieldValue == 'Motor.UNIT_SPEED_RPM' ? 170 : 100
+    max: (fieldValue == 'Motor.UNIT_SPEED_RPM' || fieldValue == 'rpm' ) ? 150 : 100
   };
 }
 
