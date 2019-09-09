@@ -263,7 +263,9 @@ Blockly.Blocks['block_drive'] = {
     createShadowElement(this.workspace, 'math_number', rotationValueInput, 3);
 
     this.appendDummyInput().appendField(
-      new Blockly.FieldDropdown([['sec', 'Motor.UNIT_SEC'], ['rotation', 'Motor.UNIT_ROT']]),
+      new Blockly.FieldDropdown([
+        ['seconds', 'Motor.UNIT_SEC'], 
+        ['rotations', 'Motor.UNIT_ROT']]),
       'UNIT_ROTATION_SELECTOR'
     );
 
@@ -312,7 +314,7 @@ Blockly.Blocks['block_drive'] = {
       if (event.name === 'UNIT_SPEED_SELECTOR') {
         var driveBlock = this.workspace.getBlockById(event.blockId);
         var selectedSpeedOption = driveBlock.getField('UNIT_SPEED_SELECTOR').getValue();
-        var maxValue = 170;
+        var maxValue = 150;
 
         if (selectedSpeedOption === 'Motor.UNIT_SPEED_PWR') {
           maxValue = 100;
@@ -356,7 +358,7 @@ Blockly.Blocks['block_turn'] = {
     this.appendDummyInput().appendField(
       new Blockly.FieldDropdown([
         ['degrees', 'Motor.UNIT_TURN_ANGLE'],
-        ['sec', 'Motor.UNIT_SEC']
+        ['seconds', 'Motor.UNIT_SEC']
       ]),
       'UNIT_ROTATION_SELECTOR'
     );
@@ -420,9 +422,9 @@ Blockly.Blocks['block_motor'] = {
 
     this.appendDummyInput().appendField(
       new Blockly.FieldDropdown([
-        ['sec', 'Motor.UNIT_SEC'],
-        ['degree', 'Motor.UNIT_DEG'],
-        ['numOfRot', 'Motor.UNIT_ROT']
+        ['seconds', 'Motor.UNIT_SEC'],
+        ['degrees', 'Motor.UNIT_DEG'],
+        ['rotations', 'Motor.UNIT_ROT']
       ]),
       'UNIT_AMOUNT_SELECTOR'
     );
