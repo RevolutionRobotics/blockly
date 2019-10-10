@@ -62,16 +62,16 @@
     <block type="logic_or"></block>
     <block type="logic_not"></block>
   </category>
+  <category name="time" colour="#868a8c">
+    <block type="block_wait"></block>
+    <block type="block_global_timer"></block>
+  </category>
   <category name="math" colour="#4dc88f">
     <block type="math_number"></block>
     <block type="math_arithmetic2"></block>
     <block type="math_round2"></block>
     <block type="math_trig2"></block>
     <block type="math_random_int2"></block>
-  </category>
-  <category name="time" colour="#868a8c">
-    <block type="block_wait"></block>
-    <block type="block_global_timer"></block>
   </category>
   <category name="variables" colour="#cc7be6" custom="VARIABLE"></category>
   <category name="functions" colour="#6ab3c1" custom="PROCEDURE"></category>
@@ -91,7 +91,34 @@
       ON_VARIABLES_EXPORTED: 'NativeBridge.onVariablesExported' //  JS -> Native, variables: String in 'var1,var2,var3'
     };
 
+    var NAME_INPUT_BLOCK_TYPES = [	
+      "block_motor",	
+      "block_stop_motor",	
+      "spin_motor",	
+      "block_ultrasonic_sensor",	
+      "block_bumper"	
+    ]
+
     var iOSBlocklyBrowser = window.navigator.userAgent === 'iOS-Blockly';
+
+    function getNameInputValues() {	
+      return NAME_INPUT_BLOCK_TYPES	
+        .map(function (blockType) {	
+          var blocks = workspace.getBlocksByType(blockType);	
+          return blocks	
+            .map(function (block) {	
+              return block.getFieldValue('NAME_INPUT');	
+            })	
+            .filter(function (name) {	
+              return name !== ''	
+            })	
+            .join();	
+        })	
+        .filter(function (nameInput) {	
+          return nameInput !== ''	
+        })	
+        .join();	
+    }
 
     function createIOSJavascriptBridge(callback) {
       if (iOSBlocklyBrowser) {
@@ -126,7 +153,7 @@
     function loadXMLProgram(xmlString) {
       var xml = Blockly.Xml.textToDom(xmlString);
       Blockly.mainWorkspace.clear();
-      Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+      Blockly.Xml.domToWorkspace(xml, Blockly.mainWorkspace);
     };
 
     function saveProgram() {
@@ -136,8 +163,7 @@
     function saveProgramWithBridge(bridge) {
       var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
       var xmlText = Blockly.Xml.domToText(xml);
-      var variablesArray = Blockly.Variables.allUsedVarModels(Blockly.mainWorkspace);
-      var variables = variablesArray ? variablesArray.map(variable => variable.name).join(",") : ""
+      var variables = getNameInputValues();
       var pythonCode = Blockly.Python.workspaceToCode(Blockly.mainWorkspace);
 
       if (iOSBlocklyBrowser && bridge) {
@@ -202,8 +228,8 @@
     lab2.classList.add('sensorIcon')
     lab3.classList.add('loopsIcon')
     lab4.classList.add('logicIcon')
-    lab5.classList.add('mathIcon')
-    lab6.classList.add('timeIcon')
+    lab5.classList.add('timeIcon')
+    lab6.classList.add('mathIcon')
     lab7.classList.add('variablesIcon')
     lab8.classList.add('functionsIcon')
   </script>
