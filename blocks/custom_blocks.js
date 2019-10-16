@@ -411,8 +411,8 @@ Blockly.Blocks['block_motor'] = {
       .appendField(new Blockly.FieldTextInput('motor1'), 'NAME_INPUT')
       .appendField(
         new Blockly.FieldDropdown([
-          ['↩️', 'Motor.DIR_CW'],
-          ['↪️', 'Motor.DIR_CCW']
+          ['forward', 'Motor.DIRECTION_FWD'],
+          ['reversed', 'Motor.DIRECTION_BACK']
         ]),
         'DIRECTION_SELECTOR'
       );
@@ -480,8 +480,8 @@ Blockly.Blocks['spin_motor'] = {
       .appendField(new Blockly.FieldTextInput('motor1'), 'NAME_INPUT')
       .appendField(
         new Blockly.FieldDropdown([
-          ['↩️', 'Motor.DIR_CW'],
-          ['↪️', 'Motor.DIR_CCW']
+          ['forward', 'Motor.DIRECTION_FWD'],
+          ['reversed', 'Motor.DIRECTION_BACK']
         ]),
         'DIRECTION_SELECTOR'
       );
