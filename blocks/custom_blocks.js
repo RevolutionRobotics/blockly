@@ -270,7 +270,7 @@ Blockly.Blocks['block_drive'] = {
     );
 
     var speedValueInput = this.appendValueInput('SPEED_SLIDER').setCheck('Number');
-    createShadowElement(this.workspace, 'math_number', speedValueInput, 150);
+    createShadowElement(this.workspace, 'math_number', speedValueInput, 75);
 
     this.appendDummyInput().appendField(
       new Blockly.FieldDropdown([
@@ -364,7 +364,7 @@ Blockly.Blocks['block_turn'] = {
     );
 
     var speedValueInput = this.appendValueInput('SPEED_SLIDER').setCheck('Number');
-    createShadowElement(this.workspace, 'math_number', speedValueInput, 150);
+    createShadowElement(this.workspace, 'math_number', speedValueInput, 75);
 
     this.appendDummyInput().appendField('rpm', 'SPEED_LABEL');
 
@@ -430,7 +430,7 @@ Blockly.Blocks['block_motor'] = {
     );
 
     var limitValueInput = this.appendValueInput('LIMIT_SLIDER').setCheck('Number');
-    createShadowElement(this.workspace, 'math_number', limitValueInput, 170);
+    createShadowElement(this.workspace, 'math_number', limitValueInput, 75);
 
     this.appendDummyInput().appendField(
       new Blockly.FieldDropdown([
@@ -487,7 +487,7 @@ Blockly.Blocks['spin_motor'] = {
       );
 
     var rotationValueInput = this.appendValueInput('ROTATION_SLIDER').setCheck('Number');
-    createShadowElement(this.workspace, 'math_number', rotationValueInput, 170);
+    createShadowElement(this.workspace, 'math_number', rotationValueInput, 75);
     this.appendDummyInput().appendField(
       new Blockly.FieldDropdown([
         ['rpm', 'Motor.UNIT_SPEED_RPM'],
