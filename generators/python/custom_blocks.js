@@ -382,6 +382,12 @@ Blockly.Python['math_arithmetic2'] = function(block) {
   // legibility of the generated code.
 };
 
+Blockly.Python['math_pi'] = function(block) {
+  Blockly.Python.definitions_['import_math'] = 'import math';
+  return ['math.pi', Blockly.Python.ORDER_MEMBER];
+};
+
+
 Blockly.Python['math_round2'] = function(block) {
   // Math operators with single operand.
   var operator = block.getFieldValue('OPERATOR_SELECTOR');

@@ -264,7 +264,7 @@ Blockly.Blocks['block_drive'] = {
 
     this.appendDummyInput().appendField(
       new Blockly.FieldDropdown([
-        ['seconds', 'Motor.UNIT_SEC'], 
+        ['seconds', 'Motor.UNIT_SEC'],
         ['rotations', 'Motor.UNIT_ROT']]),
       'UNIT_ROTATION_SELECTOR'
     );
@@ -812,6 +812,18 @@ Blockly.Blocks['math_arithmetic2'] = {
     this.setHelpUrl('');
   }
 };
+
+// Block Pi
+Blockly.Blocks['math_pi'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField('\u03c0');
+    this.setOutput(true, 'Number');
+    this.setStyle('math_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+}
 
 // Block logic_and
 Blockly.Blocks['logic_and'] = {
