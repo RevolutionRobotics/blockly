@@ -32,8 +32,8 @@ Blockly.Python['block_global_timer'] = function(block) {
 Blockly.Python['block_repeat_forever'] = function(block) {
   var statements_statement = Blockly.Python.statementToCode(block, 'STATEMENT');
   var branch = Blockly.Python.addLoopTrap(statements_statement, block.id) || Blockly.Python.PASS;
-
-  var code = 'while True:\n' + branch;
+  Blockly.Python.definitions_['import_time'] = 'import time';
+  var code = 'while True:\n' + branch + Blockly.Python.INDENT + 'time.sleep(0.05)  # allow other threads to run\n';
   return code;
 };
 
