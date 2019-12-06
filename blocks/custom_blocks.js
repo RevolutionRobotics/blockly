@@ -314,7 +314,7 @@ Blockly.Blocks['block_drive'] = {
       if (event.name === 'UNIT_SPEED_SELECTOR') {
         var driveBlock = this.workspace.getBlockById(event.blockId);
         var selectedSpeedOption = driveBlock.getField('UNIT_SPEED_SELECTOR').getValue();
-        var maxValue = 150;
+        var maxValue = 120;
 
         if (selectedSpeedOption === 'Motor.UNIT_SPEED_PWR') {
           maxValue = 100;
@@ -397,7 +397,7 @@ Blockly.Blocks['block_set_speed'] = {
       if (event.name === 'UNIT_SPEED_SELECTOR') {
         var driveBlock = this.workspace.getBlockById(event.blockId);
         var selectedSpeedOption = driveBlock.getField('UNIT_SPEED_SELECTOR').getValue();
-        var maxValue = 150;
+        var maxValue = 120;
 
         if (selectedSpeedOption === 'Motor.UNIT_SPEED_PWR') {
           maxValue = 100;

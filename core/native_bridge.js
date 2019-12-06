@@ -53,12 +53,14 @@ function transformBlockContextTitle(title) {
 }
 
 function calculateMinMaxValueForSlider(sourceBlock) {
+  var driveBlockTypes = ["block_drive", "block_turn", "block_set_speed"];
   var parentInputList = sourceBlock.getParent().inputList;
+  var isDriveBlock = (driveBlockTypes.indexOf(sourceBlock.getParent().type) > -1);
   var lastField = parentInputList[parentInputList.length - 1].fieldRow[0];
   var fieldValue = lastField.getValue();
   return {
     min: 0,
-    max: (fieldValue == 'Motor.UNIT_SPEED_RPM' || fieldValue == 'rpm' ) ? 150 : 100
+    max: (fieldValue == 'Motor.UNIT_SPEED_RPM' || fieldValue == 'rpm' ) ? (isDriveBlock ? 120 : 150) : 100
   };
 }
 
