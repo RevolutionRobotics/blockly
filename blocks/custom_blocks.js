@@ -226,7 +226,7 @@ Blockly.Blocks['controls_repeat_ext2'] = {
       .setCheck('Number')
       .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.REPEAT, 15, 15, '*'))
       .appendField('repeat');
-    createShadowElement(this.workspace, 'math_number', forValueInput);
+    createShadowElement(this.workspace, 'math_number', forValueInput, 3);
     this.appendDummyInput().appendField('times');
     this.appendStatementInput('DO')
       .setCheck(null)
@@ -260,7 +260,7 @@ Blockly.Blocks['block_drive'] = {
       );
 
     var rotationValueInput = this.appendValueInput('ROTATION').setCheck('Number');
-    createShadowElement(this.workspace, 'math_number', rotationValueInput, 3);
+    createShadowElement(this.workspace, 'math_number', rotationValueInput, '3');
 
     this.appendDummyInput().appendField(
       new Blockly.FieldDropdown([
