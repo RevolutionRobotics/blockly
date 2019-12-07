@@ -1090,7 +1090,8 @@ Blockly.Blocks['logic_compare2'] = {
       ]),
       'LOGIC_SELECTOR'
     );
-    this.appendValueInput('B').setCheck('Number');
+    var inputB = this.appendValueInput('B').setCheck('Number');
+    createShadowElement(this.workspace, 'math_number', inputB, '10');
     this.setInputsInline(true);
     this.setOutput(true, 'Boolean');
     this.setStyle('logic_blocks');
