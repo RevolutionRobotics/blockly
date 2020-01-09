@@ -34,6 +34,33 @@ Blockly.Python['block_turn_right_180'] = function (block) {
     return 'robot.turn(direction=Motor.DIRECTION_RIGHT, rotation=180, unit_rotation=Motor.UNIT_TURN_ANGLE, speed=50, unit_speed=Motor.UNIT_SPEED_RPM)\n';
 };
 
+Blockly.Python['block_drive'] = function (block) {
+    var dropdown_direction = block.getFieldValue('DIRECTION_SELECTOR');
+    var number_rotation = Blockly.Python.valueToCode(block, 'ROTATION', Blockly.Python.ORDER_ATOMIC);
+    var unit_rotation = block.getFieldValue('UNIT_ROTATION_SELECTOR');
+    var number_speed = Blockly.Python.valueToCode(block, 'SPEED_SLIDER', Blockly.Python.ORDER_ATOMIC);
+    var unit_speed = block.getFieldValue('UNIT_SPEED_SELECTOR');
+
+    var code =
+        'robot.drive(' +
+        'direction=' +
+        dropdown_direction +
+        ', ' +
+        'rotation=' +
+        number_rotation +
+        ', ' +
+        'unit_rotation=' +
+        unit_rotation +
+        ', ' +
+        'speed=' +
+        number_speed +
+        ', ' +
+        'unit_speed=' +
+        unit_speed +
+        ')\n';
+    return code;
+};
+
 Blockly.Python['block_set_speed'] = function (block) {
     var dropdown_direction = block.getFieldValue('DIRECTION_SELECTOR');
     var number_speed = Blockly.Python.valueToCode(block, 'SPEED_SLIDER', Blockly.Python.ORDER_ATOMIC);
