@@ -21,6 +21,36 @@ Blockly.Blocks['block_repeat_forever'] = {
   }
 };
 
+Blockly.Blocks['controls_repeat_n_times'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.REPEAT, 15, 15, '*'))
+      .appendField('repeat')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['2', '2'],
+          ['3', '3'],
+          ['4', '4'],
+          ['5', '5'],
+          ['6', '6'],
+          ['7', '7'],
+          ['8', '8'],
+          ['9', '9'],
+          ['10', '10']
+        ]),
+        'TIMES_SELECTOR')
+      .appendField('times');
+    this.appendStatementInput('DO')
+      .setCheck(null)
+      .appendField('do');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('loop_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
+
 Blockly.Blocks['block_break'] = {
   init: function () {
     this.appendDummyInput()

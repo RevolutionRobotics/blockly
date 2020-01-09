@@ -129,6 +129,194 @@ Blockly.Blocks['block_turn_right_180'] = {
   }
 };
 
+Blockly.Blocks['block_drive_simplified'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldImage(CUSTOM_IMAGES.DIRECTION_FWD, 15, 15, '*'),
+        'DIRECTION_IMAGE'
+      )
+      .appendField('drive', 'DIRECTION_LABEL')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['forward', 'Motor.DIRECTION_FWD'],
+          ['backward', 'Motor.DIRECTION_BACK']
+        ]),
+        'DIRECTION_SELECTOR')
+      .appendField('for')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['1', '1'],
+          ['2', '2'],
+          ['5', '5'],
+        ]),
+        'DURATION_SELECTOR')
+      .appendField('seconds with')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['slow', '25'],
+          ['medium', '75'],
+          ['fast', '120'],
+        ]),
+        'SPEED_SELECTOR')
+      .appendField('speed')
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('motor_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
+  },
+  onchange: function (event) {
+    if (event instanceof Blockly.Events.Create) {
+      var blocks = this.workspace.getBlocksByType('block_drive');
+      for (var i = 0; i < blocks.length; i++) {
+        var driveBlock = blocks[i];
+
+        var directionSelector =
+          driveBlock !== null ? driveBlock.getField('DIRECTION_SELECTOR') : null;
+        if (directionSelector) {
+          var imageField = driveBlock.getField('DIRECTION_IMAGE');
+          if (imageField) {
+            imageField.setValue(CUSTOM_IMAGES[directionSelector.getValue().replace('Motor.', '')]);
+          }
+        }
+      }
+    }
+
+    if (event instanceof Blockly.Events.Change) {
+      if (event.name === 'DIRECTION_SELECTOR') {
+        var driveBlock = this.workspace.getBlockById(event.blockId);
+        var imageField = driveBlock.getField('DIRECTION_IMAGE');
+
+        imageField.setValue(CUSTOM_IMAGES[event.newValue.replace('Motor.', '')]);
+      }
+    }
+  }
+};
+
+Blockly.Blocks['block_turn_simplified'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldImage(CUSTOM_IMAGES.DIRECTION_LEFT, 15, 15, '*'),
+        'DIRECTION_IMAGE'
+      )
+      .appendField('turn', 'DIRECTION_LABEL')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['left', 'Motor.DIRECTION_LEFT'],
+          ['right', 'Motor.DIRECTION_RIGHT']
+        ]),
+        'DIRECTION_SELECTOR'
+      )
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['45', '45'],
+          ['90', '90'],
+          ['180', '180']
+        ]),
+        'ROTATION_SELECTOR'
+      )
+      .appendField('degrees');
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('motor_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
+  },
+  onchange: function (event) {
+    if (event instanceof Blockly.Events.Create) {
+      var blocks = this.workspace.getBlocksByType('block_turn');
+      for (var i = 0; i < blocks.length; i++) {
+        var driveBlock = blocks[i];
+
+        var directionSelector =
+          driveBlock !== null ? driveBlock.getField('DIRECTION_SELECTOR') : null;
+        if (directionSelector) {
+          var imageField = driveBlock.getField('DIRECTION_IMAGE');
+          if (imageField) {
+            imageField.setValue(CUSTOM_IMAGES[directionSelector.getValue().replace('Motor.', '')]);
+          }
+        }
+      }
+    }
+
+    if (event instanceof Blockly.Events.Change) {
+      if (event.name === 'DIRECTION_SELECTOR') {
+        var driveBlock = this.workspace.getBlockById(event.blockId);
+        var imageField = driveBlock.getField('DIRECTION_IMAGE');
+
+        imageField.setValue(CUSTOM_IMAGES[event.newValue.replace('Motor.', '')]);
+      }
+    }
+  }
+};
+
+Blockly.Blocks['block_motor_simplified'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.ENGINE, 15, 15, '*'), 'ENGINE_IMAGE')
+      .appendField('move')
+      .appendField(new Blockly.FieldTextInput('motor1'), 'NAME_INPUT')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['forward', 'Motor.DIRECTION_FWD'],
+          ['reversed', 'Motor.DIRECTION_BACK']
+        ]),
+        'DIRECTION_SELECTOR'
+      )
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['45', '45'],
+          ['90', '90'],
+          ['180', '180'],
+          ['360', '360']
+        ]),
+        'AMOUNT_SELECTOR'
+      )
+      .appendField('degrees');
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('motor_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['block_spin_motor_simplified'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.SPIN, 15, 15, '*'), 'SPIN_IMAGE')
+      .appendField('spin')
+      .appendField(new Blockly.FieldTextInput('motor1'), 'NAME_INPUT')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['forward', 'Motor.DIRECTION_FWD'],
+          ['reversed', 'Motor.DIRECTION_BACK']
+        ]),
+        'DIRECTION_SELECTOR'
+      )
+      .appendField('with')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['slow', '25'],
+          ['medium', '75'],
+          ['fast', '150'],
+        ]),
+        'SPEED_SELECTOR')
+      .appendField('speed');
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('motor_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
+
 Blockly.Blocks['block_drive'] = {
   init: function () {
     this.appendDummyInput()
@@ -490,6 +678,33 @@ Blockly.Blocks['spin_motor'] = {
         }
       }
     }
+  }
+};
+
+Blockly.Blocks['block_stop_motor_simplified'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.STOP, 15, 15, '*'), 'STOP_IMAGE')
+      .appendField('stop motor')
+      .appendField(new Blockly.FieldTextInput('motor1'), 'NAME_INPUT');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('motor_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['block_stop_all_motors_simplified'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.STOP_ALL, 15, 15, '*'), 'STOP_ALL_IMAGE')
+      .appendField('stop all motors');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('motor_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
   }
 };
 

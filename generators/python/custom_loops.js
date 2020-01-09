@@ -2,6 +2,15 @@
 
 goog.require('Blockly.Python');
 
+Blockly.Python['controls_repeat_n_times'] = function (block) {
+    var repeats = block.getFieldValue('TIMES_SELECTOR');
+    var branch = Blockly.Python.statementToCode(block, 'DO');
+    branch = Blockly.Python.addLoopTrap(branch, block.id) || Blockly.Python.PASS;
+    var loopVar = Blockly.Python.variableDB_.getDistinctName('count', Blockly.Variables.NAME_TYPE);
+    var code = 'for ' + loopVar + ' in range(' + repeats + '):\n' + branch;
+    return code;
+};
+
 Blockly.Python['controls_repeat_ext2'] = function (block) {
     // Repeat n times.
     if (block.getField('TIMES')) {

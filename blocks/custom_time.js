@@ -31,6 +31,35 @@ Blockly.Blocks['block_wait_5'] = {
   }
 };
 
+Blockly.Blocks['block_wait_simplified'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.WAIT, 15, 15, '*'), 'WAIT_IMAGE')
+      .appendField('wait')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['1', '1'],
+          ['2', '2'],
+          ['3', '3'],
+          ['4', '4'],
+          ['5', '5'],
+          ['6', '6'],
+          ['7', '7'],
+          ['8', '8'],
+          ['9', '9'],
+          ['10', '10']
+        ]),
+        'WAIT_SELECTOR')
+      .appendField('sec');
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('time_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
+
 Blockly.Blocks['block_wait'] = {
   init: function () {
     this.appendDummyInput()

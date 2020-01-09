@@ -121,6 +121,60 @@ Blockly.Blocks['block_light_traffic'] = {
   }
 };
 
+Blockly.Blocks['block_set_all_leds'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.LIGHTS, 15, 15, '*'), 'LIGHT_IMAGE')
+      .appendField('set lights')
+      .appendField(new Blockly.FieldColour('#ff0000'), 'COLOR');
+
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('light_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['block_set_leds_black_small'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.LIGHT_BLACK, 15, 15, '*'), 'LIGHT_IMAGE')
+      .appendField('turn lights off');
+
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('light_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['block_set_light_effect'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.LIGHTS, 15, 15, '*'), 'LIGHT_IMAGE')
+      .appendField('set light effect')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['🚨', 'police'],
+          ['🚦', 'traffic'],
+          ['🌈', 'rainbow']
+        ]),
+        'LIGHT_EFFECT'
+      );
+
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('light_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
+
 Blockly.Blocks['block_set_led'] = {
   init: function () {
     this.appendDummyInput().appendField(
