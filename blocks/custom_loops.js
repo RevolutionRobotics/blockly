@@ -1,7 +1,6 @@
 goog.require('Blockly.Blocks');
 goog.require('Blockly');
 
-// Block repeat forever
 Blockly.Blocks['block_repeat_forever'] = {
   init: function () {
     this.appendDummyInput()
@@ -22,7 +21,6 @@ Blockly.Blocks['block_repeat_forever'] = {
   }
 };
 
-// Block break
 Blockly.Blocks['block_break'] = {
   init: function () {
     this.appendDummyInput()
@@ -37,7 +35,6 @@ Blockly.Blocks['block_break'] = {
   }
 };
 
-// Block repeat while
 Blockly.Blocks['block_repeat_while'] = {
   init: function () {
     this.appendValueInput('CONDITION')
@@ -58,7 +55,6 @@ Blockly.Blocks['block_repeat_while'] = {
   }
 };
 
-// Block block_repeat_until
 Blockly.Blocks['block_repeat_until'] = {
   init: function () {
     this.appendDummyInput()
@@ -81,7 +77,6 @@ Blockly.Blocks['block_repeat_until'] = {
   }
 };
 
-// Block block_repeat_n_times
 Blockly.Blocks['controls_repeat_ext2'] = {
   init: function () {
     var forValueInput = this.appendValueInput('TIMES')
@@ -104,7 +99,6 @@ Blockly.Blocks['controls_repeat_ext2'] = {
   }
 };
 
-// Terminate program
 Blockly.Blocks['block_terminate_program'] = {
   init: function () {
     this.appendDummyInput()
@@ -118,7 +112,6 @@ Blockly.Blocks['block_terminate_program'] = {
   }
 };
 
-// Terminate all
 Blockly.Blocks['block_terminate_all'] = {
   init: function () {
     this.appendDummyInput()

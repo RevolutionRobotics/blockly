@@ -2,42 +2,34 @@
 
 goog.require('Blockly.Python');
 
-// Generator block_drive_fwd_small
 Blockly.Python['block_drive_fwd_small'] = function (block) {
     return 'robot.drive(direction=Motor.DIRECTION_FWD, rotation=2, unit_rotation=Motor.UNIT_SEC, speed=50, unit_speed=Motor.UNIT_SPEED_RPM)\n';
 };
 
-// Generator block_drive_fwd_small
 Blockly.Python['block_drive_fwd_big'] = function (block) {
     return 'robot.drive(direction=Motor.DIRECTION_FWD, rotation=5, unit_rotation=Motor.UNIT_SEC, speed=50, unit_speed=Motor.UNIT_SPEED_RPM)\n';
 };
 
-// Generator block_drive_back_small
 Blockly.Python['block_drive_back_small'] = function (block) {
     return 'robot.drive(direction=Motor.DIRECTION_BACK, rotation=2, unit_rotation=Motor.UNIT_SEC, speed=50, unit_speed=Motor.UNIT_SPEED_RPM)\n';
 };
 
-// Generator block_drive_fwd_small
 Blockly.Python['block_drive_back_big'] = function (block) {
     return 'robot.drive(direction=Motor.DIRECTION_BACK, rotation=5, unit_rotation=Motor.UNIT_SEC, speed=50, unit_speed=Motor.UNIT_SPEED_RPM)\n';
 };
 
-// Generator block_turn_left_90
 Blockly.Python['block_turn_left_90'] = function (block) {
     return 'robot.turn(direction=Motor.DIRECTION_LEFT, rotation=90, unit_rotation=Motor.UNIT_TURN_ANGLE, speed=50, unit_speed=Motor.UNIT_SPEED_RPM)\n';
 };
 
-// Generator block_turn_right_90
 Blockly.Python['block_turn_right_90'] = function (block) {
     return 'robot.turn(direction=Motor.DIRECTION_RIGHT, rotation=90, unit_rotation=Motor.UNIT_TURN_ANGLE, speed=50, unit_speed=Motor.UNIT_SPEED_RPM)\n';
 };
 
-// Generator block_turn_left_180
 Blockly.Python['block_turn_left_180'] = function (block) {
     return 'robot.turn(direction=Motor.DIRECTION_LEFT, rotation=180, unit_rotation=Motor.UNIT_TURN_ANGLE, speed=50, unit_speed=Motor.UNIT_SPEED_RPM)\n';
 };
 
-// Generator block_turn_right_180
 Blockly.Python['block_turn_right_180'] = function (block) {
     return 'robot.turn(direction=Motor.DIRECTION_RIGHT, rotation=180, unit_rotation=Motor.UNIT_TURN_ANGLE, speed=50, unit_speed=Motor.UNIT_SPEED_RPM)\n';
 };
@@ -86,7 +78,6 @@ Blockly.Python['block_turn'] = function (block) {
     return code;
 };
 
-// Generator block_motor
 Blockly.Python['block_motor'] = function (block) {
     var text_name = block.getFieldValue('NAME_INPUT');
     var direction = block.getFieldValue('DIRECTION_SELECTOR');
@@ -116,7 +107,6 @@ Blockly.Python['block_motor'] = function (block) {
     return code;
 };
 
-// Generator block_motor
 Blockly.Python['spin_motor'] = function (block) {
     var text_name = block.getFieldValue('NAME_INPUT');
     var dropdown_direction = block.getFieldValue('DIRECTION_SELECTOR');
@@ -142,8 +132,6 @@ Blockly.Python['spin_motor'] = function (block) {
     return code;
 };
 
-
-// Generator block_stop_motor
 Blockly.Python['block_stop_motor'] = function (block) {
     var text_name = block.getFieldValue('NAME_INPUT');
     var dropdown_action = block.getFieldValue('STOP_ACTION_SELECTOR');
@@ -152,7 +140,6 @@ Blockly.Python['block_stop_motor'] = function (block) {
     return code;
 };
 
-// Generator block_stop_all_motors
 Blockly.Python['block_stop_all_motors'] = function (block) {
     var dropdown_action = block.getFieldValue('STOP_ALL_ACTION_SELECTOR');
 

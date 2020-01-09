@@ -38,7 +38,6 @@ Blockly.Blocks['if_then'] = {
   }
 };
 
-// Block logic_and
 Blockly.Blocks['logic_and'] = {
   init: function () {
     var leftValueInput = this.appendValueInput('LEFT').setCheck('Boolean');
@@ -57,7 +56,6 @@ Blockly.Blocks['logic_and'] = {
   }
 };
 
-// Block logic_and
 Blockly.Blocks['logic_or'] = {
   init: function () {
     var leftValueInput = this.appendValueInput('LEFT').setCheck('Boolean');
@@ -76,7 +74,6 @@ Blockly.Blocks['logic_or'] = {
   }
 };
 
-// Block logic_and
 Blockly.Blocks['logic_not'] = {
   init: function () {
     this.appendDummyInput().appendField('not');
@@ -92,7 +89,6 @@ Blockly.Blocks['logic_not'] = {
   }
 };
 
-// Block for repeat n times (external number).
 Blockly.Blocks['logic_compare2'] = {
   init: function () {
     this.appendValueInput('A').setCheck('Number');

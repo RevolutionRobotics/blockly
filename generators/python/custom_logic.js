@@ -20,7 +20,6 @@ Blockly.Python['logic_compare2'] = function (block) {
     return [code, order];
 };
 
-// Generator block_bumper
 Blockly.Python['logic_and'] = function (block) {
     var value_left = Blockly.Python.valueToCode(block, 'LEFT', Blockly.Python.ORDER_ATOMIC);
     var value_right = Blockly.Python.valueToCode(block, 'RIGHT', Blockly.Python.ORDER_ATOMIC);
@@ -28,7 +27,6 @@ Blockly.Python['logic_and'] = function (block) {
     return [code, Blockly.Python.ORDER_NONE];
 };
 
-// Generator block_bumper
 Blockly.Python['logic_or'] = function (block) {
     var value_left = Blockly.Python.valueToCode(block, 'LEFT', Blockly.Python.ORDER_ATOMIC);
     var value_right = Blockly.Python.valueToCode(block, 'RIGHT', Blockly.Python.ORDER_ATOMIC);
@@ -36,7 +34,6 @@ Blockly.Python['logic_or'] = function (block) {
     return [code, Blockly.Python.ORDER_NONE];
 };
 
-// Generator block_bumper
 Blockly.Python['logic_not'] = function (block) {
     var value_right = Blockly.Python.valueToCode(block, 'RIGHT', Blockly.Python.ORDER_ATOMIC);
     var code = 'not ' + value_right;
@@ -44,7 +41,6 @@ Blockly.Python['logic_not'] = function (block) {
 };
 
 Blockly.Python['if_then_else'] = function (block) {
-    // If/elseif/else condition.
     var n = 0;
     var code = '',
         branchCode,
@@ -63,7 +59,6 @@ Blockly.Python['if_then_else'] = function (block) {
 };
 
 Blockly.Python['if_then'] = function (block) {
-    // If/elseif/else condition.
     var n = 0;
     var code = '',
         branchCode,

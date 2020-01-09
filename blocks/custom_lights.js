@@ -1,7 +1,6 @@
 goog.require('Blockly.Blocks');
 goog.require('Blockly');
 
-// Block block_set_led
 Blockly.Blocks['block_set_leds_white'] = {
   init: function () {
     this.appendDummyInput().appendField(
@@ -17,7 +16,6 @@ Blockly.Blocks['block_set_leds_white'] = {
   }
 };
 
-// Block block_set_led
 Blockly.Blocks['block_set_leds_red'] = {
   init: function () {
     this.appendDummyInput().appendField(
@@ -33,7 +31,6 @@ Blockly.Blocks['block_set_leds_red'] = {
   }
 };
 
-// Block block_set_led
 Blockly.Blocks['block_set_leds_green'] = {
   init: function () {
     this.appendDummyInput().appendField(
@@ -48,7 +45,7 @@ Blockly.Blocks['block_set_leds_green'] = {
     this.setHelpUrl('');
   }
 };
-// Block block_set_led
+
 Blockly.Blocks['block_set_leds_blue'] = {
   init: function () {
     this.appendDummyInput().appendField(
@@ -63,7 +60,7 @@ Blockly.Blocks['block_set_leds_blue'] = {
     this.setHelpUrl('');
   }
 };
-// Block block_set_led
+
 Blockly.Blocks['block_set_leds_black'] = {
   init: function () {
     this.appendDummyInput().appendField(
@@ -79,7 +76,6 @@ Blockly.Blocks['block_set_leds_black'] = {
   }
 };
 
-// Block block_set_led
 Blockly.Blocks['block_light_siren'] = {
   init: function () {
     this.appendDummyInput().appendField(
@@ -95,7 +91,6 @@ Blockly.Blocks['block_light_siren'] = {
   }
 };
 
-// Block block_set_led
 Blockly.Blocks['block_light_rainbow'] = {
   init: function () {
     this.appendDummyInput().appendField(
@@ -111,7 +106,6 @@ Blockly.Blocks['block_light_rainbow'] = {
   }
 };
 
-// Block block_set_led
 Blockly.Blocks['block_light_traffic'] = {
   init: function () {
     this.appendDummyInput().appendField(
@@ -127,7 +121,6 @@ Blockly.Blocks['block_light_traffic'] = {
   }
 };
 
-// Block block_set_led
 Blockly.Blocks['block_set_led'] = {
   init: function () {
     this.appendDummyInput().appendField(
@@ -154,7 +147,6 @@ Blockly.Blocks['block_set_led'] = {
   }
 };
 
-// Block block_set_led
 Blockly.Blocks['block_set_multiple_led'] = {
   init: function () {
     this.appendDummyInput()
@@ -177,7 +169,6 @@ Blockly.Blocks['block_set_multiple_led'] = {
   }
 };
 
-// Block for composing a colour from RGB components.
 Blockly.Blocks['colour_rgb2'] = {
   init: function () {
     this.appendDummyInput().appendField('color with red');

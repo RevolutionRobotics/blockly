@@ -1,7 +1,6 @@
 goog.require('Blockly.Blocks');
 goog.require('Blockly');
 
-// Block for random int.
 Blockly.Blocks['math_random_int2'] = {
   init: function () {
     this.appendDummyInput().appendField(
@@ -28,7 +27,6 @@ Blockly.Blocks['math_random_int2'] = {
   }
 };
 
-// Block for rounding functions.
 Blockly.Blocks['math_round2'] = {
   init: function () {
     this.appendDummyInput().appendField(
@@ -51,7 +49,6 @@ Blockly.Blocks['math_round2'] = {
   }
 };
 
-// Block for repeat n times (external number).
 Blockly.Blocks['math_arithmetic2'] = {
   init: function () {
     var leftValueInput = this.appendValueInput('A').setCheck('Number');
@@ -79,7 +76,6 @@ Blockly.Blocks['math_arithmetic2'] = {
   }
 };
 
-// Block Pi
 Blockly.Blocks['math_pi'] = {
   init: function () {
     this.appendDummyInput()

@@ -2,7 +2,6 @@
 
 goog.require('Blockly.Python');
 
-// Generator block_bumper
 Blockly.Python['math_trig2'] = function (block) {
     var value_right = Blockly.Python.valueToCode(block, 'RIGHT', Blockly.Python.ORDER_ATOMIC);
     var selected_option = block.getFieldValue('MATH_TRIG_SELECTOR');
@@ -40,7 +39,6 @@ Blockly.Python['math_pi'] = function (block) {
     Blockly.Python.definitions_['import_math'] = 'import math';
     return ['math.pi', Blockly.Python.ORDER_MEMBER];
 };
-
 
 Blockly.Python['math_round2'] = function (block) {
     // Math operators with single operand.

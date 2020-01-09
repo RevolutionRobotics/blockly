@@ -23,7 +23,6 @@ Blockly.Python['controls_repeat_ext2'] = function (block) {
     return code;
 };
 
-// Generator block_repeat_while
 Blockly.Python['block_repeat_while'] = function (block) {
     var value_condition = Blockly.Python.valueToCode(block, 'CONDITION', Blockly.Python.ORDER_ATOMIC);
     var statements_statement = Blockly.Python.statementToCode(block, 'STATEMENT');
@@ -34,7 +33,6 @@ Blockly.Python['block_repeat_while'] = function (block) {
     return code;
 };
 
-// Generator block_repeat_until
 Blockly.Python['block_repeat_until'] = function (block) {
     var statements_statement = Blockly.Python.statementToCode(block, 'STATEMENT');
     var value_condition = Blockly.Python.valueToCode(block, 'CONDITION', Blockly.Python.ORDER_ATOMIC);
@@ -47,7 +45,6 @@ Blockly.Python['block_repeat_until'] = function (block) {
     return code;
 };
 
-// Generator block_repeat_forever
 Blockly.Python['block_repeat_forever'] = function (block) {
     var statements_statement = Blockly.Python.statementToCode(block, 'STATEMENT');
     var branch = Blockly.Python.addLoopTrap(statements_statement, block.id) || Blockly.Python.PASS;
@@ -56,19 +53,16 @@ Blockly.Python['block_repeat_forever'] = function (block) {
     return code;
 };
 
-// Generator block_break
 Blockly.Python['block_break'] = function (block) {
     var code = 'break\n';
     return code;
 };
 
-// Generator block_terminate_program
 Blockly.Python['block_terminate_program'] = function (block) {
     var code = 'Control.terminate_program()\n';
     return code;
 };
 
-// Generator block_terminate_all
 Blockly.Python['block_terminate_all'] = function (block) {
     var code = 'Control.terminate_all()\n';
     return code;
