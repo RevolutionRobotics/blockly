@@ -163,7 +163,7 @@ Blockly.Blocks['block_set_light_effect'] = {
           ['🚦', 'traffic'],
           ['🌈', 'rainbow']
         ]),
-        'LIGHT_EFFECT'
+        'LIGHT_EFFECT_SELECTOR'
       );
 
     this.setInputsInline(true);
