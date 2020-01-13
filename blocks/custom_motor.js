@@ -69,7 +69,7 @@ Blockly.Blocks['block_turn_left_90'] = {
   init: function () {
     this.appendDummyInput()
       .appendField(
-        new Blockly.FieldImage(CUSTOM_IMAGES.DIRECTION_LEFT, 50, 50, '*'),
+        new Blockly.FieldImage(CUSTOM_IMAGES.TURN_LEFT_90, 50, 50, '*'),
         'DIRECTION_IMAGE'
       );
 
@@ -85,7 +85,7 @@ Blockly.Blocks['block_turn_right_90'] = {
   init: function () {
     this.appendDummyInput()
       .appendField(
-        new Blockly.FieldImage(CUSTOM_IMAGES.DIRECTION_RIGHT, 50, 50, '*'),
+        new Blockly.FieldImage(CUSTOM_IMAGES.TURN_RIGHT_90, 50, 50, '*'),
         'DIRECTION_IMAGE'
       );
 
@@ -101,7 +101,7 @@ Blockly.Blocks['block_turn_left_180'] = {
   init: function () {
     this.appendDummyInput()
       .appendField(
-        new Blockly.FieldImage(CUSTOM_IMAGES.DIRECTION_LEFT_180, 50, 50, '*'),
+        new Blockly.FieldImage(CUSTOM_IMAGES.TURN_LEFT_180, 50, 50, '*'),
         'DIRECTION_IMAGE'
       );
 
@@ -117,7 +117,7 @@ Blockly.Blocks['block_turn_right_180'] = {
   init: function () {
     this.appendDummyInput()
       .appendField(
-        new Blockly.FieldImage(CUSTOM_IMAGES.DIRECTION_RIGHT_180, 50, 50, '*'),
+        new Blockly.FieldImage(CUSTOM_IMAGES.TURN_RIGHT_180, 50, 50, '*'),
         'DIRECTION_IMAGE'
       );
 
