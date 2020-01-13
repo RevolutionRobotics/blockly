@@ -260,7 +260,7 @@ Blockly.Python['block_stop_motor_simplified'] = function (block) {
 
 Blockly.Python['block_stop_all_motors_simplified'] = function (block) {
     return 'for __motor in robot.motors:\n' +
-           '  __motor.stop(action=Motor.ACTION_STOP_AND_HOLD)\n';
+            Blockly.Python.INDENT + '__motor.stop(action=Motor.ACTION_STOP_AND_HOLD)\n';
 };
 
 Blockly.Python['block_stop_motor'] = function (block) {
@@ -274,6 +274,6 @@ Blockly.Python['block_stop_motor'] = function (block) {
 Blockly.Python['block_stop_all_motors'] = function (block) {
     var dropdown_action = block.getFieldValue('STOP_ALL_ACTION_SELECTOR');
     var code = 'for __motor in robot.motors:\n' +
-               `  __motor.stop(action='${dropdown_action})\n`;
+                Blockly.Python.INDENT + `__motor.stop(action='${dropdown_action})\n`;
     return code;
 };
