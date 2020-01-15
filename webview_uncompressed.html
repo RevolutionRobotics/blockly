@@ -47,24 +47,16 @@
 
   
   <script src="toolbox/toolboxes.js"></script>
-  <style type="text/css">
-    html,
-    body,
-    #blocklyDiv {
-      border: 0;
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-    }
-  </style>
+  <script src="toolbox/tabs.js"></script>
+  <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
   <div id="blocklyDiv"></div>
   <script>
+    var initialLevel = 1;
     var workspace = Blockly.inject('blocklyDiv', {
-      toolbox: toolboxes["level3"].xml,
+      toolbox: toolboxes['level' + initialLevel].xml,
       media: './media/',
       sounds: false
     });
@@ -79,11 +71,11 @@
     };
 
     var NAME_INPUT_BLOCK_TYPES = [
-      "block_motor",
-      "block_stop_motor",
-      "spin_motor",
-      "block_ultrasonic_sensor",
-      "block_bumper"
+      'block_motor',
+      'block_stop_motor',
+      'spin_motor',
+      'block_ultrasonic_sensor',
+      'block_bumper'
     ]
 
     var iOSBlocklyBrowser = window.navigator.userAgent === 'iOS-Blockly';
@@ -189,25 +181,6 @@
       });
     }
 
-    function changeToolBox(toolboxId) {
-      workspace.updateToolbox(toolboxes[toolboxId].xml);
-      setCategoryIcons(toolboxes[toolboxId].icons);
-    }
-
-    function setCategoryIcons(icons) {
-      var treeRoot = document.getElementById(":0");
-      var categoryList = treeRoot.getElementsByTagName('div')[1];
-      var categoryElements = categoryList.getElementsByTagName('div');
-      categoryElements = Array.prototype.slice.call(categoryElements);
-      categoryElements = categoryElements.filter(function (v, i) {
-        return v.parentElement === categoryList;
-      });
-      var i;
-      for (i = 0; i < categoryElements.length; i++) {
-        categoryElements[i].getElementsByTagName('div')[0].getElementsByTagName('span')[2].classList.add(icons[i]);
-      }
-    }
-
     createIOSJavascriptBridge(function (bridge) {
       bridge.registerHandler(METHOD_SIGNATURE.LOAD_XML_PROGRAM, function (xmlString) {
         loadXMLProgram(xmlString)
@@ -222,7 +195,8 @@
       })
     });
 
-    setCategoryIcons(toolboxes["level3"].icons);
+    renderTabs();
+    tabClicked(initialLevel);
 
   </script>
 </body>

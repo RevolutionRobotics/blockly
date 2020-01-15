@@ -2,6 +2,25 @@
 
 goog.require('Blockly.Python');
 
+var angles = {
+    'ANGLE_SLIGHT': 45,
+    'ANGLE_RIGHT': 90,
+    'ANGLE_HALF':180,
+    'ANGLE_FULL': 360
+  };
+
+var speeds = {
+    'SPEED_SLOW': 25,
+    'SPEED_MEDIUM': 75,
+    'SPEED_FAST': 120
+} 
+
+var durations = {
+    'DURATION_SHORT': 1,
+    'DURATION_MEDIUM': 2,
+    'DURATION_LONG': 5
+} 
+
 Blockly.Python['block_drive_fwd_small'] = function (block) {
     return 'robot.drive(direction=Motor.DIRECTION_FWD, rotation=2, unit_rotation=Motor.UNIT_SEC, speed=50, unit_speed=Motor.UNIT_SPEED_RPM)\n';
 };
@@ -36,8 +55,8 @@ Blockly.Python['block_turn_right_180'] = function (block) {
 
 Blockly.Python['block_drive_simplified'] = function (block) {
     var dropdown_direction = block.getFieldValue('DIRECTION_SELECTOR');
-    var duration = block.getFieldValue('DURATION_SELECTOR');
-    var number_speed = block.getFieldValue('SPEED_SELECTOR');
+    var duration = durations[block.getFieldValue('DURATION_SELECTOR')];
+    var number_speed = speeds[block.getFieldValue('SPEED_SELECTOR')];
 
     var code =
         'robot.drive(' +
@@ -61,7 +80,7 @@ Blockly.Python['block_drive_simplified'] = function (block) {
 
 Blockly.Python['block_turn_simplified'] = function (block) {
     var dropdown_direction = block.getFieldValue('DIRECTION_SELECTOR');
-    var number_rotation = block.getFieldValue('ROTATION_SELECTOR');
+    var number_rotation = angles[block.getFieldValue('ROTATION_SELECTOR')];
 
     var code =
         'robot.turn(' +
@@ -84,7 +103,7 @@ Blockly.Python['block_turn_simplified'] = function (block) {
 Blockly.Python['block_motor_simplified'] = function (block) {
     var text_name = block.getFieldValue('NAME_INPUT');
     var direction = block.getFieldValue('DIRECTION_SELECTOR');
-    var amount = block.getFieldValue('AMOUNT_SELECTOR');
+    var amount = angles[block.getFieldValue('AMOUNT_SELECTOR')];
 
     var code =
         `robot.motors["${text_name}"].move(` +
@@ -110,7 +129,7 @@ Blockly.Python['block_motor_simplified'] = function (block) {
 Blockly.Python['block_spin_motor_simplified'] = function (block) {
     var text_name = block.getFieldValue('NAME_INPUT');
     var dropdown_direction = block.getFieldValue('DIRECTION_SELECTOR');
-    var number_speed = block.getFieldValue('SPEED_SELECTOR');
+    var number_speed = speeds[block.getFieldValue('SPEED_SELECTOR')];
 
     var code =
         `robot.motors["${text_name}"].spin(` +

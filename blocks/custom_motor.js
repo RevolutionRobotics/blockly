@@ -146,17 +146,17 @@ Blockly.Blocks['block_drive_simplified'] = {
       .appendField('for')
       .appendField(
         new Blockly.FieldDropdown([
-          ['1', '1'],
-          ['2', '2'],
-          ['5', '5'],
+          ['1', 'DURATION_SHORT'],
+          ['2', 'DURATION_MEDIUM'],
+          ['5', 'DURATION_LONG'],
         ]),
         'DURATION_SELECTOR')
       .appendField('seconds with')
       .appendField(
         new Blockly.FieldDropdown([
-          ['slow', '25'],
-          ['medium', '75'],
-          ['fast', '120'],
+          ['slow', 'SPEED_SLOW'],
+          ['medium', 'SPEED_MEDIUM'],
+          ['fast', 'SPEED_FAST']
         ]),
         'SPEED_SELECTOR')
       .appendField('speed')
@@ -212,9 +212,9 @@ Blockly.Blocks['block_turn_simplified'] = {
       )
       .appendField(
         new Blockly.FieldDropdown([
-          ['45', '45'],
-          ['90', '90'],
-          ['180', '180']
+          ['45', 'ANGLE_SLIGHT'],
+          ['90', 'ANGLE_RIGHT'],
+          ['180', 'ANGLE_HALF']
         ]),
         'ROTATION_SELECTOR'
       )
@@ -269,10 +269,10 @@ Blockly.Blocks['block_motor_simplified'] = {
       )
       .appendField(
         new Blockly.FieldDropdown([
-          ['45', '45'],
-          ['90', '90'],
-          ['180', '180'],
-          ['360', '360']
+          ['45', 'ANGLE_SLIGHT'],
+          ['90', 'ANGLE_RIGHT'],
+          ['180', 'ANGLE_HALF'],
+          ['360', 'ANGLE_FULL']
         ]),
         'AMOUNT_SELECTOR'
       )
@@ -302,9 +302,9 @@ Blockly.Blocks['block_spin_motor_simplified'] = {
       .appendField('with')
       .appendField(
         new Blockly.FieldDropdown([
-          ['slow', '25'],
-          ['medium', '75'],
-          ['fast', '150'],
+          ['slow', 'SPEED_SLOW'],
+          ['medium', 'SPEED_MEDIUM'],
+          ['fast', 'SPEED_FAST']
         ]),
         'SPEED_SELECTOR')
       .appendField('speed');
