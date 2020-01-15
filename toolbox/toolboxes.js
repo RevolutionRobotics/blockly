@@ -1,10 +1,11 @@
-toolboxes = []
+toolboxes = {};
 toolboxes["empty"] = {
     xml: '<xml>' +
         '</xml>',
     icons: [
     ]
-}
+};
+
 toolboxes["level1"] = {
     xml: '<xml>' +
         '<category name="move" colour="#e60312">' +
@@ -44,7 +45,7 @@ toolboxes["level1"] = {
         'soundIcon',
         'timeIcon'
     ]
-}
+};
 
 toolboxes["level2"] = {
     xml: '<xml>' +
@@ -100,7 +101,7 @@ toolboxes["level2"] = {
         'logicIcon',
         'timeIcon'
     ]
-}
+};
 
 toolboxes["level3"] = {
     xml: '<xml>' +
@@ -172,5 +173,4 @@ toolboxes["level3"] = {
         'variablesIcon',
         'functionsIcon'
     ]
-}
-
+};
