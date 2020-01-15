@@ -23,19 +23,15 @@ Blockly.Python['block_set_leds_black'] = function (block) {
 };
 
 Blockly.Python['block_light_siren'] = function (block) {
-    return "robot.led.set(led_index=[1,2,3,4,5,6,7,8,9,10,11,12], color='#000000')\n";
-};
-
-Blockly.Python['block_light_siren'] = function (block) {
-    return "robot.led.set(led_index=[1,2,3,4,5,6,7,8,9,10,11,12], color='#000000')\n";
+    return "robot.led.start_animation(RingLed.Siren)\n";
 };
 
 Blockly.Python['block_light_rainbow'] = function (block) {
-    return "robot.led.set(led_index=[1,2,3,4,5,6,7,8,9,10,11,12], color='#000000')\n";
+    return "robot.led.start_animation(RingLed.ColorWheel)\n";
 };
 
-Blockly.Python['block_light_police'] = function (block) {
-    return "robot.led.set(led_index=[1,2,3,4,5,6,7,8,9,10,11,12], color='#000000')\n";
+Blockly.Python['block_light_traffic'] = function (block) {
+    return "robot.led.start_animation(RingLed.TrafficLight)\n";
 };
 
 Blockly.Python['block_set_all_leds'] = function (block) {
@@ -46,7 +42,8 @@ Blockly.Python['block_set_all_leds'] = function (block) {
 Blockly.Python['block_set_leds_black_small'] = Blockly.Python['block_set_leds_black'];
 
 Blockly.Python['block_set_light_effect'] = function (block) {
-    return "time.sleep(0.05)  # to be implemented\n";
+    var effect = block.getFieldValue('LIGHT_EFFECT_SELECTOR');
+    return `robot.led.start_animation(${effect})\n`;
 };
 
 Blockly.Python['block_set_led'] = function (block) {

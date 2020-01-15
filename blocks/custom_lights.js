@@ -159,9 +159,9 @@ Blockly.Blocks['block_set_light_effect'] = {
       .appendField('set light effect')
       .appendField(
         new Blockly.FieldDropdown([
-          ['🚨', 'police'],
-          ['🚦', 'traffic'],
-          ['🌈', 'rainbow']
+          ['🚨', 'RingLed.Siren'],
+          ['🚦', 'RingLed.TrafficLight'],
+          ['🌈', 'RingLed.ColorWheel']
         ]),
         'LIGHT_EFFECT_SELECTOR'
       );
