@@ -667,6 +667,11 @@ Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node) {
   var oldNode = this.getSelectedItem();
   goog.ui.tree.TreeControl.prototype.setSelectedItem.call(this, node);
   if (node && node.blocks && node.blocks.length) {
+    // itt kene megoldani
+    if (toolbox.workspace_.scale !== 1) {
+      toolbox.workspace_.restoreWorkspace();
+    }
+
     toolbox.flyout_.show(node.blocks);
     // Scroll the flyout to the top if the category has changed.
     if (toolbox.lastCategory_ != node) {

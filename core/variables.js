@@ -32,6 +32,7 @@ goog.provide('Blockly.Variables');
 
 goog.require('Blockly.Blocks');
 goog.require('Blockly.constants');
+goog.require('Blockly.NativeBridge');
 goog.require('Blockly.VariableModel');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.Xml');
@@ -396,7 +397,7 @@ Blockly.Variables.renameVariable = function(workspace, variable,
  *     variable name, or null if the user picked something illegal.
  */
 Blockly.Variables.promptName = function(promptText, defaultText, callback) {
-  Blockly.prompt(promptText, defaultText, function(newVar) {
+  Blockly.NativeBridge.input(null, 'variable', promptText, defaultText, function(newVar) {
     // Merge runs of whitespace.  Strip leading and trailing whitespace.
     // Beyond this, all names are legal.
     if (newVar) {

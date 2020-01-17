@@ -55,7 +55,7 @@ var defaultBlockStyles = {
     "colourTertiary": "#495284"
   },
   "procedure_blocks": {
-    "colourPrimary": "#995ba5",
+    "colourPrimary": "#6ab3c1",
     "colourSecondary": "#d6bddb",
     "colourTertiary": "#7a4984"
   },
@@ -65,12 +65,12 @@ var defaultBlockStyles = {
     "colourTertiary": "#498470"
   },
   "variable_blocks": {
-    "colourPrimary": "#a55b99",
+    "colourPrimary": "#cc7be6",
     "colourSecondary": "#dbbdd6",
     "colourTertiary": "#84497a"
   },
   "variable_dynamic_blocks": {
-    "colourPrimary": "#a55b99",
+    "colourPrimary": "#cc7be6",
     "colourSecondary": "#dbbdd6",
     "colourTertiary": "#84497a"
   },
@@ -99,16 +99,16 @@ var categoryStyles = {
     "colour": "#5b67a5",
   },
   "procedure_category": {
-    "colour": "#995ba5",
+    "colour": "#6ab3c1",
   },
   "text_category": {
     "colour": "#5ba58c",
   },
   "variable_category": {
-    "colour": "#a55b99",
+    "colour": "#cc7be6",
   },
   "variable_dynamic_category":{
-    "colour": "#a55b99",
+    "colour": "#cc7be6",
   }
 };
 

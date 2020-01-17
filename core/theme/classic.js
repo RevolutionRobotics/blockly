@@ -31,31 +31,57 @@ goog.require('Blockly.Theme');
 
 var defaultBlockStyles = {
   "colour_blocks":{
-    "colourPrimary": "20"
+    "colourPrimary": "#f8bc08",
+    "colourSecondary":"#FFFFFF",
+    "colourTertiary":"#f8bc08"
+  },
+  "motor_blocks": {
+    "colourPrimary": "#e60312",
+    "colourSecondary":"#FFFFFF",
+    "colourTertiary":"#e60312"
+  },
+  "time_blocks": {
+    "colourPrimary" : "#868a8c",
+    "colourSecondary":"#FFFFFF",
+    "colourTertiary":"#868a8c"
   },
   "list_blocks": {
     "colourPrimary": "260"
   },
   "logic_blocks": {
-    "colourPrimary": "210"
+    "colourPrimary": "#0264ff",
+    "colourSecondary":"#FFFFFF",
+    "colourTertiary":"#0264ff"
   },
   "loop_blocks": {
-    "colourPrimary": "120"
+    "colourPrimary": "#dd7d3a",
+    "colourSecondary":"#FFFFFF",
+    "colourTertiary":"#dd7d3a"
   },
   "math_blocks": {
-    "colourPrimary": "230"
+    "colourPrimary": "#4dc88f",
+    "colourSecondary":"#FFFFFF",
+    "colourTertiary":"#4dc88f"
   },
   "procedure_blocks": {
-    "colourPrimary": "290"
+    "colourPrimary": "#6ab3c1",
+    "colourSecondary":"#FFFFFF",
+    "colourTertiary":"#6ab3c1"
   },
   "text_blocks": {
-    "colourPrimary": "160"
+    "colourPrimary": "#000000",
+    "colourSecondary":"#000000",
+    "colourTertiary":"#000000"
   },
   "variable_blocks": {
-    "colourPrimary": "330"
+    "colourPrimary": "#cc7be6",
+    "colourSecondary":"#FFFFFF",
+    "colourTertiary":"#cc7be6"
   },
   "variable_dynamic_blocks":{
-    "colourPrimary": "310"
+    "colourPrimary": "#cc7be6",
+    "colourSecondary":"#FFFFFF",
+    "colourTertiary":"#cc7be6"
   },
   "hat_blocks":{
     "colourPrimary":"330",
@@ -67,26 +93,32 @@ var categoryStyles = {
   "colour_category":{
     "colour": "20"
   },
+  "motor_category" : {
+    "color": "#e60312"
+  },
   "list_category": {
     "colour": "260"
   },
   "logic_category": {
-    "colour": "210"
+    "colour": "#0264ff"
   },
   "loop_category": {
-    "colour": "120"
+    "colour": "#dd7d3a"
   },
   "math_category": {
-    "colour": "230"
+    "colour": "#4dc88f"
   },
   "procedure_category": {
-    "colour": "290"
+    "colour": "#6ab3c1"
+  },
+  "time_category": {
+    "colour": "#868a8c"
   },
   "text_category": {
     "colour": "160"
   },
   "variable_category": {
-    "colour": "330"
+    "colour": "#cc7be6"
   },
   "variable_dynamic_category":{
     "colour": "310"

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<!-- HTML file to host Blockly in a mobile WebView. -->
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <!-- Auto generated from source -->
+  <script src="blockly_compressed.js"></script>
+  <script src="blocks_compressed.js"></script>
+  <!-- For real time generation -->
+  <script src="python_compressed.js"></script>
+  <!-- TODO: Select msg file based on locale. -->
+  <script src="msg/js/en.js"></script>
+  <style type="text/css">
+    html,
+    body,
+    #blocklyDiv {
+      border: 0;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+<div id="blocklyDiv"></div>
+<xml id="toolbox">
+  <category name="motors" colour="#e60312">
+    <block type="block_drive"></block>
+    <block type="block_motor"></block>
+    <block type="spin_motor"></block>
+    <block type="block_stop_motor"></block>
+    <block type="block_stop_all_motors"></block>
+  </category>
+  <category name="sensors" colour="#f8bc08">
+    <block type="block_ultrasonic_sensor"></block>
+    <block type="block_bumper"></block>
+    <block type="play_tune"></block>
+    <block type="colour_picker"></block>
+    <block type="colour_rgb2"></block>
+    <block type="block_set_led"></block>
+    <block type="block_set_multiple_led"></block>
+  </category>
+  <category name="loops" colour="#dd7d3a">
+    <block type="controls_repeat_ext2"></block>
+    <block type="block_repeat_forever"></block>
+    <block type="block_repeat_while"></block>
+    <block type="block_repeat_until"></block>
+    <block type="block_break"></block>
+    <block type="block_terminate_program"></block>
+    <block type="block_terminate_all"></block>
+  </category>
+  <category name="logic" colour="#0264ff">
+    <block type="logic_boolean"></block>
+    <block type="logic_compare2"></block>
+    <block type="if_then"></block>
+    <block type="if_then_else"></block>
+    <block type="logic_and"></block>
+    <block type="logic_or"></block>
+    <block type="logic_not"></block>
+  </category>
+  <category name="math" colour="#4dc88f">
+    <block type="math_number"></block>
+    <block type="math_arithmetic2"></block>
+    <block type="math_round2"></block>
+    <block type="math_trig2"></block>
+    <block type="math_random_int2"></block>
+  </category>
+  <category name="time" colour="#868a8c">
+    <block type="block_wait"></block>
+    <block type="block_global_timer"></block>
+  </category>
+  <category name="variables" colour="#cc7be6" custom="VARIABLE"></category>
+  <category name="functions" colour="#6ab3c1" custom="PROCEDURE"></category>
+</xml>
+<script>
+    var workspace = Blockly.inject('blocklyDiv', {
+      toolbox: document.getElementById('toolbox')
+    })
+
+    var METHOD_SIGNATURE = {
+      LOAD_XML_PROGRAM: 'NativeBridge.loadXMLProgram', // Native -> JS, xmlString: String
+      SAVE_PROGRAM: 'NativeBridge.saveProgram', // Native -> JS
+      CLEAR_WORKSPACE: 'NativeBridge.clearWorkspace', // Native -> JS
+      ON_XML_PROGRAM_SAVED: 'NativeBridge.onXMLProgramSaved', //  JS -> Native, xmlString: String
+      ON_PYTHON_PROGRAM_SAVED: 'NativeBridge.onPythonProgramSaved', //  JS -> Native, pythonString: String
+      ON_VARIABLES_EXPORTED: 'NativeBridge.onVariablesExported' //  JS -> Native, variables: String in 'var1,var2,var3'
+    };
+
+    var iOSBlocklyBrowser = window.navigator.userAgent === 'iOS-Blockly';
+
+    function createIOSJavascriptBridge(callback) {
+      if (iOSBlocklyBrowser) {
+        if (window.WKWebViewJavascriptBridge) {
+          return callback(WKWebViewJavascriptBridge)
+        }
+        if (window.WKWVJBCallbacks) {
+          return window.WKWVJBCallbacks.push(callback)
+        }
+        window.WKWVJBCallbacks = [callback]
+        window.webkit.messageHandlers.iOS_Native_InjectJavascript.postMessage(null)
+      }
+    }
+
+    function redraw() {
+      var workspace = Blockly.mainWorkspace;
+
+      var childBlock = workspace.newBlock('text');
+      childBlock.setFieldValue('Loading...', 'TEXT');
+      childBlock.initSvg();
+      childBlock.render();
+
+      setTimeout(() => {
+          workspace.clear();
+      });
+    };
+
+    window.addEventListener('load', (event) => {
+      redraw();
+    });
+
+    function loadXMLProgram(xmlString) {
+      var xml = Blockly.Xml.textToDom(xmlString);
+      Blockly.mainWorkspace.clear();
+      Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+    };
+
+    function saveProgram() {
+      saveProgramWithBridge()
+    };
+
+    function saveProgramWithBridge(bridge) {
+      var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+      var xmlText = Blockly.Xml.domToText(xml);
+      var variablesArray = Blockly.Variables.allUsedVarModels(Blockly.mainWorkspace);
+      var variables = variablesArray ? variablesArray.map(variable => variable.name).join(",") : ""
+      var pythonCode = Blockly.Python.workspaceToCode(Blockly.mainWorkspace);
+
+      if (iOSBlocklyBrowser && bridge) {
+        bridge.callHandler(METHOD_SIGNATURE.ON_PYTHON_PROGRAM_SAVED, {
+          parameter: pythonCode
+        })
+        bridge.callHandler(METHOD_SIGNATURE.ON_XML_PROGRAM_SAVED, {
+          parameter: xmlText
+        })
+        bridge.callHandler(METHOD_SIGNATURE.ON_VARIABLES_EXPORTED, {
+          parameter: variables
+        })
+        return
+      }
+
+      NativeBridge.onXMLProgramSaved(xmlText);
+      NativeBridge.onPythonProgramSaved(pythonCode);
+      NativeBridge.onVariablesExported(variables);
+    }
+
+    function clearWorkspace() {
+      Blockly.mainWorkspace.clear();
+    }
+
+    function closeToolbox() {
+      Blockly.mainWorkspace.toolbox_.flyout_.hide();
+      restoreCategories();
+    }
+
+    function restoreCategories() {
+      var elements = document.getElementsByClassName('blocklyTreeRow blocklyTreeSelected');
+
+      [].forEach.call(elements, function (el) {
+        el.classList.remove("blocklyTreeSelected");
+        el.style.removeProperty("background-color");
+      });
+    }
+
+    createIOSJavascriptBridge(function (bridge) {
+      bridge.registerHandler(METHOD_SIGNATURE.LOAD_XML_PROGRAM, function (xmlString) {
+        loadXMLProgram(xmlString)
+      })
+
+      bridge.registerHandler(METHOD_SIGNATURE.SAVE_PROGRAM, function () {
+        saveProgramWithBridge(bridge)
+      })
+
+      bridge.registerHandler(METHOD_SIGNATURE.CLEAR_WORKSPACE, function () {
+        clearWorkspace()
+      })
+    });
+
+    var lab1 = document.getElementById(':1.label')
+    var lab2 = document.getElementById(':2.label')
+    var lab3 = document.getElementById(':3.label')
+    var lab4 = document.getElementById(':4.label')
+    var lab5 = document.getElementById(':5.label')
+    var lab6 = document.getElementById(':6.label')
+    var lab7 = document.getElementById(':7.label')
+    var lab8 = document.getElementById(':8.label')
+    lab1.classList.add('motorIcon')
+    lab2.classList.add('sensorIcon')
+    lab3.classList.add('loopsIcon')
+    lab4.classList.add('logicIcon')
+    lab5.classList.add('mathIcon')
+    lab6.classList.add('timeIcon')
+    lab7.classList.add('variablesIcon')
+    lab8.classList.add('functionsIcon')
+  </script>
+</body>
+
+</html>

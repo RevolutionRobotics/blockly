@@ -28,6 +28,7 @@ goog.provide('Blockly.FieldColour');
 
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Field');
+goog.require('Blockly.NativeBridge');
 goog.require('Blockly.utils');
 
 goog.require('goog.style');
@@ -277,20 +278,24 @@ Blockly.FieldColour.prototype.setColumns = function(columns) {
  * @private
  */
 Blockly.FieldColour.prototype.showEditor_ = function() {
+  var fieldColor = this;
 
-  Blockly.DropDownDiv.hideWithoutAnimation();
-  Blockly.DropDownDiv.clearContent();
-
-  var picker = this.createWidget_();
-  Blockly.DropDownDiv.getContentDiv().appendChild(picker);
-  Blockly.DropDownDiv.setColour(
-      this.DROPDOWN_BACKGROUND_COLOUR, this.DROPDOWN_BORDER_COLOUR);
-
-  Blockly.DropDownDiv.showPositionedByField(this);
-
-  // Configure event handler on the table to listen for any event in a cell.
-  Blockly.FieldColour.onUpWrapper_ = Blockly.bindEvent_(picker,
-      'mouseup', this, this.onClick_);
+  Blockly.NativeBridge.optionSelector(
+      Blockly.NativeBridge.createPromptType(fieldColor.sourceBlock_, fieldColor),
+      fieldColor.getValue(),
+      Blockly.FieldColour.COLOURS,
+      function(newValue) {
+        if (fieldColor.sourceBlock_) {
+        // Call any validation function, and allow it to override.
+          newValue = fieldColor.callValidator(newValue);
+        }
+        if (newValue !== null) {
+          fieldColor.setValue(newValue);
+        }
+      }
+  );
+  // Blockly.DropDownDiv.hideWithoutAnimation();
+  // Blockly.DropDownDiv.clearContent();
 };
 
 /**

@@ -291,8 +291,8 @@ Blockly.ContextMenu.blockCommentOption = function(block) {
   } else {
     // If there's no comment, add an option to create a comment.
     commentOption.text = Blockly.Msg['ADD_COMMENT'];
-    commentOption.callback = function() {
-      block.setCommentText('');
+    commentOption.callback = function(text) {
+      block.setCommentText(text);
     };
   }
   return commentOption;

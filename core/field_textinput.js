@@ -29,6 +29,7 @@ goog.provide('Blockly.FieldTextInput');
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Field');
 goog.require('Blockly.Msg');
+goog.require('Blockly.NativeBridge');
 goog.require('Blockly.utils');
 
 goog.require('goog.math.Coordinate');
@@ -156,14 +157,14 @@ Blockly.FieldTextInput.prototype.setSpellcheck = function(check) {
  * @protected
  */
 Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
-  this.workspace_ = this.sourceBlock_.workspace;
-  var quietInput = opt_quietInput || false;
-  if (!quietInput && (goog.userAgent.MOBILE || goog.userAgent.ANDROID ||
-                      goog.userAgent.IPAD)) {
-    this.showPromptEditor_();
-  } else {
-    this.showInlineEditor_(quietInput);
-  }
+  // this.workspace_ = this.sourceBlock_.workspace;
+  // var quietInput = opt_quietInput || false;
+  // if (!quietInput && (goog.userAgent.MOBILE || goog.userAgent.ANDROID ||
+  //                     goog.userAgent.IPAD)) {
+  //   this.showPromptEditor_();
+  // } else {
+  //   this.showInlineEditor_(quietInput);
+  // }
 };
 
 /**
@@ -173,13 +174,35 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
  */
 Blockly.FieldTextInput.prototype.showPromptEditor_ = function() {
   var fieldText = this;
-  Blockly.prompt(Blockly.Msg['CHANGE_VALUE_TITLE'], this.text_,
-      function(newValue) {
-        if (fieldText.sourceBlock_) {
-          newValue = fieldText.callValidator(newValue);
+  var promptType = Blockly.NativeBridge.createPromptType(fieldText.sourceBlock_, fieldText);
+
+  if (promptType.includes('slider')) {
+    Blockly.NativeBridge.slider(
+        promptType,
+        Blockly.Msg['CHANGE_VALUE_TITLE'],
+        fieldText.getText(),
+        fieldText.sourceBlock_,
+        function(newValue) {
+          if (fieldText.sourceBlock_) {
+            newValue = fieldText.callValidator(newValue);
+          }
+          fieldText.setValue(newValue);
         }
-        fieldText.setValue(newValue);
-      });
+    );
+  } else {
+    Blockly.NativeBridge.input(
+        fieldText.sourceBlock_,
+        promptType,
+        Blockly.Msg['CHANGE_VALUE_TITLE'],
+        fieldText.getText(),
+        function(newValue) {
+          if (fieldText.sourceBlock_) {
+            newValue = fieldText.callValidator(newValue);
+          }
+          fieldText.setValue(newValue);
+        }
+    );
+  }
 };
 
 /**

@@ -32,6 +32,7 @@ goog.require('Blockly.ContextMenu');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Grid');
+goog.require('Blockly.NativeBridge');
 goog.require('Blockly.RenderedConnection');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
@@ -645,86 +646,31 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
   }
   // Save the current block in a variable for use in closures.
   var block = this;
-  var menuOptions = [];
 
-  if (this.isDeletable() && this.isMovable() && !block.isInFlyout) {
-    menuOptions.push(Blockly.ContextMenu.blockDuplicateOption(block));
-    if (this.isEditable() && !this.collapsed_ &&
-        this.workspace.options.comments) {
-      menuOptions.push(Blockly.ContextMenu.blockCommentOption(block));
-    }
+  Blockly.NativeBridge.blockContext(block.type, block.getCommentText(), function(actionString) {
+    if (actionString) {
+      var ACTION_TYPE = Blockly.NativeBridge.CONTEXT_ACTION_TYPE;
+      var action = JSON.parse(actionString);
 
-    // Option to make block inline.
-    if (!this.collapsed_) {
-      for (var i = 1; i < this.inputList.length; i++) {
-        if (this.inputList[i - 1].type != Blockly.NEXT_STATEMENT &&
-            this.inputList[i].type != Blockly.NEXT_STATEMENT) {
-          // Only display this option if there are two value or dummy inputs
-          // next to each other.
-          var inlineOption = {enabled: true};
-          var isInline = this.getInputsInline();
-          inlineOption.text = isInline ?
-              Blockly.Msg['EXTERNAL_INPUTS'] : Blockly.Msg['INLINE_INPUTS'];
-          inlineOption.callback = function() {
-            block.setInputsInline(!isInline);
-          };
-          menuOptions.push(inlineOption);
+      switch (action.type) {
+        case ACTION_TYPE.ADD_COMMENT:
+          block.setCommentText(action.payload);
           break;
-        }
+
+        case ACTION_TYPE.DELETE_BLOCK:
+          Blockly.ContextMenu.blockDeleteOption(block).callback();
+          break;
+
+        case ACTION_TYPE.DUPLICATE_BLOCK:
+          Blockly.duplicate_(block);
+          break;
+
+        case ACTION_TYPE.HELP:
+          block.showHelp_();
+          break;
       }
     }
-
-    if (this.workspace.options.collapse) {
-      // Option to collapse/expand block.
-      if (this.collapsed_) {
-        var expandOption = {enabled: true};
-        expandOption.text = Blockly.Msg['EXPAND_BLOCK'];
-        expandOption.callback = function() {
-          block.setCollapsed(false);
-        };
-        menuOptions.push(expandOption);
-      } else {
-        var collapseOption = {enabled: true};
-        collapseOption.text = Blockly.Msg['COLLAPSE_BLOCK'];
-        collapseOption.callback = function() {
-          block.setCollapsed(true);
-        };
-        menuOptions.push(collapseOption);
-      }
-    }
-
-    if (this.workspace.options.disable) {
-      // Option to disable/enable block.
-      var disableOption = {
-        text: this.disabled ?
-            Blockly.Msg['ENABLE_BLOCK'] : Blockly.Msg['DISABLE_BLOCK'],
-        enabled: !this.getInheritedDisabled(),
-        callback: function() {
-          var group = Blockly.Events.getGroup();
-          if (!group) {
-            Blockly.Events.setGroup(true);
-          }
-          block.setDisabled(!block.disabled);
-          if (!group) {
-            Blockly.Events.setGroup(false);
-          }
-        }
-      };
-      menuOptions.push(disableOption);
-    }
-
-    menuOptions.push(Blockly.ContextMenu.blockDeleteOption(block));
-  }
-
-  menuOptions.push(Blockly.ContextMenu.blockHelpOption(block));
-
-  // Allow the block to add or modify menuOptions.
-  if (this.customContextMenu) {
-    this.customContextMenu(menuOptions);
-  }
-
-  Blockly.ContextMenu.show(e, menuOptions, this.RTL);
-  Blockly.ContextMenu.currentBlock = this;
+  });
 };
 
 /**

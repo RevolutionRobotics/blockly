@@ -433,6 +433,11 @@ Blockly.Trashcan.prototype.click = function() {
   for (var i = 0, text; text = this.contents_[i]; i++) {
     xml[i] = Blockly.Xml.textToDom(text).firstChild;
   }
+  // TODO: Localize remove 'Loading...' element
+  xml = xml.filter(function(element) {
+    return element.textContent !== 'Loading...';
+  });
+
   this.flyout_.show(xml);
 };
 

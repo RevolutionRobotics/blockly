@@ -314,7 +314,7 @@ Blockly.FieldVariable.dropdownCreate = function() {
     // Set the UUID as the internal representation of the variable.
     options[i] = [variableModelList[i].name, variableModelList[i].getId()];
   }
-  options.push([Blockly.Msg['RENAME_VARIABLE'], Blockly.RENAME_VARIABLE_ID]);
+  // options.push([Blockly.Msg['RENAME_VARIABLE'], Blockly.RENAME_VARIABLE_ID]);
   if (Blockly.Msg['DELETE_VARIABLE']) {
     options.push(
         [
@@ -325,6 +325,25 @@ Blockly.FieldVariable.dropdownCreate = function() {
   }
 
   return options;
+};
+
+Blockly.FieldVariable.prototype.handleDropdownCallback_ = function(newValue) {
+  if (newValue === null) {
+    return;
+  }
+
+  var action = JSON.parse(newValue);
+  if (action.type && action.payload) {
+    switch (action.type) {
+      case 'DELETE_VARIABLE_ID':
+        this.sourceBlock_.workspace.deleteVariableById(action.payload);
+        return;
+
+      case 'SET_VARIABLE_ID':
+        this.setValue(action.payload);
+        return;
+    }
+  }
 };
 
 /**

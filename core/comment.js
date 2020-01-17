@@ -178,43 +178,43 @@ Blockly.Comment.prototype.resizeBubble_ = function() {
  * @param {boolean} visible True if the bubble should be visible.
  */
 Blockly.Comment.prototype.setVisible = function(visible) {
-  if (visible == this.isVisible()) {
-    // No change.
-    return;
-  }
-  Blockly.Events.fire(
-      new Blockly.Events.Ui(this.block_, 'commentOpen', !visible, visible));
-  if ((!this.block_.isEditable() && !this.textarea_) || goog.userAgent.IE) {
-    // Steal the code from warnings to make an uneditable text bubble.
-    // MSIE does not support foreignobject; textareas are impossible.
-    // https://docs.microsoft.com/en-us/openspecs/ie_standards/ms-svg/56e6e04c-7c8c-44dd-8100-bd745ee42034
-    // Always treat comments in IE as uneditable.
-    Blockly.Warning.prototype.setVisible.call(this, visible);
-    return;
-  }
-  // Save the bubble stats before the visibility switch.
-  var text = this.getText();
-  var size = this.getBubbleSize();
-  if (visible) {
-    // Create the bubble.
-    this.bubble_ = new Blockly.Bubble(
-        /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
-        this.createEditor_(), this.block_.svgPath_,
-        this.iconXY_, this.width_, this.height_);
-    // Expose this comment's block's ID on its top-level SVG group.
-    this.bubble_.setSvgId(this.block_.id);
-    this.bubble_.registerResizeEvent(this.resizeBubble_.bind(this));
-    this.updateColour();
-  } else {
-    // Dispose of the bubble.
-    this.bubble_.dispose();
-    this.bubble_ = null;
-    this.textarea_ = null;
-    this.foreignObject_ = null;
-  }
-  // Restore the bubble stats after the visibility switch.
-  this.setText(text);
-  this.setBubbleSize(size.width, size.height);
+  // if (visible == this.isVisible()) {
+  //   // No change.
+  //   return;
+  // }
+  // Blockly.Events.fire(
+  //     new Blockly.Events.Ui(this.block_, 'commentOpen', !visible, visible));
+  // if ((!this.block_.isEditable() && !this.textarea_) || goog.userAgent.IE) {
+  //   // Steal the code from warnings to make an uneditable text bubble.
+  //   // MSIE does not support foreignobject; textareas are impossible.
+  //   // https://docs.microsoft.com/en-us/openspecs/ie_standards/ms-svg/56e6e04c-7c8c-44dd-8100-bd745ee42034
+  //   // Always treat comments in IE as uneditable.
+  //   Blockly.Warning.prototype.setVisible.call(this, visible);
+  //   return;
+  // }
+  // // Save the bubble stats before the visibility switch.
+  // var text = this.getText();
+  // var size = this.getBubbleSize();
+  // if (visible) {
+  //   // Create the bubble.
+  //   this.bubble_ = new Blockly.Bubble(
+  //       /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
+  //       this.createEditor_(), this.block_.svgPath_,
+  //       this.iconXY_, this.width_, this.height_);
+  //   // Expose this comment's block's ID on its top-level SVG group.
+  //   this.bubble_.setSvgId(this.block_.id);
+  //   this.bubble_.registerResizeEvent(this.resizeBubble_.bind(this));
+  //   this.updateColour();
+  // } else {
+  //   // Dispose of the bubble.
+  //   this.bubble_.dispose();
+  //   this.bubble_ = null;
+  //   this.textarea_ = null;
+  //   this.foreignObject_ = null;
+  // }
+  // // Restore the bubble stats after the visibility switch.
+  // this.setText(text);
+  // this.setBubbleSize(size.width, size.height);
 };
 
 /**

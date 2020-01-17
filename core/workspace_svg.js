@@ -1853,6 +1853,42 @@ Blockly.WorkspaceSvg.prototype.centerOnBlock = function(id) {
   this.scroll(x, y);
 };
 
+Blockly.WorkspaceSvg.prototype.restoreWorkspace = function() {
+  this.scale = 1;
+
+  // Blockly.hideChaff(false);
+  if (this.flyout_) {
+    // No toolbox, resize flyout.
+    this.flyout_.reflow();
+    this.recordDeleteAreas();
+  }
+  if (this.grid_) {
+    this.grid_.update(this.scale);
+  }
+
+  // We call scroll instead of scrollbar.resize() so that we can center the
+  // zoom correctly without scrollbars, but scroll does not resize the
+  // scrollbars so we have to call resizeView/resizeContent as well.
+  var metrics = this.getMetrics();
+  // The scroll values and the view values are additive inverses of
+  // each other, so when we subtract from one we have to add to the other.
+  this.scrollX -= metrics.absoluteLeft;
+  this.scrollY -= metrics.absoluteTop;
+  metrics.viewLeft += metrics.absoluteLeft;
+  metrics.viewTop += metrics.absoluteTop;
+
+  this.scroll(this.scrollX, this.scrollY);
+  if (this.scrollbar) {
+    if (this.flyout_) {
+      this.scrollbar.hScroll.resizeViewHorizontal(metrics);
+      this.scrollbar.vScroll.resizeViewVertical(metrics);
+    } else {
+      this.scrollbar.hScroll.resizeContentHorizontal(metrics);
+      this.scrollbar.vScroll.resizeContentVertical(metrics);
+    }
+  }
+};
+
 /**
  * Set the workspace's zoom factor.
  * @param {number} newScale Zoom factor. Units: (pixels / workspaceUnit).

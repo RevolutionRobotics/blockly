@@ -220,7 +220,9 @@ Blockly.VerticalFlyout.prototype.setBackgroundPath_ = function(width, height) {
  * Scroll the flyout to the top.
  */
 Blockly.VerticalFlyout.prototype.scrollToStart = function() {
-  this.scrollbar_.set(0);
+  if (this.scrollbar_) {
+    this.scrollbar_.set(0);
+  }
 };
 
 /**
@@ -237,7 +239,9 @@ Blockly.VerticalFlyout.prototype.wheel_ = function(e) {
     var limit = metrics.contentHeight - metrics.viewHeight;
     pos = Math.min(pos, limit);
     pos = Math.max(pos, 0);
-    this.scrollbar_.set(pos);
+    if (this.scrollbar_) {
+      this.scrollbar_.set(pos);
+    }
     // When the flyout moves from a wheel event, hide WidgetDiv.
     Blockly.WidgetDiv.hide();
   }

@@ -52,8 +52,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "helpUrl": "%{BKY_TEXT_TEXT_HELPURL}",
     "tooltip": "%{BKY_TEXT_TEXT_TOOLTIP}",
     "extensions": [
-      "text_quotes",
-      "parent_tooltip_when_inline"
+      // "text_quotes",
+      // "parent_tooltip_when_inline"
     ]
   },
   {

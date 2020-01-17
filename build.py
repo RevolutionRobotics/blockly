@@ -203,18 +203,18 @@ class Gen_compressed(threading.Thread):
     if ('core' in self.bundles):
       self.gen_core()
 
-    if ('accessible' in self.bundles):
-      self.gen_accessible()
+    # if ('accessible' in self.bundles):
+    #   self.gen_accessible()
 
     if ('core' in self.bundles or 'accessible' in self.bundles):
       self.gen_blocks()
 
     if ('generators' in self.bundles):
-      self.gen_generator("javascript")
+      # self.gen_generator("javascript")
       self.gen_generator("python")
-      self.gen_generator("php")
-      self.gen_generator("lua")
-      self.gen_generator("dart")
+      # self.gen_generator("php")
+      # self.gen_generator("lua")
+      # self.gen_generator("dart")
 
   def gen_core(self):
     target_filename = "blockly_compressed.js"
@@ -551,8 +551,8 @@ developers.google.com/blockly/guides/modify/web/closure""")
   if ('core' in args):
     Gen_uncompressed(core_search_paths, 'blockly_uncompressed.js').start()
 
-  if ('accessible' in args):
-    Gen_uncompressed(full_search_paths, 'blockly_accessible_uncompressed.js').start()
+  # if ('accessible' in args):
+  #   Gen_uncompressed(full_search_paths, 'blockly_accessible_uncompressed.js').start()
 
   # Compressed is limited by network and server speed.
   Gen_compressed(full_search_paths, args).start()

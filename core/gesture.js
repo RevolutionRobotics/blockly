@@ -633,7 +633,8 @@ Blockly.Gesture.prototype.handleRightClick = function(e) {
     this.startBubble_.showContextMenu_(e);
   } else if (this.startWorkspace_ && !this.flyout_) {
     Blockly.hideChaff();
-    this.startWorkspace_.showContextMenu_(e);
+    // TODO implement onworkspace longpress
+    // this.startWorkspace_.showContextMenu_(e);
   }
 
   // TODO: Handle right-click on a bubble.
@@ -724,7 +725,7 @@ Blockly.Gesture.prototype.doBubbleClick_ = function() {
  */
 Blockly.Gesture.prototype.doFieldClick_ = function() {
   this.startField_.showEditor_();
-  this.bringBlockToFront_();
+  // this.bringBlockToFront_();
 };
 
 /**

@@ -46,9 +46,9 @@ goog.require('goog.math.Coordinate');
 Blockly.ScrollbarPair = function(workspace) {
   this.workspace_ = workspace;
   this.hScroll = new Blockly.Scrollbar(
-      workspace, true, true, 'blocklyMainWorkspaceScrollbar');
+      workspace, true, true, 'blocklyMainWorkspaceScrollbar', null);
   this.vScroll = new Blockly.Scrollbar(
-      workspace, false, true, 'blocklyMainWorkspaceScrollbar');
+      workspace, false, true, 'blocklyMainWorkspaceScrollbar', null);
   this.corner_ = Blockly.utils.createSvgElement(
       'rect',
       {
@@ -197,13 +197,15 @@ Blockly.ScrollbarPair.prototype.getRatio_ = function(handlePosition, viewSize) {
  * @param {boolean} horizontal True if horizontal, false if vertical.
  * @param {boolean=} opt_pair True if scrollbar is part of a horiz/vert pair.
  * @param {string=} opt_class A class to be applied to this scrollbar.
+ * @param {string=} scrollbar_handle_class A class to be applied to this scrollbar handler.
  * @constructor
  */
-Blockly.Scrollbar = function(workspace, horizontal, opt_pair, opt_class) {
+Blockly.Scrollbar = function(workspace, horizontal, opt_pair, opt_class, scrollbar_handle_class) {
   this.workspace_ = workspace;
   this.pair_ = opt_pair || false;
   this.horizontal_ = horizontal;
   this.oldHostMetrics_ = null;
+  this.scrollbarHandlerClass = scrollbar_handle_class;
 
   this.createDom_(opt_class);
 
@@ -302,9 +304,9 @@ Blockly.Scrollbar.prototype.containerVisible_ = true;
  * Width of vertical scrollbar or height of horizontal scrollbar in CSS pixels.
  * Scrollbars should be larger on touch devices.
  */
-Blockly.Scrollbar.scrollbarThickness = 15;
+Blockly.Scrollbar.scrollbarThickness = 8;
 if (goog.events.BrowserFeature.TOUCH_ENABLED) {
-  Blockly.Scrollbar.scrollbarThickness = 25;
+  Blockly.Scrollbar.scrollbarThickness = 8;
 }
 
 /**
@@ -620,7 +622,7 @@ Blockly.Scrollbar.prototype.createDom_ = function(opt_class) {
   this.svgHandle_ = Blockly.utils.createSvgElement(
       'rect',
       {
-        'class': 'blocklyScrollbarHandle',
+        'class': this.scrollbarHandlerClass ? this.scrollbarHandlerClass : 'blocklyScrollbarHandle',
         'rx': radius,
         'ry': radius
       },
