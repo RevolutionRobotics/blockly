@@ -476,7 +476,7 @@ Blockly.FieldDropdown.prototype.updateColour = function() {
   //   } else {
   //     this.arrow_.style.fill = this.sourceBlock_.getColour();
   //   }
-  }
+  // }
 };
 
 /**
