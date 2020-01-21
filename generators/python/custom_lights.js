@@ -2,8 +2,12 @@
 
 goog.require('Blockly.Python');
 
-var setAllLedsImpl= function (color) {
-    return `robot.led.set(led_index=[1,2,3,4,5,6,7,8,9,10,11,12], color="${color}")\n`;
+var setLedsImpl = function (leds, color) {
+    return `robot.led.set(leds=[${leds}], color=${color})\n`;
+};
+
+var setAllLedsImpl = function (color) {
+    return setLedsImpl('1,2,3,4,5,6,7,8,9,10,11,12', color);
 };
 
 var startAnimationImpl = function (animation) {
@@ -11,23 +15,23 @@ var startAnimationImpl = function (animation) {
 };
 
 Blockly.Python['block_set_leds_white'] = function (block) {
-    return setAllLedsImpl('#ffffff');
+    return setAllLedsImpl("'#ffffff'");
 };
 
 Blockly.Python['block_set_leds_red'] = function (block) {
-    return setAllLedsImpl('#ff0000');
+    return setAllLedsImpl("'#ff0000'");
 };
 
 Blockly.Python['block_set_leds_green'] = function (block) {
-    return setAllLedsImpl('#00ff00');
+    return setAllLedsImpl("'#00ff00'");
 };
 
 Blockly.Python['block_set_leds_blue'] = function (block) {
-    return setAllLedsImpl('#0000ff');
+    return setAllLedsImpl("'#0000ff'");
 };
 
 Blockly.Python['block_set_leds_black'] = function (block) {
-    return setAllLedsImpl('#000000');
+    return setAllLedsImpl("'#000000'");
 };
 
 Blockly.Python['block_light_siren'] = function (block) {
@@ -44,7 +48,7 @@ Blockly.Python['block_light_traffic'] = function (block) {
 
 Blockly.Python['block_set_all_leds'] = function (block) {
     var value_color = block.getFieldValue('COLOR');
-    return setAllLedsImpl(value_color);
+    return setAllLedsImpl(`'${value_color}'`);
 };
 
 Blockly.Python['block_set_leds_black_small'] = Blockly.Python['block_set_leds_black'];
@@ -58,14 +62,14 @@ Blockly.Python['block_set_led'] = function (block) {
     var value_led = Blockly.Python.valueToCode(block, 'LED', Blockly.Python.ORDER_ATOMIC);
     var value_color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_ATOMIC);
 
-    return `robot.led.set(led_index=${value_led}, color=${value_color})\n`;
+    return setLedsImpl(value_led, value_color);
 };
 
 Blockly.Python['block_set_multiple_led'] = function (block) {
     var value_led = block.getFieldValue('LED_IDS');
     var value_color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_ATOMIC);
 
-    return `robot.led.set(led_index=[${value_led}], color=${value_color})\n`;
+    return setLedsImpl(value_led, value_color);
 };
 
 Blockly.Python['colour_rgb2'] = function (block) {

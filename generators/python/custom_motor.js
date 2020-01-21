@@ -133,7 +133,7 @@ Blockly.Python['block_set_speed'] = function (block) {
     var unit_speed = block.getFieldValue('UNIT_SPEED_SELECTOR');
 
     var code =
-        'robot.drivetrain.set_speeds(' +
+        'robot.drivetrain.set_speed(' +
         `direction=${dropdown_direction}, ` +
         `speed=${number_speed}, ` +
         `unit_speed=${unit_speed})\n`;
