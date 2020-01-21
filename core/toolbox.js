@@ -732,7 +732,7 @@ Blockly.Css.register([
 
   /* Category tree in Toolbox. */
   '.blocklyToolboxDiv {',
-    'background-color: #ddd;',
+    'background-color: #000;',
     'overflow-x: visible;',
     'overflow-y: auto;',
     'position: absolute;',
@@ -749,11 +749,38 @@ Blockly.Css.register([
   '}',
 
   '.blocklyTreeRow {',
-    'height: 22px;',
-    'line-height: 22px;',
-    'margin-bottom: 3px;',
+    'position: relative;',
+    'height: 40px;',
+    'line-height: 39px;',
+    'margin-bottom: 4px;',
     'padding-right: 8px;',
     'white-space: nowrap;',
+    'color: #fff;',
+    'background-color: #282828;',
+  '}',
+
+  '.blocklyTreeRow:before {',
+    'position: absolute;',
+    'height: 0px;',
+    'width: 0;',
+    'content: " ";',
+    'border: 20px solid black;',
+    'border-color: #00000000 transparent black black;',
+    'border-width: 10px 0px 0px 10px;',
+    'left: -8px;',
+    'top: 30px;',
+  '}',
+
+  '.blocklyTreeRow:after {',
+    'position: absolute;',
+    'height: 0px;',
+    'width: 0;',
+    'content: " ";',
+    'border: 20px solid black;',
+    'border-color: transparent transparent transparent black;',
+    'border-width: 0px 0px 10px 10px;',
+    'left: -8px;',
+    'top: 0px;',
   '}',
 
   '.blocklyHorizontalTree {',
@@ -770,9 +797,9 @@ Blockly.Css.register([
     'margin-left: 8px;',
   '}',
 
-  '.blocklyTreeRow:not(.blocklyTreeSelected):hover {',
-    'background-color: #e4e4e4;',
-  '}',
+ // '.blocklyTreeRow:not(.blocklyTreeSelected):hover {',
+ //   'background-color: #fff;',
+ // '}',
 
   '.blocklyTreeSeparator {',
     'border-bottom: solid #e5e5e5 1px;',
@@ -827,9 +854,56 @@ Blockly.Css.register([
     'cursor: default;',
     'font-family: sans-serif;',
     'font-size: 16px;',
-    'padding: 0 3px;',
+    'padding: 0 3px 0 18px;',
     'vertical-align: middle;',
   '}',
+
+/* Icons */
+  '.blocklyTreeLabel:before {',
+    'position: absolute;',
+    'width: 20px;',
+    'height: 20px;',
+    'content: "";',
+    'top: -1px;',
+    'left: -8px;',
+    'background-size: contain;',
+    'background-repeat: no-repeat;',
+    'background-position: center;',
+  '}',
+
+  '.motorIcon:before {',
+    'background-image: url("./media/moves.svg");',
+  '}',
+
+  '.sensorIcon:before {',
+    'background-image: url("./media/sensors.svg");',
+  '}',
+
+  '.loopsIcon:before {',
+  'background-image: url("./media/loop.svg");',
+  '}',
+
+  '.logicIcon:before {',
+  'background-image: url("./media/logic.svg");',
+  '}',
+
+  '.mathIcon:before {',
+  'background-image: url("./media/math.svg");',
+  '}',
+
+  '.timeIcon:before {',
+  'background-image: url("./media/time.svg");',
+  '}',
+
+  '.variablesIcon:before {',
+  'background-image: url("./media/variables.svg");',
+  '}',
+
+  '.functionsIcon:before {',
+  'background-image: url("./media/functions.svg");',
+  '}',
+
+  /* End of Icons */
 
   '.blocklyToolboxDelete .blocklyTreeLabel {',
     'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
