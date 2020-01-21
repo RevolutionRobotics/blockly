@@ -80,8 +80,9 @@
 <script>
     var workspace = Blockly.inject('blocklyDiv', {
       toolbox: document.getElementById('toolbox'),
+      media: './media/',
       sounds: false
-    })
+    });
 
     var METHOD_SIGNATURE = {
       LOAD_XML_PROGRAM: 'NativeBridge.loadXMLProgram', // Native -> JS, xmlString: String
