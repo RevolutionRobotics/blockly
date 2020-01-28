@@ -167,10 +167,10 @@ Blockly.Python['block_motor'] = function (block) {
 
     var code =
         `robot.motors["${text_name}"].move(` +
-        `direction=${direction}, `
-        `amount=${amount}, `
-        `unit_amount=${unit_amount}, `
-        `limit=${limit}, `
+        `direction=${direction}, ` +
+        `amount=${amount}, ` +
+        `unit_amount=${unit_amount}, ` +
+        `limit=${limit}, ` +
         `unit_limit=${unit_limit})\n`;
     return code;
 };
