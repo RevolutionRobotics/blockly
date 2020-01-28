@@ -4,7 +4,7 @@ var changeToolbox = function(toolboxId) {
 }
 
 var setCategoryIcons = function(icons) {
-  var treeRoot = document.getElementById(":0");
+  var treeRoot = document.getElementById("blockly:0");
   var categoryList = treeRoot.getElementsByTagName('div')[1];
   var categoryElements = categoryList.getElementsByTagName('div');
   categoryElements = Array.prototype.slice.call(categoryElements);
