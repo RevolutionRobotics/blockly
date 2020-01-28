@@ -4,7 +4,7 @@ var changeToolbox = function(toolboxId) {
 };
 
 var setCategoryIcons = function(icons) {
-  var treeRoot = document.getElementById("blockly:0");
+  var treeRoot = document.getElementsByClassName("tabs-level")[0].nextSibling.firstChild;
   var categoryList = treeRoot.getElementsByTagName('div')[1];
   var categoryElements = Array.prototype.slice.call(categoryList
     .getElementsByTagName('div'))
@@ -14,7 +14,7 @@ var setCategoryIcons = function(icons) {
 
   for (var i = 0; i < categoryElements.length; i++) {
     categoryElements[i].getElementsByTagName('div')[0]
-      .getElementsByTagName('span')[2]
+      .getElementsByTagName('span')[1]
       .classList
       .add(icons[i]);
   }
