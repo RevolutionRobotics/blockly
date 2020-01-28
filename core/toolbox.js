@@ -876,6 +876,14 @@ Blockly.Css.register([
     'background-image: url("./media/moves.svg");',
   '}',
 
+  '.lightIcon:before {',
+    'background-image: url("./media/lights.svg");',
+  '}',
+
+  '.soundIcon:before {',
+    'background-image: url("./media/tune.svg");',
+  '}',
+
   '.sensorIcon:before {',
     'background-image: url("./media/sensors.svg");',
   '}',
