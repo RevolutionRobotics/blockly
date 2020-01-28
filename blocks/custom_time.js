@@ -1,6 +1,38 @@
 goog.require('Blockly.Blocks');
 goog.require('Blockly');
 
+// Block block_set_led
+Blockly.Blocks['block_wait_1'] = {
+  init: function () {
+    this.appendDummyInput().appendField(
+      new Blockly.FieldImage(CUSTOM_IMAGES.WAIT_1, 50, 50, '*'),
+      'LIGHT_IMAGE'
+    );
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('time_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
+
+// Block block_set_led
+Blockly.Blocks['block_wait_5'] = {
+  init: function () {
+    this.appendDummyInput().appendField(
+      new Blockly.FieldImage(CUSTOM_IMAGES.WAIT_5, 50, 50, '*'),
+      'LIGHT_IMAGE'
+    );
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('time_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
+
 // Block wait
 Blockly.Blocks['block_wait'] = {
     init: function () {

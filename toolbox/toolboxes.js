@@ -7,18 +7,42 @@ toolboxes["empty"] = {
 }
 toolboxes["level1"] = {
     xml: '<xml>' +
-        '<category name="motors" colour="#e60312">' +
-        '    <block type="block_drive"></block>' +
-        '    <block type="block_turn"></block>' +
-        '    <block type="block_set_speed"></block>' +
-        '    <block type="block_motor"></block>' +
-        '    <block type="spin_motor"></block>' +
-        '    <block type="block_stop_motor"></block>' +
-        '    <block type="block_stop_all_motors"></block>' +
+        '<category name="move" colour="#e60312">' +
+        '    <block type="block_drive_fwd_small"></block>' +
+        '    <block type="block_drive_fwd_big"></block>' +
+        '    <block type="block_drive_back_small"></block>' +
+        '    <block type="block_drive_back_big"></block>' +
+        '    <block type="block_turn_left_90"></block>' +
+        '    <block type="block_turn_right_90"></block>' +
+        '    <block type="block_turn_left_180"></block>' +
+        '    <block type="block_turn_right_180"></block>' +
         '</category>'+
+        '<category name="lights" colour="#e51777">' +
+        '    <block type="block_set_leds_white"></block>' +
+        '    <block type="block_set_leds_red"></block>' +
+        '    <block type="block_set_leds_green"></block>' +
+        '    <block type="block_set_leds_blue"></block>' +
+        '    <block type="block_set_leds_black"></block>' +
+        '    <block type="block_light_siren"></block>' +
+        '    <block type="block_light_rainbow"></block>' +
+        '    <block type="block_light_traffic"></block>' +
+        '</category>' +
+        '<category name="sounds" colour="#5e2882">' +
+        '    <block type="play_tune_cat"></block>' +
+        '    <block type="play_tune_uh_oh"></block>' +
+        '    <block type="play_tune_robot"></block>' +
+        '    <block type="play_tune_tada"></block>' +
+        '</category>' +
+        '<category name="time" colour="#868a8c">' +
+        '    <block type="block_wait_1"></block>' +
+        '    <block type="block_wait_5"></block>' +
+        '</category>' +
         '</xml>',
     icons: [
-        'motorIcon'
+        'motorIcon',
+        'lightIcon',
+        'soundIcon',
+        'timeIcon'
     ]
 }
 
@@ -36,11 +60,15 @@ toolboxes["level3"] = {
         '<category name="sensors" colour="#f8bc08">' +
         '    <block type="block_ultrasonic_sensor"></block>' +
         '    <block type="block_bumper"></block>' +
-        '    <block type="play_tune"></block>' +
+        '</category>' +
+        '<category name="lights" colour="#e51777">' +
         '    <block type="colour_picker"></block>' +
         '    <block type="colour_rgb2"></block>' +
         '    <block type="block_set_led"></block>' +
         '    <block type="block_set_multiple_led"></block>' +
+        '</category>' +
+        '<category name="sounds" colour="#5e2882">' +
+        '    <block type="play_tune"></block>' +
         '</category>' +
         '<category name="loops" colour="#dd7d3a">' +
         '    <block type="controls_repeat_ext2"></block>' +
@@ -78,6 +106,8 @@ toolboxes["level3"] = {
     icons: [
         'motorIcon',
         'sensorIcon',
+        'lightIcon',
+        'soundIcon',
         'loopsIcon',
         'logicIcon',
         'timeIcon',

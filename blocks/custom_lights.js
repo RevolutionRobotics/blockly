@@ -2,6 +2,132 @@ goog.require('Blockly.Blocks');
 goog.require('Blockly');
 
 // Block block_set_led
+Blockly.Blocks['block_set_leds_white'] = {
+  init: function () {
+    this.appendDummyInput().appendField(
+      new Blockly.FieldImage(CUSTOM_IMAGES.LIGHT, 50, 50, '*'),
+      'LIGHT_IMAGE'
+    );
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('light_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
+
+// Block block_set_led
+Blockly.Blocks['block_set_leds_red'] = {
+  init: function () {
+    this.appendDummyInput().appendField(
+      new Blockly.FieldImage(CUSTOM_IMAGES.LIGHT_RED, 50, 50, '*'),
+      'LIGHT_IMAGE'
+    );
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('light_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
+
+// Block block_set_led
+Blockly.Blocks['block_set_leds_green'] = {
+  init: function () {
+    this.appendDummyInput().appendField(
+      new Blockly.FieldImage(CUSTOM_IMAGES.LIGHT_GREEN, 50, 50, '*'),
+      'LIGHT_IMAGE'
+    );
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('light_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
+// Block block_set_led
+Blockly.Blocks['block_set_leds_blue'] = {
+  init: function () {
+    this.appendDummyInput().appendField(
+      new Blockly.FieldImage(CUSTOM_IMAGES.LIGHT_BLUE, 50, 50, '*'),
+      'LIGHT_IMAGE'
+    );
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('light_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
+// Block block_set_led
+Blockly.Blocks['block_set_leds_black'] = {
+  init: function () {
+    this.appendDummyInput().appendField(
+      new Blockly.FieldImage(CUSTOM_IMAGES.LIGHT_BLACK, 50, 50, '*'),
+      'LIGHT_IMAGE'
+    );
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('light_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
+
+// Block block_set_led
+Blockly.Blocks['block_light_siren'] = {
+  init: function () {
+    this.appendDummyInput().appendField(
+      new Blockly.FieldImage(CUSTOM_IMAGES.LIGHT_SIREN, 50, 50, '*'),
+      'LIGHT_IMAGE'
+    );
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('light_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
+
+// Block block_set_led
+Blockly.Blocks['block_light_rainbow'] = {
+  init: function () {
+    this.appendDummyInput().appendField(
+      new Blockly.FieldImage(CUSTOM_IMAGES.LIGHT_RAINBOW, 50, 50, '*'),
+      'LIGHT_IMAGE'
+    );
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('light_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
+
+// Block block_set_led
+Blockly.Blocks['block_light_traffic'] = {
+  init: function () {
+    this.appendDummyInput().appendField(
+      new Blockly.FieldImage(CUSTOM_IMAGES.LIGHT_TRAFFIC, 50, 50, '*'),
+      'LIGHT_IMAGE'
+    );
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('light_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
+
+// Block block_set_led
 Blockly.Blocks['block_set_led'] = {
   init: function () {
     this.appendDummyInput().appendField(
@@ -22,7 +148,7 @@ Blockly.Blocks['block_set_led'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setStyle('colour_blocks');
+    this.setStyle('light_blocks');
     this.setTooltip('');
     this.setHelpUrl('');
   }
@@ -45,7 +171,7 @@ Blockly.Blocks['block_set_multiple_led'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setStyle('colour_blocks');
+    this.setStyle('light_blocks');
     this.setTooltip('');
     this.setHelpUrl('');
   }
@@ -69,7 +195,7 @@ Blockly.Blocks['colour_rgb2'] = {
 
     this.setInputsInline(true);
     this.setOutput(true, 'Colour');
-    this.setColour('#f8bc08');
+    this.setStyle('light_blocks');
     this.setTooltip('%{BKY_COLOUR_RGB_TOOLTIP}');
     this.setHelpUrl('%{BKY_COLOUR_RGB_HELPURL}');
   }

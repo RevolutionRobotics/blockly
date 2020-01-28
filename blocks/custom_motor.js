@@ -1,6 +1,141 @@
 goog.require('Blockly.Blocks');
 goog.require('Blockly');
 
+// Block block_drive_fwd_small
+Blockly.Blocks['block_drive_fwd_small'] = {
+  init: function () {
+      this.appendDummyInput()
+          .appendField(
+              new Blockly.FieldImage(CUSTOM_IMAGES.DIRECTION_FWD, 50, 50, '*'),
+              'DIRECTION_IMAGE'
+          );
+
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setStyle('motor_blocks');
+      this.setTooltip('');
+      this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['block_drive_fwd_big'] = {
+  init: function () {
+      this.appendDummyInput()
+          .appendField(
+              new Blockly.FieldImage(CUSTOM_IMAGES.DIRECTION_FWD_FAST, 50, 50, '*'),
+              'DIRECTION_IMAGE'
+          );
+
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setStyle('motor_blocks');
+      this.setTooltip('');
+      this.setHelpUrl('');
+  }
+};
+
+// Block block_drive
+Blockly.Blocks['block_drive_back_small'] = {
+  init: function () {
+      this.appendDummyInput()
+          .appendField(
+              new Blockly.FieldImage(CUSTOM_IMAGES.DIRECTION_BACK, 50, 50, '*'),
+              'DIRECTION_IMAGE'
+          );
+
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setStyle('motor_blocks');
+      this.setTooltip('');
+      this.setHelpUrl('');
+  }
+};
+
+// Block block_drive
+Blockly.Blocks['block_drive_back_big'] = {
+  init: function () {
+      this.appendDummyInput()
+          .appendField(
+              new Blockly.FieldImage(CUSTOM_IMAGES.DIRECTION_BACK_FAST, 50, 50, '*'),
+              'DIRECTION_IMAGE'
+          );
+
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setStyle('motor_blocks');
+      this.setTooltip('');
+      this.setHelpUrl('');
+  }
+};
+
+// Block block_drive
+Blockly.Blocks['block_turn_left_90'] = {
+  init: function () {
+      this.appendDummyInput()
+          .appendField(
+              new Blockly.FieldImage(CUSTOM_IMAGES.DIRECTION_LEFT, 50, 50, '*'),
+              'DIRECTION_IMAGE'
+          );
+
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setStyle('motor_blocks');
+      this.setTooltip('');
+      this.setHelpUrl('');
+  }
+};
+
+// Block block_drive
+Blockly.Blocks['block_turn_right_90'] = {
+  init: function () {
+      this.appendDummyInput()
+          .appendField(
+              new Blockly.FieldImage(CUSTOM_IMAGES.DIRECTION_RIGHT, 50, 50, '*'),
+              'DIRECTION_IMAGE'
+          );
+
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setStyle('motor_blocks');
+      this.setTooltip('');
+      this.setHelpUrl('');
+  }
+};
+
+// Block block_drive
+Blockly.Blocks['block_turn_left_180'] = {
+  init: function () {
+      this.appendDummyInput()
+          .appendField(
+              new Blockly.FieldImage(CUSTOM_IMAGES.DIRECTION_LEFT_180, 50, 50, '*'),
+              'DIRECTION_IMAGE'
+          );
+
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setStyle('motor_blocks');
+      this.setTooltip('');
+      this.setHelpUrl('');
+  }
+};
+
+// Block block_drive
+Blockly.Blocks['block_turn_right_180'] = {
+  init: function () {
+      this.appendDummyInput()
+          .appendField(
+              new Blockly.FieldImage(CUSTOM_IMAGES.DIRECTION_RIGHT_180, 50, 50, '*'),
+              'DIRECTION_IMAGE'
+          );
+
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setStyle('motor_blocks');
+      this.setTooltip('');
+      this.setHelpUrl('');
+  }
+};
+
 // Block block_drive
 Blockly.Blocks['block_drive'] = {
     init: function () {

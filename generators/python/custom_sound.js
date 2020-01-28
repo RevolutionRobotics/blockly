@@ -2,6 +2,26 @@
 
 goog.require('Blockly.Python');
 
+// Generator block_set_led
+Blockly.Python['play_tune_cat'] = function (block) {
+    return "robot.play_tune('cat')\n";
+};
+
+// Generator block_set_led
+Blockly.Python['play_tune_uh_oh'] = function (block) {
+    return "robot.play_tune('uh_oh')\n";
+};
+
+// Generator block_set_led
+Blockly.Python['play_tune_robot'] = function (block) {
+    return "robot.play_tune('robot')\n";
+};
+
+// Generator block_set_led
+Blockly.Python['play_tune_tada'] = function (block) {
+    return "robot.play_tune('ta_da')\n";
+};
+
 // Generator block_play_note
 Blockly.Python['block_play_note'] = function (block) {
     var dropdown_octave = block.getFieldValue('OCTAVE_SELECTOR');
