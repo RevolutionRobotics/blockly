@@ -5,7 +5,7 @@ Blockly.Blocks['play_tune_cat'] = {
   init: function () {
     var icon = this.appendDummyInput()
       .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.CAT, 50, 50, '*'), 'TUNE_IMAGE')
-    icon.size_ = new goog.math.Size(50, 50);
+
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setStyle('sound_blocks');
@@ -18,7 +18,7 @@ Blockly.Blocks['play_tune_uh_oh'] = {
   init: function () {
     var icon = this.appendDummyInput()
       .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.UH_OH, 50, 50, '*'), 'TUNE_IMAGE')
-    icon.size_ = new goog.math.Size(50, 50);
+
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setStyle('sound_blocks');
@@ -31,7 +31,7 @@ Blockly.Blocks['play_tune_robot'] = {
   init: function () {
     var icon = this.appendDummyInput()
       .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.ROBOT, 50, 50, '*'), 'TUNE_IMAGE')
-    icon.size_ = new goog.math.Size(50, 50);
+
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setStyle('sound_blocks');
@@ -44,7 +44,7 @@ Blockly.Blocks['play_tune_tada'] = {
   init: function () {
     var icon = this.appendDummyInput()
       .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.TADA, 50, 50, '*'), 'TUNE_IMAGE')
-    icon.size_ = new goog.math.Size(50, 50);
+
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setStyle('sound_blocks');
