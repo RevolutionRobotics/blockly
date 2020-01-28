@@ -11,6 +11,7 @@
   <script src="python_compressed.js"></script>
   <!-- TODO: Select msg file based on locale. -->
   <script src="msg/js/en.js"></script>
+  <script src="toolbox/toolboxes.js"></script>
   <style type="text/css">
     html,
     body,
@@ -25,62 +26,10 @@
 </head>
 
 <body>
-<div id="blocklyDiv"></div>
-<xml id="toolbox">
-  <category name="motors" colour="#e60312">
-    <block type="block_drive"></block>
-    <block type="block_turn"></block>
-    <block type="block_set_speed"></block>
-    <block type="block_motor"></block>
-    <block type="spin_motor"></block>
-    <block type="block_stop_motor"></block>
-    <block type="block_stop_all_motors"></block>
-  </category>
-  <category name="sensors" colour="#f8bc08">
-    <block type="block_ultrasonic_sensor"></block>
-    <block type="block_bumper"></block>
-    <block type="play_tune"></block>
-    <block type="colour_picker"></block>
-    <block type="colour_rgb2"></block>
-    <block type="block_set_led"></block>
-    <block type="block_set_multiple_led"></block>
-  </category>
-  <category name="loops" colour="#dd7d3a">
-    <block type="controls_repeat_ext2"></block>
-    <block type="block_repeat_forever"></block>
-    <block type="block_repeat_while"></block>
-    <block type="block_repeat_until"></block>
-    <block type="block_break"></block>
-    <block type="block_terminate_program"></block>
-    <block type="block_terminate_all"></block>
-  </category>
-  <category name="logic" colour="#0264ff">
-    <block type="logic_boolean"></block>
-    <block type="logic_compare2"></block>
-    <block type="if_then"></block>
-    <block type="if_then_else"></block>
-    <block type="logic_and"></block>
-    <block type="logic_or"></block>
-    <block type="logic_not"></block>
-  </category>
-  <category name="time" colour="#868a8c">
-    <block type="block_wait"></block>
-    <block type="block_global_timer"></block>
-  </category>
-  <category name="math" colour="#4dc88f">
-    <block type="math_number"></block>
-    <block type="math_arithmetic2"></block>
-    <block type="math_round2"></block>
-    <block type="math_trig2"></block>
-    <block type="math_random_int2"></block>
-    <block type="math_pi"></block>
-  </category>
-  <category name="variables" colour="#cc7be6" custom="VARIABLE"></category>
-  <category name="functions" colour="#6ab3c1" custom="PROCEDURE"></category>
-</xml>
-<script>
+  <div id="blocklyDiv"></div>
+  <script>
     var workspace = Blockly.inject('blocklyDiv', {
-      toolbox: document.getElementById('toolbox'),
+      toolbox: toolboxes["level3"].xml,
       media: './media/',
       sounds: false
     });
@@ -94,33 +43,33 @@
       ON_VARIABLES_EXPORTED: 'NativeBridge.onVariablesExported' //  JS -> Native, variables: String in 'var1,var2,var3'
     };
 
-    var NAME_INPUT_BLOCK_TYPES = [	
-      "block_motor",	
-      "block_stop_motor",	
-      "spin_motor",	
-      "block_ultrasonic_sensor",	
-      "block_bumper"	
+    var NAME_INPUT_BLOCK_TYPES = [
+      "block_motor",
+      "block_stop_motor",
+      "spin_motor",
+      "block_ultrasonic_sensor",
+      "block_bumper"
     ]
 
     var iOSBlocklyBrowser = window.navigator.userAgent === 'iOS-Blockly';
 
-    function getNameInputValues() {	
-      return NAME_INPUT_BLOCK_TYPES	
-        .map(function (blockType) {	
-          var blocks = workspace.getBlocksByType(blockType);	
-          return blocks	
-            .map(function (block) {	
-              return block.getFieldValue('NAME_INPUT');	
-            })	
-            .filter(function (name) {	
-              return name !== ''	
-            })	
-            .join();	
-        })	
-        .filter(function (nameInput) {	
-          return nameInput !== ''	
-        })	
-        .join();	
+    function getNameInputValues() {
+      return NAME_INPUT_BLOCK_TYPES
+        .map(function (blockType) {
+          var blocks = workspace.getBlocksByType(blockType);
+          return blocks
+            .map(function (block) {
+              return block.getFieldValue('NAME_INPUT');
+            })
+            .filter(function (name) {
+              return name !== ''
+            })
+            .join();
+        })
+        .filter(function (nameInput) {
+          return nameInput !== ''
+        })
+        .join();
     }
 
     function createIOSJavascriptBridge(callback) {
@@ -145,7 +94,7 @@
       childBlock.render();
 
       setTimeout(() => {
-          workspace.clear();
+        workspace.clear();
       });
     };
 
@@ -205,6 +154,25 @@
       });
     }
 
+    function changeToolBox(toolboxId) {
+      workspace.updateToolbox(toolboxes[toolboxId].xml);
+      setCategoryIcons(toolboxes[toolboxId].icons);
+    }
+
+    function setCategoryIcons(icons) {
+      var treeRoot = document.getElementById(":0");
+      var categoryList = treeRoot.getElementsByTagName('div')[1];
+      var categoryElements = categoryList.getElementsByTagName('div');
+      categoryElements = Array.prototype.slice.call(categoryElements);
+      categoryElements = categoryElements.filter(function (v, i) {
+        return v.parentElement === categoryList;
+      });
+      var i;
+      for (i = 0; i < categoryElements.length; i++) {
+        categoryElements[i].getElementsByTagName('div')[0].getElementsByTagName('span')[2].classList.add(icons[i]);
+      }
+    }
+
     createIOSJavascriptBridge(function (bridge) {
       bridge.registerHandler(METHOD_SIGNATURE.LOAD_XML_PROGRAM, function (xmlString) {
         loadXMLProgram(xmlString)
@@ -219,22 +187,8 @@
       })
     });
 
-    var lab1 = document.getElementById('blockly:1.label').nextSibling
-    var lab2 = document.getElementById('blockly:2.label').nextSibling
-    var lab3 = document.getElementById('blockly:3.label').nextSibling
-    var lab4 = document.getElementById('blockly:4.label').nextSibling
-    var lab5 = document.getElementById('blockly:5.label').nextSibling
-    var lab6 = document.getElementById('blockly:6.label').nextSibling
-    var lab7 = document.getElementById('blockly:7.label').nextSibling
-    var lab8 = document.getElementById('blockly:8.label').nextSibling
-    lab1.classList.add('motorIcon')
-    lab2.classList.add('sensorIcon')
-    lab3.classList.add('loopsIcon')
-    lab4.classList.add('logicIcon')
-    lab5.classList.add('timeIcon')
-    lab6.classList.add('mathIcon')
-    lab7.classList.add('variablesIcon')
-    lab8.classList.add('functionsIcon')
+    setCategoryIcons(toolboxes["level3"].icons);
+
   </script>
 </body>
 
