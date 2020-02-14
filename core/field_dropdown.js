@@ -286,12 +286,13 @@ Blockly.FieldDropdown.prototype.showEditor_ = function(opt_e) {
   Blockly.DropDownDiv.showPositionedByField(
       this, this.dropdownDispose_.bind(this));
 
-Blockly.FieldDropdown.prototype.handleDropdownCallback_ = function(newValue) {
-  if (this.sourceBlock_) {
-    newValue = this.callValidator(newValue);
-  }
-  if (newValue !== null) {
-    this.setValue(newValue);
+  Blockly.FieldDropdown.prototype.handleDropdownCallback_ = function(newValue) {
+    if (this.sourceBlock_) {
+      newValue = this.callValidator(newValue);
+    }
+    if (newValue !== null) {
+      this.setValue(newValue);
+    }
   }
 };
 
