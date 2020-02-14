@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2013 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -139,9 +128,9 @@ Blockly.Icon.prototype.iconClick_ = function(e) {
 /**
  * Change the colour of the associated bubble to match its block.
  */
-Blockly.Icon.prototype.updateColour = function() {
+Blockly.Icon.prototype.applyColour = function() {
   if (this.isVisible()) {
-    this.bubble_.setColour(this.block_.getColour());
+    this.bubble_.setColour(this.block_.style.colourPrimary);
   }
 };
 
@@ -174,8 +163,8 @@ Blockly.Icon.prototype.computeIconLocation = function() {
 
 /**
  * Returns the center of the block's icon relative to the surface.
- * @return {!Blockly.utils.Coordinate} Object with x and y properties in workspace
- *     coordinates.
+ * @return {Blockly.utils.Coordinate} Object with x and y properties in
+ *     workspace coordinates.
  */
 Blockly.Icon.prototype.getIconLocation = function() {
   return this.iconXY_;

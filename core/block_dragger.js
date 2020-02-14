@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2017 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -26,6 +15,7 @@ goog.provide('Blockly.BlockDragger');
 goog.require('Blockly.blockAnimations');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockMove');
+goog.require('Blockly.Events.Ui');
 goog.require('Blockly.InsertionMarkerManager');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
@@ -100,14 +90,10 @@ Blockly.BlockDragger = function(block, workspace) {
  * @package
  */
 Blockly.BlockDragger.prototype.dispose = function() {
-  this.draggingBlock_ = null;
-  this.workspace_ = null;
-  this.startWorkspace_ = null;
   this.dragIconData_.length = 0;
 
   if (this.draggedConnectionManager_) {
     this.draggedConnectionManager_.dispose();
-    this.draggedConnectionManager_ = null;
   }
 };
 
@@ -123,7 +109,7 @@ Blockly.BlockDragger.initIconData_ = function(block) {
   // Build a list of icons that need to be moved and where they started.
   var dragIconData = [];
   var descendants = block.getDescendants(false);
-  for (var i = 0, descendant; descendant = descendants[i]; i++) {
+  for (var i = 0, descendant; (descendant = descendants[i]); i++) {
     var icons = descendant.getIcons();
     for (var j = 0; j < icons.length; j++) {
       var data = {
@@ -151,6 +137,7 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
   if (!Blockly.Events.getGroup()) {
     Blockly.Events.setGroup(true);
   }
+  this.fireDragStartEvent_();
 
   // Mutators don't have the same type of z-ordering as the normal workspace
   // during a drag.  They have to rely on the order of the blocks in the SVG.
@@ -180,7 +167,7 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
   // For future consideration: we may be able to put moveToDragSurface inside
   // the block dragger, which would also let the block not track the block drag
   // surface.
-  this.draggingBlock_.moveToDragSurface_();
+  this.draggingBlock_.moveToDragSurface();
 
   var toolbox = this.workspace_.getToolbox();
   if (toolbox) {
@@ -188,6 +175,16 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
         'blocklyToolboxGrab';
     toolbox.addStyle(style);
   }
+};
+
+/**
+ * Fire a UI event at the start of a block drag.
+ * @private
+ */
+Blockly.BlockDragger.prototype.fireDragStartEvent_ = function() {
+  var event = new Blockly.Events.Ui(this.draggingBlock_, 'dragStart',
+      null, this.draggingBlock_.getDescendants(false));
+  Blockly.Events.fire(event);
 };
 
 /**
@@ -222,19 +219,20 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
   // Make sure internal state is fresh.
   this.dragBlock(e, currentDragDeltaXY);
   this.dragIconData_ = [];
-
+  this.fireDragEndEvent_();
+  
   Blockly.utils.dom.stopTextWidthCache();
 
   Blockly.blockAnimations.disconnectUiStop();
 
   var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
   var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
-  this.draggingBlock_.moveOffDragSurface_(newLoc);
+  this.draggingBlock_.moveOffDragSurface(newLoc);
 
   var deleted = this.maybeDeleteBlock_();
   if (!deleted) {
     // These are expensive and don't need to be done if we're deleting.
-    this.draggingBlock_.moveConnections_(delta.x, delta.y);
+    this.draggingBlock_.moveConnections(delta.x, delta.y);
     this.draggingBlock_.setDragging(false);
     this.fireMoveEvent_();
     if (this.draggedConnectionManager_.wouldConnectBlock()) {
@@ -254,6 +252,16 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
     toolbox.removeStyle(style);
   }
   Blockly.Events.setGroup(false);
+};
+
+/**
+ * Fire a UI event at the end of a block drag.
+ * @private
+ */
+Blockly.BlockDragger.prototype.fireDragEndEvent_ = function() {
+  var event = new Blockly.Events.Ui(this.draggingBlock_, 'dragStop',
+      this.draggingBlock_.getDescendants(false), null);
+  Blockly.Events.fire(event);
 };
 
 /**
@@ -301,12 +309,12 @@ Blockly.BlockDragger.prototype.updateCursorDuringBlockDrag_ = function() {
   if (this.wouldDeleteBlock_) {
     this.draggingBlock_.setDeleteStyle(true);
     if (this.deleteArea_ == Blockly.DELETE_AREA_TRASH && trashcan) {
-      trashcan.setOpen_(true);
+      trashcan.setOpen(true);
     }
   } else {
     this.draggingBlock_.setDeleteStyle(false);
     if (trashcan) {
-      trashcan.setOpen_(false);
+      trashcan.setOpen(false);
     }
   }
 };

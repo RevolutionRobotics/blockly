@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -62,6 +51,7 @@ goog.require('Blockly.ZoomControls');
 // None of these should be required when using advanced compilation since
 // individual block files should include the requirements they depend on.
 goog.require('Blockly.Mutator');
+goog.require('Blockly.Warning');
 goog.require('Blockly.FieldAngle');
 goog.require('Blockly.FieldCheckbox');
 goog.require('Blockly.FieldColour');
@@ -73,13 +63,20 @@ goog.require('Blockly.FieldMultilineInput');
 goog.require('Blockly.FieldNumber');
 goog.require('Blockly.FieldVariable');
 
+// If you'd like to include the date field in your build, you will also need to
+// include the Closure library as a build dependency.  You can do so by running:
+//     gulp build-compressed --closure-library
+// Be sure to also include "google-closure-library" to your list of
+// devDependencies.
+// goog.require('Blockly.FieldDate');
+
 
 // Blockly Renderers.
 // At least one renderer is mandatory.  Geras is the default one.
 // Others may be chosen using Blockly.inject's "renderer" configuration.
 goog.require('Blockly.geras.Renderer');
-// goog.require('Blockly.thrasos.Renderer');
-// goog.require('Blockly.zelos.Renderer');
+goog.require('Blockly.thrasos.Renderer');
+goog.require('Blockly.zelos.Renderer');
 // The debug renderer, which shows simplified versions of the blocks for
 // developer use.
 // goog.require('Blockly.blockRendering.Debug');
@@ -88,5 +85,7 @@ goog.require('Blockly.geras.Renderer');
 // Classic is the default theme.
 goog.require('Blockly.Themes.Classic');
 goog.require('Blockly.Themes.Dark');
+goog.require('Blockly.Themes.Deuteranopia');
 goog.require('Blockly.Themes.HighContrast');
-goog.require('Blockly.Themes.Modern');
+goog.require('Blockly.Themes.Tritanopia');
+// goog.require('Blockly.Themes.Modern');

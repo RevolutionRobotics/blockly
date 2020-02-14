@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -61,8 +50,6 @@ Blockly.blockRendering.InputConnection = function(constants, input) {
     this.connectedBlockHeight = 0;
   }
 
-  // TODO: change references to connectionModel, since that's on Connection.
-  this.connection = input.connection;
   this.connectionOffsetX = 0;
   this.connectionOffsetY = 0;
 };
@@ -87,8 +74,7 @@ Blockly.blockRendering.InlineInput = function(constants, input) {
 
   if (!this.connectedBlock) {
     this.height = this.constants_.EMPTY_INLINE_INPUT_HEIGHT;
-    this.width = this.shape.width +
-        this.constants_.EMPTY_INLINE_INPUT_PADDING;
+    this.width = this.constants_.EMPTY_INLINE_INPUT_PADDING;
   } else {
     // We allow the dark path to show on the parent block so that the child
     // block looks embossed.  This takes up an extra pixel in both x and y.
@@ -96,9 +82,18 @@ Blockly.blockRendering.InlineInput = function(constants, input) {
     this.height = this.connectedBlockHeight;
   }
 
-  this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
-  this.connectionHeight = this.shape.height;
-  this.connectionWidth = this.shape.width;
+  this.connectionHeight = !this.isDynamicShape ? this.shape.height :
+      this.shape.height(this.height);
+  this.connectionWidth = !this.isDynamicShape ? this.shape.width :
+      this.shape.width(this.height);
+  if (!this.connectedBlock) {
+    this.width += this.connectionWidth * (this.isDynamicShape ? 2 : 1);
+  }
+  this.connectionOffsetY = this.isDynamicShape ?
+      this.shape.connectionOffsetY(this.connectionHeight) :
+      this.constants_.TAB_OFFSET_FROM_TOP;
+  this.connectionOffsetX = this.isDynamicShape ?
+      this.shape.connectionOffsetX(this.connectionWidth) : 0;
 };
 Blockly.utils.object.inherits(Blockly.blockRendering.InlineInput,
     Blockly.blockRendering.InputConnection);
@@ -127,8 +122,7 @@ Blockly.blockRendering.StatementInput = function(constants, input) {
     this.height =
         this.connectedBlockHeight + this.constants_.STATEMENT_BOTTOM_SPACER;
   }
-  this.width = this.constants_.NOTCH_OFFSET_LEFT +
-      this.shape.width;
+  this.width = this.constants_.STATEMENT_INPUT_NOTCH_OFFSET + this.shape.width;
 };
 Blockly.utils.object.inherits(Blockly.blockRendering.StatementInput,
     Blockly.blockRendering.InputConnection);
@@ -148,12 +142,12 @@ Blockly.blockRendering.ExternalValueInput = function(constants, input) {
   Blockly.blockRendering.ExternalValueInput.superClass_.constructor.call(this,
       constants, input);
   this.type |= Blockly.blockRendering.Types.EXTERNAL_VALUE_INPUT;
-
   if (!this.connectedBlock) {
     this.height = this.shape.height;
   } else {
     this.height =
-        this.connectedBlockHeight - 2 * this.constants_.TAB_OFFSET_FROM_TOP;
+        this.connectedBlockHeight - this.constants_.TAB_OFFSET_FROM_TOP -
+        this.constants_.MEDIUM_PADDING;
   }
   this.width = this.shape.width +
       this.constants_.EXTERNAL_VALUE_INPUT_PADDING;

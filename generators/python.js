@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2012 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -139,6 +128,7 @@ Blockly.Python.ORDER_OVERRIDES = [
 /**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
+ * @this {Blockly.Generator}
  */
 Blockly.Python.init = function(workspace) {
   /**
@@ -172,7 +162,7 @@ Blockly.Python.init = function(workspace) {
   var variables = Blockly.Variables.allUsedVarModels(workspace);
   for (var i = 0; i < variables.length; i++) {
     defvars.push(Blockly.Python.variableDB_.getName(variables[i].getId(),
-        Blockly.Variables.NAME_TYPE) + ' = None');
+        Blockly.VARIABLE_CATEGORY_NAME) + ' = None');
   }
 
   Blockly.Python.definitions_['variables'] = defvars.join('\n');
@@ -276,7 +266,7 @@ Blockly.Python.scrub_ = function(block, code, opt_thisOnly) {
       if (block.inputList[i].type == Blockly.INPUT_VALUE) {
         var childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
-          var comment = Blockly.Python.allNestedComments(childBlock);
+          comment = Blockly.Python.allNestedComments(childBlock);
           if (comment) {
             commentCode += Blockly.Python.prefixLines(comment, '# ');
           }

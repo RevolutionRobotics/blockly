@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2011 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -110,6 +99,13 @@ Blockly.Toolbox = function(workspace) {
         'blocklyHorizontalTreeRtl' : 'blocklyHorizontalTree');
     this.config_['cssTreeIcon'] = '';
   }
+
+  /**
+   * The toolbox flyout.
+   * @type {Blockly.Flyout}
+   * @private
+   */
+  this.flyout_ = null;
 };
 
 /**
@@ -140,6 +136,8 @@ Blockly.Toolbox.prototype.lastCategory_ = null;
 
 /**
  * Initializes the toolbox.
+ * @throws {Error} If missing a require for both `Blockly.HorizontalFlyout` and
+ *     `Blockly.VerticalFlyout`.
  */
 Blockly.Toolbox.prototype.init = function() {
   var workspace = this.workspace_;
@@ -154,8 +152,9 @@ Blockly.Toolbox.prototype.init = function() {
   this.HtmlDiv.setAttribute('dir', workspace.RTL ? 'RTL' : 'LTR');
   svg.parentNode.insertBefore(this.HtmlDiv, svg);
   var themeManager = workspace.getThemeManager();
-  themeManager.subscribe(this.HtmlDiv, 'toolbox', 'background-color');
-  themeManager.subscribe(this.HtmlDiv, 'toolboxText', 'color');
+  themeManager.subscribe(this.HtmlDiv, 'toolboxBackgroundColour',
+      'background-color');
+  themeManager.subscribe(this.HtmlDiv, 'toolboxForegroundColour', 'color');
 
   // Clicking on toolbox closes popups.
   Blockly.bindEventWithChecks_(this.HtmlDiv, 'mousedown', this,
@@ -169,20 +168,17 @@ Blockly.Toolbox.prototype.init = function() {
         }
         Blockly.Touch.clearTouchIdentifier();  // Don't block future drags.
       }, /* opt_noCaptureIdentifier */ false, /* opt_noPreventDefault */ true);
-  var workspaceOptions = {
-    disabledPatternId: workspace.options.disabledPatternId,
-    parentWorkspace: workspace,
-    RTL: workspace.RTL,
-    oneBasedIndex: workspace.options.oneBasedIndex,
-    horizontalLayout: workspace.horizontalLayout,
-    toolboxPosition: workspace.options.toolboxPosition,
-    renderer: workspace.options.renderer
-  };
-  /**
-   * @type {!Blockly.Flyout}
-   * @private
-   */
-  this.flyout_ = null;
+  var workspaceOptions = new Blockly.Options(
+      /** @type {!Blockly.BlocklyOptions} */
+      ({
+        'parentWorkspace': workspace,
+        'rtl': workspace.RTL,
+        'oneBasedIndex': workspace.options.oneBasedIndex,
+        'horizontalLayout': workspace.horizontalLayout,
+        'renderer': workspace.options.renderer
+      }));
+  workspaceOptions.toolboxPosition = workspace.options.toolboxPosition;
+  
   if (workspace.horizontalLayout) {
     if (!Blockly.HorizontalFlyout) {
       throw Error('Missing require for Blockly.HorizontalFlyout');
@@ -194,9 +190,13 @@ Blockly.Toolbox.prototype.init = function() {
     }
     this.flyout_ = new Blockly.VerticalFlyout(workspaceOptions);
   }
+  if (!this.flyout_) {
+    throw Error('One of Blockly.VerticalFlyout or Blockly.Horizontal must be' +
+        'required.');
+  }
+  
   // Insert the flyout after the workspace.
-  Blockly.utils.dom.insertAfter(this.flyout_.createDom('svg'),
-      this.workspace_.getParentSvg());
+  Blockly.utils.dom.insertAfter(this.flyout_.createDom('svg'), svg);
   this.flyout_.init(workspace);
 
   this.config_['cleardotPath'] = workspace.options.pathToMedia + '1x1.gif';
@@ -207,7 +207,7 @@ Blockly.Toolbox.prototype.init = function() {
 
 /**
  * Fill the toolbox with categories and blocks.
- * @param {!Node} languageTree DOM tree of blocks.
+ * @param {Node} languageTree DOM tree of blocks.
  * @package
  */
 Blockly.Toolbox.prototype.renderTree = function(languageTree) {
@@ -225,8 +225,8 @@ Blockly.Toolbox.prototype.renderTree = function(languageTree) {
   if (languageTree) {
     this.tree_.blocks = [];
     this.hasColours_ = false;
-    var openNode =
-      this.syncTrees_(languageTree, this.tree_, this.workspace_.options.pathToMedia);
+    openNode = this.syncTrees_(
+        languageTree, this.tree_, this.workspace_.options.pathToMedia);
 
     if (this.tree_.blocks.length) {
       throw Error('Toolbox cannot have both blocks and categories ' +
@@ -245,7 +245,8 @@ Blockly.Toolbox.prototype.renderTree = function(languageTree) {
   // Trees have an implicit orientation of vertical, so we only need to set this
   // when the toolbox is in horizontal mode.
   if (this.horizontalLayout_) {
-    Blockly.utils.aria.setState(/** @type {!Element} */ (this.tree_.getElement()),
+    Blockly.utils.aria.setState(
+        /** @type {!Element} */ (this.tree_.getElement()),
         Blockly.utils.aria.State.ORIENTATION, 'horizontal');
   }
 };
@@ -287,13 +288,13 @@ Blockly.Toolbox.prototype.handleAfterTreeSelected_ = function(
     if (this.lastCategory_ != newNode) {
       this.flyout_.scrollToStart();
     }
-    if (Blockly.keyboardAccessibilityMode) {
+    if (this.workspace_.keyboardAccessibilityMode) {
       Blockly.navigation.setState(Blockly.navigation.STATE_TOOLBOX);
     }
   } else {
     // Hide the flyout.
     this.flyout_.hide();
-    if (Blockly.keyboardAccessibilityMode &&
+    if (this.workspace_.keyboardAccessibilityMode &&
         !(newNode instanceof Blockly.Toolbox.TreeSeparator)) {
       Blockly.navigation.setState(Blockly.navigation.STATE_WS);
     }
@@ -353,7 +354,6 @@ Blockly.Toolbox.prototype.dispose = function() {
   this.tree_.dispose();
   this.workspace_.getThemeManager().unsubscribe(this.HtmlDiv);
   Blockly.utils.dom.removeNode(this.HtmlDiv);
-  this.workspace_ = null;
   this.lastCategory_ = null;
 };
 
@@ -374,6 +374,14 @@ Blockly.Toolbox.prototype.getHeight = function() {
 };
 
 /**
+ * Get the toolbox flyout.
+ * @return {Blockly.Flyout} The toolbox flyout.
+ */
+Blockly.Toolbox.prototype.getFlyout = function() {
+  return this.flyout_;
+};
+
+/**
  * Move the toolbox to the edge.
  */
 Blockly.Toolbox.prototype.position = function() {
@@ -382,8 +390,7 @@ Blockly.Toolbox.prototype.position = function() {
     // Not initialized yet.
     return;
   }
-  var svg = this.workspace_.getParentSvg();
-  var svgSize = Blockly.svgSize(svg);
+  var svgSize = Blockly.svgSize(this.workspace_.getParentSvg());
   if (this.horizontalLayout_) {
     treeDiv.style.left = '0';
     treeDiv.style.height = 'auto';
@@ -418,7 +425,7 @@ Blockly.Toolbox.prototype.position = function() {
 Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
   var openNode = null;
   var lastElement = null;
-  for (var i = 0, childIn; childIn = treeIn.childNodes[i]; i++) {
+  for (var i = 0, childIn; (childIn = treeIn.childNodes[i]); i++) {
     if (!childIn.tagName) {
       // Skip over text.
       continue;
@@ -474,7 +481,8 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
           // Separator between two categories.
           // <sep></sep>
           treeOut.add(new Blockly.Toolbox.TreeSeparator(
-              /** @type {!Blockly.tree.BaseNode.Config} */ (this.treeSeparatorConfig_)));
+              /** @type {!Blockly.tree.BaseNode.Config} */
+              (this.treeSeparatorConfig_)));
           break;
         }
         // Otherwise falls through.
@@ -531,13 +539,14 @@ Blockly.Toolbox.prototype.setColour_ = function(colourValue, childOut,
  * @param {string} styleName Name of the style.
  * @param {!Blockly.tree.TreeNode} childOut The child to set the hexColour on.
  * @param {string} categoryName Name of the toolbox category.
+ * @private
  */
 Blockly.Toolbox.prototype.setColourFromStyle_ = function(
     styleName, childOut, categoryName) {
   childOut.styleName = styleName;
   var theme = this.workspace_.getTheme();
   if (styleName && theme) {
-    var style = theme.getCategoryStyle(styleName);
+    var style = theme.categoryStyles[styleName];
     if (style && style.colour) {
       this.setColour_(style.colour, childOut, categoryName);
     } else {
@@ -557,7 +566,7 @@ Blockly.Toolbox.prototype.updateColourFromTheme_ = function(opt_tree) {
   var tree = opt_tree || this.tree_;
   if (tree) {
     var children = tree.getChildren(false);
-    for (var i = 0, child; child = children[i]; i++) {
+    for (var i = 0, child; (child = children[i]); i++) {
       if (child.styleName) {
         this.setColourFromStyle_(child.styleName, child, '');
         this.addColour_();
@@ -604,7 +613,7 @@ Blockly.Toolbox.prototype.updateSelectedItemColour_ = function(tree) {
 Blockly.Toolbox.prototype.addColour_ = function(opt_tree) {
   var tree = opt_tree || this.tree_;
   var children = tree.getChildren(false);
-  for (var i = 0, child; child = children[i]; i++) {
+  for (var i = 0, child; (child = children[i]); i++) {
     var element = child.getRowElement();
     if (element) {
       if (this.hasColours_) {

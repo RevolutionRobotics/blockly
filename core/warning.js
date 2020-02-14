@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2012 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -92,7 +81,7 @@ Blockly.Warning.textToDom_ = function(text) {
       (Blockly.utils.dom.createSvgElement(
           'text',
           {
-            'class': 'blocklyText blocklyBubbleText',
+            'class': 'blocklyText blocklyBubbleText blocklyNoPointerEvents',
             'y': Blockly.Bubble.BORDER_WIDTH
           },
           null)
@@ -134,7 +123,8 @@ Blockly.Warning.prototype.createBubble = function() {
   this.paragraphElement_ = Blockly.Warning.textToDom_(this.getText());
   this.bubble_ = new Blockly.Bubble(
       /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
-      this.paragraphElement_, this.block_.svgPath_, this.iconXY_, null, null);
+      this.paragraphElement_, this.block_.pathObject.svgPath,
+      /** @type {!Blockly.utils.Coordinate} */ (this.iconXY_), null, null);
   // Expose this warning's block's ID on its top-level SVG group.
   this.bubble_.setSvgId(this.block_.id);
   if (this.block_.RTL) {
@@ -142,13 +132,13 @@ Blockly.Warning.prototype.createBubble = function() {
     // This cannot be done until the bubble is rendered on screen.
     var maxWidth = this.paragraphElement_.getBBox().width;
     for (var i = 0, textElement;
-      textElement = this.paragraphElement_.childNodes[i]; i++) {
+      (textElement = this.paragraphElement_.childNodes[i]); i++) {
 
       textElement.setAttribute('text-anchor', 'end');
       textElement.setAttribute('x', maxWidth + Blockly.Bubble.BORDER_WIDTH);
     }
   }
-  this.updateColour();
+  this.applyColour();
 };
 
 /**
@@ -171,7 +161,7 @@ Blockly.Warning.prototype.disposeBubble = function() {
  */
 
 Blockly.Warning.prototype.bodyFocus_ = function(_e) {
-  this.bubble_.promote_();
+  this.bubble_.promote();
 };
 
 /**

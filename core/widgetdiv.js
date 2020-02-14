@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2013 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -33,12 +22,6 @@ goog.require('Blockly.utils.style');
 
 
 /**
- * The HTML container.  Set once by Blockly.WidgetDiv.createDom.
- * @type {Element}
- */
-Blockly.WidgetDiv.DIV = null;
-
-/**
  * The object currently using this container.
  * @type {Object}
  * @private
@@ -53,13 +36,30 @@ Blockly.WidgetDiv.owner_ = null;
 Blockly.WidgetDiv.dispose_ = null;
 
 /**
+ * A class name representing the current owner's workspace renderer.
+ * @type {?string}
+ * @private
+ */
+Blockly.WidgetDiv.rendererClassName_ = null;
+
+/**
+ * A class name representing the current owner's workspace theme.
+ * @type {?string}
+ * @private
+ */
+Blockly.WidgetDiv.themeClassName_ = null;
+
+/**
  * Create the widget div and inject it onto the page.
  */
 Blockly.WidgetDiv.createDom = function() {
   if (Blockly.WidgetDiv.DIV) {
     return;  // Already created.
   }
-  // Create an HTML container for popup overlays (e.g. editor widgets).
+  /**
+   * The HTML container for popup overlays (e.g. editor widgets).
+   * @type {!Element}
+   */
   Blockly.WidgetDiv.DIV = document.createElement('div');
   Blockly.WidgetDiv.DIV.className = 'blocklyWidgetDiv';
   document.body.appendChild(Blockly.WidgetDiv.DIV);
@@ -76,27 +76,40 @@ Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
   Blockly.WidgetDiv.hide();
   Blockly.WidgetDiv.owner_ = newOwner;
   Blockly.WidgetDiv.dispose_ = dispose;
-  // Temporarily move the widget to the top of the screen so that it does not
-  // cause a scrollbar jump in Firefox when displayed.
-  var xy = Blockly.utils.style.getViewportPageOffset();
-  Blockly.WidgetDiv.DIV.style.top = xy.y + 'px';
-  Blockly.WidgetDiv.DIV.style.direction = rtl ? 'rtl' : 'ltr';
-  Blockly.WidgetDiv.DIV.style.display = 'block';
+  var div = Blockly.WidgetDiv.DIV;
+  div.style.direction = rtl ? 'rtl' : 'ltr';
+  div.style.display = 'block';
+  Blockly.WidgetDiv.rendererClassName_ =
+      Blockly.getMainWorkspace().getRenderer().name + '-renderer';
+  Blockly.WidgetDiv.themeClassName_ =
+      Blockly.getMainWorkspace().getTheme().name + '-theme';
+  Blockly.utils.dom.addClass(div, Blockly.WidgetDiv.rendererClassName_);
+  Blockly.utils.dom.addClass(div, Blockly.WidgetDiv.themeClassName_);
 };
 
 /**
  * Destroy the widget and hide the div.
  */
 Blockly.WidgetDiv.hide = function() {
+  var div = Blockly.WidgetDiv.DIV;
   if (Blockly.WidgetDiv.owner_) {
     Blockly.WidgetDiv.owner_ = null;
-    Blockly.WidgetDiv.DIV.style.display = 'none';
-    Blockly.WidgetDiv.DIV.style.left = '';
-    Blockly.WidgetDiv.DIV.style.top = '';
+    div.style.display = 'none';
+    div.style.left = '';
+    div.style.top = '';
     Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_();
     Blockly.WidgetDiv.dispose_ = null;
-    Blockly.WidgetDiv.DIV.innerHTML = '';
+    div.innerHTML = '';
   }
+  if (Blockly.WidgetDiv.rendererClassName_) {
+    Blockly.utils.dom.removeClass(div, Blockly.WidgetDiv.rendererClassName_);
+    Blockly.WidgetDiv.rendererClassName_ = null;
+  }
+  if (Blockly.WidgetDiv.themeClassName_) {
+    Blockly.utils.dom.removeClass(div, Blockly.WidgetDiv.themeClassName_);
+    Blockly.WidgetDiv.themeClassName_ = null;
+  }
+  Blockly.getMainWorkspace().markFocused();
 };
 
 /**

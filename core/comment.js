@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2011 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -24,6 +13,7 @@
 goog.provide('Blockly.Comment');
 
 goog.require('Blockly.Bubble');
+goog.require('Blockly.Css');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Events.Ui');
@@ -60,6 +50,34 @@ Blockly.Comment = function(block) {
    * @private
    */
   this.cachedText_ = '';
+
+  /**
+   * Mouse up event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onMouseUpWrapper_ = null;
+
+  /**
+   * Wheel event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onWheelWrapper_ = null;
+
+  /**
+   * Change event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onChangeWrapper_ = null;
+
+  /**
+   * Input event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onInputWrapper_ = null;
 
   this.createIcon();
 };
@@ -137,21 +155,24 @@ Blockly.Comment.prototype.createEditor_ = function() {
   // Ideally this would be hooked to the focus event for the comment.
   // However doing so in Firefox swallows the cursor for unknown reasons.
   // So this is hooked to mouseup instead.  No big deal.
-  Blockly.bindEventWithChecks_(textarea, 'mouseup', this, this.startEdit_,
-      true, true);
+  this.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(
+      textarea, 'mouseup', this, this.startEdit_, true, true);
   // Don't zoom with mousewheel.
-  Blockly.bindEventWithChecks_(textarea, 'wheel', this, function(e) {
-    e.stopPropagation();
-  });
-  Blockly.bindEventWithChecks_(textarea, 'change', this, function(_e) {
-    if (this.cachedText_ != this.model_.text) {
-      Blockly.Events.fire(new Blockly.Events.BlockChange(
-          this.block_, 'comment', null, this.cachedText_, this.model_.text));
-    }
-  });
-  Blockly.bindEventWithChecks_(textarea, 'input', this, function(_e) {
-    this.model_.text = textarea.value;
-  });
+  this.onWheelWrapper_ = Blockly.bindEventWithChecks_(
+      textarea, 'wheel', this, function(e) {
+        e.stopPropagation();
+      });
+  this.onChangeWrapper_ = Blockly.bindEventWithChecks_(
+      textarea, 'change', this, function(_e) {
+        if (this.cachedText_ != this.model_.text) {
+          Blockly.Events.fire(new Blockly.Events.BlockChange(
+              this.block_, 'comment', null, this.cachedText_, this.model_.text));
+        }
+      });
+  this.onInputWrapper_ = Blockly.bindEventWithChecks_(
+      textarea, 'input', this, function(_e) {
+        this.model_.text = textarea.value;
+      });
 
   setTimeout(textarea.focus.bind(textarea), 0);
 
@@ -241,17 +262,19 @@ Blockly.Comment.prototype.createBubble_ = function() {
 Blockly.Comment.prototype.createEditableBubble_ = function() {
   this.bubble_ = new Blockly.Bubble(
       /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
-      this.createEditor_(), this.block_.svgPath_,
-      this.iconXY_, this.model_.size.width, this.model_.size.height);
+      this.createEditor_(), this.block_.pathObject.svgPath,
+      /** @type {!Blockly.utils.Coordinate} */ (this.iconXY_),
+      this.model_.size.width, this.model_.size.height);
   // Expose this comment's block's ID on its top-level SVG group.
   this.bubble_.setSvgId(this.block_.id);
   this.bubble_.registerResizeEvent(this.onBubbleResize_.bind(this));
-  this.updateColour();
+  this.applyColour();
 };
 
 /**
  * Show a non-editable bubble.
  * @private
+ * @suppress {checkTypes} Suppress `this` type mismatch.
  */
 Blockly.Comment.prototype.createNonEditableBubble_ = function() {
   // TODO (#2917): It would be great if the comment could support line breaks.
@@ -261,6 +284,7 @@ Blockly.Comment.prototype.createNonEditableBubble_ = function() {
 /**
  * Dispose of the bubble.
  * @private
+ * @suppress {checkTypes} Suppress `this` type mismatch.
  */
 Blockly.Comment.prototype.disposeBubble_ = function() {
   if (this.paragraphElement_) {
@@ -268,7 +292,22 @@ Blockly.Comment.prototype.disposeBubble_ = function() {
     Blockly.Warning.prototype.disposeBubble.call(this);
     return;
   }
-
+  if (this.onMouseUpWrapper_) {
+    Blockly.unbindEvent_(this.onMouseUpWrapper_);
+    this.onMouseUpWrapper_ = null;
+  }
+  if (this.onWheelWrapper_) {
+    Blockly.unbindEvent_(this.onWheelWrapper_);
+    this.onWheelWrapper_ = null;
+  }
+  if (this.onChangeWrapper_) {
+    Blockly.unbindEvent_(this.onChangeWrapper_);
+    this.onChangeWrapper_ = null;
+  }
+  if (this.onInputWrapper_) {
+    Blockly.unbindEvent_(this.onInputWrapper_);
+    this.onInputWrapper_ = null;
+  }
   this.bubble_.dispose();
   this.bubble_ = null;
   this.textarea_ = null;
@@ -284,7 +323,7 @@ Blockly.Comment.prototype.disposeBubble_ = function() {
  * @private
  */
 Blockly.Comment.prototype.startEdit_ = function(_e) {
-  if (this.bubble_.promote_()) {
+  if (this.bubble_.promote()) {
     // Since the act of moving this node within the DOM causes a loss of focus,
     // we need to reapply the focus.
     this.textarea_.focus();
@@ -364,3 +403,21 @@ Blockly.Comment.prototype.dispose = function() {
   this.block_.comment = null;
   Blockly.Icon.prototype.dispose.call(this);
 };
+
+/**
+ * CSS for block comment.  See css.js for use.
+ */
+Blockly.Css.register([
+  /* eslint-disable indent */
+  '.blocklyCommentTextarea {',
+    'background-color: #fef49c;',
+    'border: 0;',
+    'outline: 0;',
+    'margin: 0;',
+    'padding: 3px;',
+    'resize: none;',
+    'display: block;',
+    'overflow: hidden;',
+  '}'
+  /* eslint-enable indent */
+]);
