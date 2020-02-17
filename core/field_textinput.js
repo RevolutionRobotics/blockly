@@ -276,15 +276,15 @@ Blockly.FieldTextInput.prototype.setSpellcheck = function(check) {
  */
 Blockly.FieldTextInput.prototype.showEditor_ = function(_opt_e,
     opt_quietInput) {
-  //this.workspace_ = this.sourceBlock_.workspace;
-  //var quietInput = opt_quietInput || false;
-  //if (!quietInput && (Blockly.utils.userAgent.MOBILE ||
-  //                    Blockly.utils.userAgent.ANDROID ||
-  //                    Blockly.utils.userAgent.IPAD)) {
-  //  this.showPromptEditor_();
-  //} else {
-  //  this.showInlineEditor_(quietInput);
-  //}
+  this.workspace_ = this.sourceBlock_.workspace;
+  var quietInput = opt_quietInput || false;
+  if (!quietInput && (Blockly.utils.userAgent.MOBILE ||
+                      Blockly.utils.userAgent.ANDROID ||
+                      Blockly.utils.userAgent.IPAD)) {
+    this.showPromptEditor_();
+  } else {
+    this.showInlineEditor_(quietInput);
+  }
 };
 
 /**
@@ -295,7 +295,6 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(_opt_e,
 Blockly.FieldTextInput.prototype.showPromptEditor_ = function() {
   var fieldText = this;
   var promptType = Blockly.NativeBridge.createPromptType(fieldText.sourceBlock_, fieldText);
-
   if (promptType.includes('slider')) {
     Blockly.NativeBridge.slider(
         promptType,
