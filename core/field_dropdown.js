@@ -261,38 +261,25 @@ Blockly.FieldDropdown.prototype.createSVGArrow_ = function() {
  * @private
  */
 Blockly.FieldDropdown.prototype.showEditor_ = function(opt_e) {
-  this.menu_ = this.dropdownCreate_();
-  if (opt_e && typeof opt_e.clientX === 'number') {
-    this.menu_.openingCoords =
-        new Blockly.utils.Coordinate(opt_e.clientX, opt_e.clientY);
-  } else {
-    this.menu_.openingCoords = null;
+  var fieldDropdown = this;
+
+  Blockly.NativeBridge.optionSelector(
+      Blockly.NativeBridge.createPromptType(fieldDropdown.sourceBlock_, fieldDropdown),
+      fieldDropdown.value_,
+      fieldDropdown.getOptions(),
+      function(newValue) {
+        fieldDropdown.handleDropdownCallback_(newValue);
+        Blockly.Events.setGroup(false);
+      }
+  );
+};
+
+Blockly.FieldDropdown.prototype.handleDropdownCallback_ = function(newValue) {
+  if (this.sourceBlock_) {
+    newValue = this.callValidator(newValue);
   }
-  // Element gets created in render.
-  this.menu_.render(Blockly.DropDownDiv.getContentDiv());
-  Blockly.utils.dom.addClass(
-      /** @type {!Element} */ (this.menu_.getElement()), 'blocklyDropdownMenu');
-
-  if (this.constants_.FIELD_DROPDOWN_COLOURED_DIV) {
-    var primaryColour = (this.sourceBlock_.isShadow()) ?
-        this.sourceBlock_.getParent().getColour() :
-        this.sourceBlock_.getColour();
-    var borderColour = (this.sourceBlock_.isShadow()) ?
-        this.sourceBlock_.getParent().style.colourTertiary :
-        this.sourceBlock_.style.colourTertiary;
-    Blockly.DropDownDiv.setColour(primaryColour, borderColour);
-  }
-
-  Blockly.DropDownDiv.showPositionedByField(
-      this, this.dropdownDispose_.bind(this));
-
-  Blockly.FieldDropdown.prototype.handleDropdownCallback_ = function(newValue) {
-    if (this.sourceBlock_) {
-      newValue = this.callValidator(newValue);
-    }
-    if (newValue !== null) {
-      this.setValue(newValue);
-    }
+  if (newValue !== null) {
+    this.setValue(newValue);
   }
 };
 
