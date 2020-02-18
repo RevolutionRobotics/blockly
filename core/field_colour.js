@@ -316,12 +316,6 @@ Blockly.FieldColour.prototype.setColumns = function(columns) {
  */
 Blockly.FieldColour.prototype.showEditor_ = function() {
   var fieldColor = this;
-
-  Blockly.DropDownDiv.showPositionedByField(
-      this, this.dropdownDispose_.bind(this));
-
-  // Focus so we can start receiving keyboard events.
-  this.picker_.focus({preventScroll:true});
   
   Blockly.NativeBridge.optionSelector(
       Blockly.NativeBridge.createPromptType(fieldColor.sourceBlock_, fieldColor),
