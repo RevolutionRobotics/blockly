@@ -314,25 +314,45 @@ Blockly.FieldColour.prototype.setColumns = function(columns) {
  * Create and show the colour field's editor.
  * @private
  */
-Blockly.FieldColour.prototype.showEditor_ = function() {
-  var fieldColor = this;
-  
-  Blockly.NativeBridge.optionSelector(
-      Blockly.NativeBridge.createPromptType(fieldColor.sourceBlock_, fieldColor),
-      fieldColor.getValue(),
-      Blockly.FieldColour.COLOURS,
-      function(newValue) {
-        if (fieldColor.sourceBlock_) {
-        // Call any validation function, and allow it to override.
-          newValue = fieldColor.callValidator(newValue);
-        }
-        if (newValue !== null) {
-          fieldColor.setValue(newValue);
-        }
-      }
-  );
+Blockly.FieldColour.prototype.showEditor_ = function () {
+  if (Blockly.utils.userAgent.MOBILE ||
+    Blockly.utils.userAgent.ANDROID ||
+    Blockly.utils.userAgent.IPAD) {
+    this.showPopup_();
+  } else {
+    this.showInlineDropdown_();
+  }
   // Blockly.DropDownDiv.hideWithoutAnimation();
   // Blockly.DropDownDiv.clearContent();
+};
+
+Blockly.FieldColour.prototype.showPopup_ = function () {
+  var fieldColor = this;
+  Blockly.NativeBridge.optionSelector(
+    Blockly.NativeBridge.createPromptType(fieldColor.sourceBlock_, fieldColor),
+    fieldColor.getValue(),
+    Blockly.FieldColour.COLOURS,
+    function (newValue) {
+      if (fieldColor.sourceBlock_) {
+        // Call any validation function, and allow it to override.
+        newValue = fieldColor.callValidator(newValue);
+      }
+      if (newValue !== null) {
+        fieldColor.setValue(newValue);
+      }
+    }
+  );
+};
+
+Blockly.FieldColour.prototype.showInlineDropdown_ = function () {
+  this.picker_ = this.dropdownCreate_();
+  Blockly.DropDownDiv.getContentDiv().appendChild(this.picker_);
+
+  Blockly.DropDownDiv.showPositionedByField(
+    this, this.dropdownDispose_.bind(this));
+
+  // Focus so we can start receiving keyboard events.
+  this.picker_.focus({ preventScroll: true });
 };
 
 /**
