@@ -21,12 +21,17 @@ Blockly.Themes.Classic.defaultBlockStyles = {
   "colour_blocks":{
     "colourPrimary": "#f8bc08",
     "colourSecondary":"#d7ab07",
-    "colourTertiary":"#c60a06"
+    "colourTertiary":"#c69a06"
   },
   "motor_blocks": {
     "colourPrimary": "#e60312",
     "colourSecondary":"#d50201",
     "colourTertiary":"#c40100"
+  },
+  "sensor_blocks":{
+    "colourPrimary": "#f8bc08",
+    "colourSecondary":"#d7ab07",
+    "colourTertiary":"#c69a06"
   },
   "time_blocks": {
     "colourPrimary" : "#868a8c",
