@@ -125,7 +125,7 @@ function compile(compilerOptions, opt_verbose, opt_warnings_as_error) {
   compilerOptions.compilation_level = 'SIMPLE_OPTIMIZATIONS';
   compilerOptions.warning_level = opt_verbose ? 'VERBOSE' : 'DEFAULT';
   compilerOptions.language_in =
-    compilerOptions.language_in || 'ECMASCRIPT5_STRICT';
+    compilerOptions.language_in || 'ECMASCRIPT6_STRICT';
   compilerOptions.language_out = 'ECMASCRIPT5_STRICT';
   compilerOptions.rewrite_polyfills = false;
   compilerOptions.hide_warnings_for = 'node_modules';
@@ -184,7 +184,7 @@ function buildCompressed(cb) {
       externs: ['./externs/svg-externs.js', './externs/goog-externs.js'],
       define: defines,
       language_in:
-        argv.closureLibrary ? 'ECMASCRIPT_2015' : 'ECMASCRIPT5_STRICT'
+        argv.closureLibrary ? 'ECMASCRIPT_2015' : 'ECMASCRIPT6_STRICT'
     }, argv.verbose, argv.strict))
     .pipe(prependHeader())
     .pipe(gulp.dest('./'));
