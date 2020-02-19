@@ -51,7 +51,16 @@ var renderItems = function(tabs) {
     var anchor = document.createElement('a');
     anchor.setAttribute('href', '');
     anchor.setAttribute('onclick', 'return tabClicked(' + label + ')');
-    anchor.innerText = label;
+    
+    var tabImage = document.createElement('img');
+    if (i == 0) {
+      tabImage.setAttribute('src', "media/paper-plane.svg");
+    } else if (i == 1) {
+      tabImage.setAttribute('src', "media/plane.svg");
+    } else if (i == 2) {
+      tabImage.setAttribute('src', "media/rocket.svg");
+    }
+    anchor.appendChild(tabImage);
 
     tab.appendChild(anchor);
     tabs.appendChild(tab);
