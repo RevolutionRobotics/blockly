@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2017 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -64,14 +53,15 @@ Blockly.Grid = function(pattern, options) {
    * @type {SVGElement}
    * @private
    */
-  this.line1_ = pattern.firstChild;
+  this.line1_ = /** @type {SVGElement} */ (pattern.firstChild);
 
   /**
    * The vertical grid line, if it exists.
    * @type {SVGElement}
    * @private
    */
-  this.line2_ = this.line1_ && this.line1_.nextSibling;
+  this.line2_ = this.line1_ &&
+    (/** @type {SVGElement} */ (this.line1_.nextSibling));
 
   /**
    * Whether blocks should snap to the grid.
@@ -92,6 +82,7 @@ Blockly.Grid.prototype.scale_ = 1;
 /**
  * Dispose of this grid and unlink from the DOM.
  * @package
+ * @suppress {checkTypes}
  */
 Blockly.Grid.prototype.dispose = function() {
   this.gridPattern_ = null;
@@ -153,7 +144,7 @@ Blockly.Grid.prototype.update = function(scale) {
 /**
  * Set the attributes on one of the lines in the grid.  Use this to update the
  * length and stroke width of the grid lines.
- * @param {!SVGElement} line Which line to update.
+ * @param {SVGElement} line Which line to update.
  * @param {number} width The new stroke size (in px).
  * @param {number} x1 The new x start position of the line (in px).
  * @param {number} x2 The new x end position of the line (in px).

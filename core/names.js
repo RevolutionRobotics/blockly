@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2012 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -76,7 +65,6 @@ Blockly.Names.prototype.reset = function() {
 /**
  * Set the variable map that maps from variable name to variable object.
  * @param {!Blockly.VariableMap} map The map to track.
- * @package
  */
 Blockly.Names.prototype.setVariableMap = function(map) {
   this.variableMap_ = map;
@@ -84,7 +72,8 @@ Blockly.Names.prototype.setVariableMap = function(map) {
 
 /**
  * Get the name for a user-defined variable, based on its ID.
- * This should only be used for variables of type Blockly.Variables.NAME_TYPE.
+ * This should only be used for variables of type
+ * Blockly.VARIABLE_CATEGORY_NAME.
  * @param {string} id The ID to look up in the variable map.
  * @return {?string} The name of the referenced variable, or null if there was
  *     no variable map or the variable was not found in the map.
@@ -113,10 +102,9 @@ Blockly.Names.prototype.getNameForUserVariable_ = function(id) {
  * @param {string} type The type of entity in Blockly
  *     ('VARIABLE', 'PROCEDURE', 'BUILTIN', etc...).
  * @return {string} An entity name that is legal in the exported language.
- * @suppress {deprecated} Suppress deprecated Blockly.Variables.NAME_TYPE.
  */
 Blockly.Names.prototype.getName = function(name, type) {
-  if (type == Blockly.Variables.NAME_TYPE) {
+  if (type == Blockly.VARIABLE_CATEGORY_NAME) {
     var varName = this.getNameForUserVariable_(name);
     if (varName) {
       name = varName;
@@ -124,7 +112,7 @@ Blockly.Names.prototype.getName = function(name, type) {
   }
   var normalized = name.toLowerCase() + '_' + type;
 
-  var isVarType = type == Blockly.Variables.NAME_TYPE ||
+  var isVarType = type == Blockly.VARIABLE_CATEGORY_NAME ||
       type == Blockly.Names.DEVELOPER_VARIABLE_TYPE;
 
   var prefix = isVarType ? this.variablePrefix_ : '';
@@ -156,7 +144,7 @@ Blockly.Names.prototype.getDistinctName = function(name, type) {
   }
   safeName += i;
   this.dbReverse_[safeName] = true;
-  var isVarType = type == Blockly.Variables.NAME_TYPE ||
+  var isVarType = type == Blockly.VARIABLE_CATEGORY_NAME ||
       type == Blockly.Names.DEVELOPER_VARIABLE_TYPE;
   var prefix = isVarType ? this.variablePrefix_ : '';
   return prefix + safeName;

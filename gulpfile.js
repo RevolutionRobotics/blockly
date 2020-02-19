@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2018 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -32,11 +21,14 @@ var path = require('path');
 var fs = require('fs');
 var rimraf = require('rimraf');
 var execSync = require('child_process').execSync;
+var through2 = require('through2');
 
 var closureCompiler = require('google-closure-compiler').gulp();
+var closureDeps = require('google-closure-deps');
 var packageJson = require('./package.json');
 var argv = require('yargs').argv;
 
+const upstream_url = "https://github.com/google/blockly.git";
 
 ////////////////////////////////////////////////////////////
 //                        Build                           //
@@ -46,18 +38,7 @@ const licenseRegex = `\\/\\*\\*
  \\* @license
  \\* (Copyright \\d+ (Google LLC|Massachusetts Institute of Technology))
 ( \\* All rights reserved.
-)? \\*
- \\* Licensed under the Apache License, Version 2.0 \\(the "License"\\);
- \\* you may not use this file except in compliance with the License.
- \\* You may obtain a copy of the License at
- \\*
- \\*   http://www.apache.org/licenses/LICENSE-2.0
- \\*
- \\* Unless required by applicable law or agreed to in writing, software
- \\* distributed under the License is distributed on an "AS IS" BASIS,
- \\* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- \\* See the License for the specific language governing permissions and
- \\* limitations under the License.
+)? \\* SPDX-License-Identifier: Apache-2.0
  \\*\\/`;
 
 /**
@@ -79,17 +60,78 @@ function prependHeader() {
 }
 
 /**
+ * Closure compiler warning groups used to treat warnings as errors.
+ * For a full list of closure compiler groups, consult:
+ * https://github.com/google/closure-compiler/blob/master/src/com/google/javascript/jscomp/DiagnosticGroups.java#L113
+ */
+var JSCOMP_ERROR = [
+  'accessControls',
+  'checkPrototypalTypes',
+  'checkRegExp',
+  'checkTypes',
+  'checkVars',
+  'conformanceViolations',
+  'const',
+  'constantProperty',
+  'deprecated',
+  'deprecatedAnnotations',
+  'duplicateMessage',
+  'es5Strict',
+  'externsValidation',
+  'functionParams',
+  'globalThis',
+  'invalidCasts',
+  'misplacedTypeAnnotation',
+  'missingGetCssName',
+  // 'missingOverride',
+  'missingPolyfill',
+  'missingProperties',
+  'missingProvide',
+  'missingRequire',
+  'missingReturn',
+  // 'missingSourcesWarnings',
+  'moduleLoad',
+  'msgDescriptions',
+  'nonStandardJsDocs',
+  // 'polymer',
+  // 'reportUnknownTypes',
+  // 'strictCheckTypes',
+  // 'strictMissingProperties',
+  'strictModuleDepCheck',
+  // 'strictPrimitiveOperators',
+  'suspiciousCode',
+  'typeInvalidation',
+  'undefinedNames',
+  'undefinedVars',
+  'underscore',
+  'unknownDefines',
+  'unusedLocalVariables',
+  // 'unusedPrivateMembers',
+  'useOfGoogBase',
+  'uselessCode',
+  'untranspilableFeatures',
+  'visibility'
+];
+
+/**
  * Helper method for calling the Closure compiler.
  * @param {*} compilerOptions
  * @param {boolean=} opt_verbose Optional option for verbose logging
+ * @param {boolean=} opt_warnings_as_error Optional option for treating warnings
+ *     as errors.
  */
-function compile(compilerOptions, opt_verbose) {
-  if (!compilerOptions) compilerOptions = {};
+function compile(compilerOptions, opt_verbose, opt_warnings_as_error) {
+  compilerOptions = compilerOptions || {};
   compilerOptions.compilation_level = 'SIMPLE_OPTIMIZATIONS';
   compilerOptions.warning_level = opt_verbose ? 'VERBOSE' : 'DEFAULT';
+  compilerOptions.language_in =
+    compilerOptions.language_in || 'ECMASCRIPT6_STRICT';
   compilerOptions.language_out = 'ECMASCRIPT5_STRICT';
   compilerOptions.rewrite_polyfills = false;
   compilerOptions.hide_warnings_for = 'node_modules';
+  if (opt_warnings_as_error) {
+    compilerOptions.jscomp_error = JSCOMP_ERROR;
+  }
 
   const platform = ['native', 'java', 'javascript'];
 
@@ -97,14 +139,32 @@ function compile(compilerOptions, opt_verbose) {
 }
 
 /**
+ * Helper method for possibly adding the Closure library into a sources array.
+ * @param {Array.<string>} srcs
+ */
+function maybeAddClosureLibrary(srcs) {
+  if (argv.closureLibrary) {
+    // If you require Google's Closure library, you can include it in your
+    // build by adding the --closure-library flag.
+    // You will also need to include the "google-closure-library" in your list
+    // of devDependencies.
+    console.log('Including the google-closure-library in your build.');
+    if (!fs.existsSync('./node_modules/google-closure-library')) {
+      throw Error('You must add the google-closure-library to your ' +
+        'devDependencies in package.json, and run `npm install`.');
+    }
+    srcs.push('./node_modules/google-closure-library/closure/goog/**/**/*.js');
+  }
+  return srcs;
+}
+
+/**
  * This task builds Blockly's core files.
  *     blockly_compressed.js
  */
-gulp.task('build-core', function () {
+function buildCompressed(cb) {
   const defines = 'Blockly.VERSION="' + packageJson.version + '"';
-  return gulp.src([
-      'core/**/**/*.js'
-    ], {base: './'})
+  return gulp.src(maybeAddClosureLibrary(['core/**/**/*.js']), {base: './'})
     // Directories in Blockly are used to group similar files together
     // but are not used to limit access with @package, instead the
     // method means something is internal to Blockly and not a public
@@ -121,18 +181,23 @@ gulp.task('build-core', function () {
       dependency_mode: 'PRUNE',
       entry_point: './core-requires.js',
       js_output_file: 'blockly_compressed.js',
-      externs: './externs/svg-externs.js',
-      define: defines
-    }, argv.verbose))
+      externs: ['./externs/svg-externs.js', './externs/goog-externs.js'],
+      define: defines,
+      language_in:
+        argv.closureLibrary ? 'ECMASCRIPT_2015' : 'ECMASCRIPT6_STRICT'
+    }, argv.verbose, argv.strict))
     .pipe(prependHeader())
     .pipe(gulp.dest('./'));
-});
+};
 
 /**
  * This task builds the Blockly's built in blocks.
  *     blocks_compressed.js
  */
-gulp.task('build-blocks', function () {
+function buildBlocks() {
+  // Add provides used throughout blocks/ in order to be compatible with the
+  // compiler.  Anything added to this list must be removed from the compiled
+  // result using the remove regex steps below.
   const provides = `
 goog.provide('Blockly');
 goog.provide('Blockly.Blocks');
@@ -146,24 +211,28 @@ goog.provide('Blockly.FieldMultilineInput');
 goog.provide('Blockly.FieldNumber');
 goog.provide('Blockly.FieldTextInput');
 goog.provide('Blockly.FieldVariable');
-goog.provide('Blockly.Mutator');`;
-  return gulp.src('blocks/*.js', {base: './'})
+goog.provide('Blockly.Mutator');
+goog.provide('Blockly.Warning');`;
+  return gulp.src(maybeAddClosureLibrary(['blocks/*.js']), {base: './'})
     // Add Blockly.Blocks to be compatible with the compiler.
     .pipe(gulp.replace(`goog.provide('Blockly.Constants.Colour');`,
       `${provides}goog.provide('Blockly.Constants.Colour');`))
     .pipe(stripApacheLicense())
     .pipe(compile({
       dependency_mode: 'NONE',
+      externs: ['./externs/goog-externs.js'],
       js_output_file: 'blocks_compressed.js'
-    }, argv.verbose))
+    }, argv.verbose, argv.strict))
     .pipe(gulp.replace('\'use strict\';', '\'use strict\';\n\n\n'))
     // Remove Blockly.Blocks to be compatible with Blockly.
     .pipe(gulp.replace(/var Blockly=\{[^;]*\};\n?/, ''))
     // Remove Blockly Fields to be compatible with Blockly.
     .pipe(gulp.replace(/Blockly\.Field[^=\(]+=\{[^;]*\};/g, ''))
+    // Remove Blockly Warning, Comment & Mutator to be compatible with Blockly.
+    .pipe(gulp.replace(/Blockly\.(Comment|Warning|Mutator)=\{[^;]*\};/g, ''))
     .pipe(prependHeader())
     .pipe(gulp.dest('./'));
-});
+};
 
 /**
  * A helper method for building a Blockly code generator.
@@ -173,6 +242,7 @@ goog.provide('Blockly.Mutator');`;
 function buildGenerator(language, namespace) {
   var provides = `
 goog.provide('Blockly.Generator');
+goog.provide('Blockly.utils.global');
 goog.provide('Blockly.utils.string');`;
   return gulp.src([`generators/${language}.js`, `generators/${language}/*.js`], {base: './'})
     .pipe(stripApacheLicense())
@@ -181,11 +251,12 @@ goog.provide('Blockly.utils.string');`;
       `${provides}goog.provide('Blockly.${namespace}');`))
     .pipe(compile({
       dependency_mode: 'NONE',
+      externs: ['./externs/goog-externs.js'],
       js_output_file: `${language}_compressed.js`
-    }, argv.verbose))
+    }, argv.verbose, argv.strict))
     .pipe(gulp.replace('\'use strict\';', '\'use strict\';\n\n\n'))
     // Remove Blockly.Generator and Blockly.utils.string to be compatible with Blockly.
-    .pipe(gulp.replace(/var Blockly=\{[^;]*\};\s*Blockly.utils.string={};\n?/, ''))
+    .pipe(gulp.replace(/var Blockly=\{[^;]*\};\s*Blockly.utils.global={};\s*Blockly.utils.string={};\n?/, ''))
     .pipe(prependHeader())
     .pipe(gulp.dest('./'));
 };
@@ -194,48 +265,67 @@ goog.provide('Blockly.utils.string');`;
  * This task builds the javascript generator.
  *     javascript_compressed.js
  */
-gulp.task('build-javascript', function() {
+function buildJavascript() {
   return buildGenerator('javascript', 'JavaScript');
-});
+};
 
 /**
  * This task builds the python generator.
  *     python_compressed.js
  */
-gulp.task('build-python', function() {
+function buildPython() {
   return buildGenerator('python', 'Python');
-});
+};
 
 /**
  * This task builds the php generator.
  *     php_compressed.js
  */
-gulp.task('build-php', function() {
+function buildPHP() {
   return buildGenerator('php', 'PHP');
-});
+};
 
 /**
  * This task builds the lua generator.
  *     lua_compressed.js
  */
-gulp.task('build-lua', function() {
+function buildLua() {
   return buildGenerator('lua', 'Lua');
-});
+};
 
 /**
  * This task builds the dart generator:
  *     dart_compressed.js
  */
-gulp.task('build-dart', function() {
+function buildDart() {
   return buildGenerator('dart', 'Dart');
-});
+};
+
+/**
+ * This tasks builds all the generators:
+ *     javascript_compressed.js
+ *     python_compressed.js
+ *     php_compressed.js
+ *     lua_compressed.js
+ *     dart_compressed.js
+ */
+const buildGenerators = gulp.parallel(
+  buildJavascript,
+  buildPython,
+  buildPHP,
+  buildLua,
+  buildDart
+);
 
 /**
  * This task builds Blockly's uncompressed file.
  *     blockly_uncompressed.js
  */
-gulp.task('build-uncompressed', function() {
-  const header = `// Do not edit this file; automatically generated by build.py.
+function buildUncompressed() {
+  const closurePath = argv.closureLibrary ?
+    'node_modules/google-closure-library/closure/goog' :
+    'closure/goog';
+  const header = `// Do not edit this file; automatically generated by gulp.
 'use strict';
 
 this.IS_NODE_JS = !!(typeof module !== 'undefined' && module.exports);
@@ -269,34 +359,83 @@ if (this.IS_NODE_JS) {
   this.BLOCKLY_BOOT(this);
   module.exports = Blockly;
 } else {
-  // Delete any existing Closure (e.g. Soy's nogoog_shim).
-  document.write('<script>var goog = undefined;</script>');
-  // Load fresh Closure Library.
   document.write('<script src="' + this.BLOCKLY_DIR +
-      '/closure/goog/base.js"></script>');
+      '/${closurePath}/base.js"></script>');
   document.write('<script>this.BLOCKLY_BOOT(this);</script>');
 }
 `;
-  const file = 'blockly_uncompressed.js';
-  // Run depswriter.py and which scans the core directory and writes out a ``goog.addDependency`` line for each file.
-  const cmd = `python ./node_modules/google-closure-library/closure/bin/build/depswriter.py \
-    --root_with_prefix="./core ../core" > ${file}`;
-  execSync(cmd, { stdio: 'inherit' });
 
-  const requires = `\n// Load Blockly.\ngoog.require('Blockly.requires');\n`;
+let deps = [];
+return gulp.src(maybeAddClosureLibrary(['core/**/**/*.js']))
+  .pipe(through2.obj((file, _enc, cb) => {
+    const result = closureDeps.parser.parseFile(file.path);
+    for (const dep of result.dependencies) {
+      deps.push(dep);
+    }
+    cb(null);
+  }))
+  .on('end', () => {
+    // Update the path to closure for any files that we don't know the full path
+    // of (parsed from a goog.addDependency call).
+    for (const dep of deps) {
+      dep.setClosurePath(closurePath);
+    }
 
-  return gulp.src(file)
-    // Remove comments so we're compatible with the build.py script
-    .pipe(gulp.replace(/\/\/.*\n/gm, ''))
-    // Replace quotes to be compatible with build.py
-    .pipe(gulp.replace(/\'(.*\.js)\'/gm, '"$1"'))
-    // Find the Blockly directory name and replace it with a JS variable.
-    // This allows blockly_uncompressed.js to be compiled on one computer and be
-    // used on another, even if the directory name differs.
-    .pipe(gulp.replace(/\.\.\/core/gm, `../../core`))
-    .pipe(gulp.insert.wrap(header, requires + footer))
-    .pipe(gulp.dest('./'));
-});
+    const addDependency = closureDeps.depFile.getDepFileText(closurePath, deps);
+
+    const requires = `goog.addDependency("base.js", [], []);
+
+// Load Blockly.
+goog.require('Blockly.requires')
+`;
+    fs.writeFileSync('blockly_uncompressed.js',
+      header +
+      addDependency +
+      requires +
+      footer);
+  });
+};
+
+/**
+ * This task builds Blockly's lang files.
+ *     msg/*.js
+ */
+function buildLangfiles(done) {
+  // Run js_to_json.py
+  const jsToJsonCmd = `python ./i18n/js_to_json.py \
+--input_file ${path.join('msg', 'messages.js')} \
+--output_dir ${path.join('msg', 'json')} \
+--quiet`;
+  execSync(jsToJsonCmd, { stdio: 'inherit' });
+
+  // Run create_messages.py
+  let json_files = fs.readdirSync(path.join('msg', 'json'));
+  json_files = json_files.filter(file => file.endsWith('json') &&
+    !(new RegExp(/(keys|synonyms|qqq|constants)\.json$/).test(file)));
+  json_files = json_files.map(file => path.join('msg', 'json', file));
+  const createMessagesCmd = `python ./i18n/create_messages.py \
+  --source_lang_file ${path.join('msg', 'json', 'en.json')} \
+  --source_synonym_file ${path.join('msg', 'json', 'synonyms.json')} \
+  --source_constants_file ${path.join('msg', 'json', 'constants.json')} \
+  --key_file ${path.join('msg', 'json', 'keys.json')} \
+  --output_dir ${path.join('msg', 'js')} \
+  --quiet ${json_files.join(' ')}`;
+    execSync(createMessagesCmd, { stdio: 'inherit' });
+
+  done();
+};
+
+/**
+ * This tasks builds Blockly's core files:
+ *     blockly_compressed.js
+ *     blocks_compressed.js
+ *     blockly_uncompressed.js
+ */
+const buildCore = gulp.parallel(
+  buildCompressed,
+  buildBlocks,
+  buildUncompressed
+);
 
 /**
  * This task builds all of Blockly:
@@ -307,16 +446,14 @@ if (this.IS_NODE_JS) {
  *     php_compressed.js
  *     lua_compressed.js
  *     dart_compressed.js
+ *     blockly_uncompressed.js
+ *     msg/json/*.js
  */
-gulp.task('build', gulp.parallel(
-  'build-core',
-  'build-blocks',
-  'build-javascript',
-  'build-python',
-  'build-php',
-  'build-lua',
-  'build-dart'
-));
+const build = gulp.parallel(
+  buildCore,
+  buildGenerators,
+  buildLangfiles
+);
 
 ////////////////////////////////////////////////////////////
 //                        Typings                         //
@@ -327,7 +464,7 @@ gulp.task('build', gulp.parallel(
 // the script also pulls in a number of part files from typings/parts.
 // This includes the header (incl License), additional useful interfaces
 // including Blockly Options and Google Closure typings.
-gulp.task('typings', function (cb) {
+function typings() {
   const tmpDir = './typings/tmp';
   const blocklySrcs = [
     "core/",
@@ -389,7 +526,7 @@ gulp.task('typings', function (cb) {
         rimraf.sync(tmpDir);
       }
     });
-});
+};
 
 ////////////////////////////////////////////////////////////
 //                  NPM packaging tasks                   //
@@ -430,19 +567,19 @@ function packageCommonJS(namespace, dependencies) {
  * This task wraps blockly_compressed.js into a UMD module.
  * @example import 'blockly/blockly';
  */
-gulp.task('package-blockly', function() {
+function packageBlockly() {
   return gulp.src('blockly_compressed.js')
     .pipe(packageUMD('Blockly', []))
     .pipe(gulp.rename('blockly.js'))
     .pipe(gulp.dest(packageDistribution));
-});
+};
 
 /**
  * This task wraps blocks_compressed.js into a CommonJS module for Node.js.
  * This is an equivelant task to package-blockly but for Node.js.
  * @example import 'blockly/blockly-node';
  */
-gulp.task('package-blockly-node', function() {
+function packageBlocklyNode() {
   // Override textToDomDocument, providing a Node.js alternative to DOMParser.
   return gulp.src('blockly_compressed.js')
     .pipe(gulp.insert.append(`
@@ -458,13 +595,13 @@ gulp.task('package-blockly-node', function() {
     .pipe(packageCommonJS('Blockly', []))
     .pipe(gulp.rename('blockly-node.js'))
     .pipe(gulp.dest(packageDistribution));
-})
+};
 
 /**
  * This task wraps blocks_compressed.js into a UMD module.
  * @example import 'blockly/blocks';
  */
-gulp.task('package-blocks', function() {
+function packageBlocks() {
   return gulp.src('blocks_compressed.js')
     .pipe(gulp.insert.prepend(`
     Blockly.Blocks={};`))
@@ -475,7 +612,7 @@ gulp.task('package-blocks', function() {
       }]))
     .pipe(gulp.rename('blocks.js'))
     .pipe(gulp.dest(packageDistribution));
-});
+};
 
 /**
  * This task wraps package/index.js into a UMD module.
@@ -483,7 +620,7 @@ gulp.task('package-blocks', function() {
  * and the Browser entry point for AMD environments.
  * @example import * as Blockly from 'blockly';
  */
-gulp.task('package-index', function() {
+function packageIndex() {
   return gulp.src('package/index.js')
     .pipe(packageUMD('Blockly', [{
         name: 'Blockly',
@@ -492,7 +629,7 @@ gulp.task('package-index', function() {
       }]))
     .pipe(gulp.rename('index.js'))
     .pipe(gulp.dest(packageDistribution));
-});
+};
 
 /**
  * This task wraps package/browser/index.js into a UMD module.
@@ -503,7 +640,7 @@ gulp.task('package-index', function() {
  * built by package-node in browser environments.
  * @example import * as Blockly from 'blockly/browser';
  */
-gulp.task('package-browser', function() {
+function packageBrowser() {
   return gulp.src('package/browser/index.js')
     .pipe(packageUMD('Blockly', [{
         name: 'Blockly',
@@ -524,7 +661,7 @@ gulp.task('package-browser', function() {
       }]))
     .pipe(gulp.rename('browser.js'))
     .pipe(gulp.dest(packageDistribution));
-});
+};
 
 /**
  * This task wraps package/browser/core.js into a UMD module.
@@ -534,7 +671,7 @@ gulp.task('package-browser', function() {
  * built by package-node-core in browser environments.
  * @example import * as Blockly from 'blockly/core';
  */
-gulp.task('package-core', function() {
+function packageCore() {
   return gulp.src('package/browser/core.js')
     .pipe(packageUMD('Blockly', [{
         name: 'Blockly',
@@ -543,7 +680,7 @@ gulp.task('package-core', function() {
       }]))
     .pipe(gulp.rename('core-browser.js'))
     .pipe(gulp.dest(packageDistribution));
-});
+};
 
 /**
  * This task wraps package/node/index.js into a CommonJS module for Node.js.
@@ -553,7 +690,7 @@ gulp.task('package-core', function() {
  * built by package-browser in browser environments.
  * @example import * as Blockly from 'blockly/node';
  */
-gulp.task('package-node', function() {
+function packageNode() {
   return gulp.src('package/node/index.js')
     .pipe(packageCommonJS('Blockly', [{
         name: 'Blockly',
@@ -582,7 +719,7 @@ gulp.task('package-node', function() {
       }]))
     .pipe(gulp.rename('node.js'))
     .pipe(gulp.dest(packageDistribution));
-});
+};
 
 /**
  * This task wraps package/node/core.js into a CommonJS module for Node.js.
@@ -592,7 +729,7 @@ gulp.task('package-node', function() {
  * built by package-core in browser environments.
  * @example import * as Blockly from 'blockly/core';
  */
-gulp.task('package-node-core', function() {
+function packageNodeCore() {
   return gulp.src('package/node/core.js')
     .pipe(packageCommonJS('Blockly', [{
         name: 'Blockly',
@@ -601,7 +738,7 @@ gulp.task('package-node-core', function() {
       }]))
     .pipe(gulp.rename('core.js'))
     .pipe(gulp.dest(packageDistribution));
-});
+};
 
 /**
  * A helper method for packaging a Blockly code generator into a UMD module.
@@ -624,47 +761,47 @@ function packageGenerator(file, rename, generator) {
  * This task wraps javascript_compressed.js into a UMD module.
  * @example import 'blockly/javascript';
  */
-gulp.task('package-javascript', function() {
+function packageJavascript() {
   return packageGenerator('javascript_compressed.js', 'javascript.js', 'Blockly.JavaScript');
-});
+};
 
 /**
  * This task wraps python_compressed.js into a UMD module.
  * @example import 'blockly/python';
  */
-gulp.task('package-python', function() {
+function packagePython() {
   return packageGenerator('python_compressed.js', 'python.js', 'Blockly.Python');
-});
+};
 
 /**
  * This task wraps lua_compressed.js into a UMD module.
  * @example import 'blockly/lua';
  */
-gulp.task('package-lua', function() {
+function packageLua() {
   return packageGenerator('lua_compressed.js', 'lua.js', 'Blockly.Lua');
-});
+};
 
 /**
  * This task wraps dart_compressed.js into a UMD module.
  * @example import 'blockly/dart';
  */
-gulp.task('package-dart', function() {
+function packageDart() {
   return packageGenerator('dart_compressed.js', 'dart.js', 'Blockly.Dart');
-});
+};
 
 /**
  * This task wraps php_compressed.js into a UMD module.
  * @example import 'blockly/php';
  */
-gulp.task('package-php', function() {
+function packagePHP() {
   return packageGenerator('php_compressed.js', 'php.js', 'Blockly.PHP');
-});
+};
 
 /**
  * This task wraps each of the msg/js/* files into a UMD module.
  * @example import * as En from 'blockly/msg/en';
  */
-gulp.task('package-locales', function() {
+function packageLocales() {
   // Remove references to goog.provide and goog.require.
   return gulp.src('msg/js/*.js')
       .pipe(gulp.replace(/goog\.[^\n]+/g, ''))
@@ -676,7 +813,7 @@ gulp.task('package-locales', function() {
           cjs: '../core',
         }]))
       .pipe(gulp.dest(`${packageDistribution}/msg`));
-});
+};
 
 /**
  * This task creates a UMD bundle of Blockly which includes the Blockly
@@ -684,7 +821,7 @@ gulp.task('package-locales', function() {
  * English localization files.
  * @example <script src="https://unpkg.com/blockly/blockly.min.js"></script>
  */
-gulp.task('package-umd-bundle', function() {
+function packageUMDBundle() {
   var srcs = [
     'blockly_compressed.js',
     'msg/js/en.js',
@@ -695,78 +832,187 @@ gulp.task('package-umd-bundle', function() {
     .pipe(gulp.concat('blockly.min.js'))
     .pipe(packageUMD('Blockly', []))
     .pipe(gulp.dest(`${packageDistribution}`))
-});
+};
 
 /**
  * This task copies all the media/* files into the distribution directory.
  */
-gulp.task('package-media', function() {
+function packageMedia() {
   return gulp.src('./media/*')
     .pipe(gulp.dest(`${packageDistribution}/media`));
-});
+};
 
 /**
  * This task copies the package.json file into the distribution directory.
  */
-gulp.task('package-json', function() {
-  return gulp.src('./package.json')
-    .pipe(gulp.dest(`${packageDistribution}`))
-});
+function packageJSON(cb) {
+  const json = Object.assign({}, packageJson);
+  delete json['scripts'];
+  if (!fs.existsSync(packageDistribution)) {
+    fs.mkdirSync(packageDistribution);
+  }
+  fs.writeFileSync(`${packageDistribution}/package.json`,
+      JSON.stringify(json, null, 2));
+  cb();
+};
 
 /**
  * This task copies the package/README.md file into the distribution directory.
  * This file is what developers will see at https://www.npmjs.com/package/blockly.
  */
-gulp.task('package-readme', function() {
+function packageReadme() {
   return gulp.src('./package/README.md')
-    .pipe(gulp.dest(`${packageDistribution}`))
-});
+    .pipe(gulp.dest(`${packageDistribution}`));
+};
 
 /**
  * This task copies the typings/blockly.d.ts TypeScript definition file into the
  * distribution directory.
  * The bundled declaration file is referenced in package.json in the types property.
  */
-gulp.task('package-dts', function() {
+function packageDTS() {
   return gulp.src('./typings/blockly.d.ts')
-    .pipe(gulp.dest(`${packageDistribution}`))
-});
+    .pipe(gulp.dest(`${packageDistribution}`));
+};
 
 /**
  * This task prepares the NPM distribution files under the /dist directory.
  */
-gulp.task('package', gulp.parallel(
-  'package-index',
-  'package-browser',
-  'package-node',
-  'package-core',
-  'package-node-core',
-  'package-blockly',
-  'package-blockly-node',
-  'package-blocks',
-  'package-javascript',
-  'package-python',
-  'package-lua',
-  'package-dart',
-  'package-php',
-  'package-locales',
-  'package-media',
-  'package-umd-bundle',
-  'package-json',
-  'package-readme',
-  'package-dts'
-  ));
+const package = gulp.parallel(
+  packageIndex,
+  packageBrowser,
+  packageNode,
+  packageCore,
+  packageNodeCore,
+  packageBlockly,
+  packageBlocklyNode,
+  packageBlocks,
+  packageJavascript,
+  packagePython,
+  packageLua,
+  packageDart,
+  packagePHP,
+  packageLocales,
+  packageMedia,
+  packageUMDBundle,
+  packageJSON,
+  packageReadme,
+  packageDTS
+);
 
-// The release task prepares Blockly for an npm release.
-// It rebuilds the Blockly compressed files and updates the TypeScript
-// typings, and then packages all the npm release files into the /dist directory
-gulp.task('release', gulp.series(['build', 'typings', function() {
-  // Clean directory if exists
-  if (fs.existsSync(packageDistribution)) {
-    rimraf.sync(packageDistribution);
+// Stash current state, check out the named branch, and sync with
+// google/blockly.
+function syncBranch(branchName) {
+  return function(done) {
+    execSync('git stash save -m "Stash for sync"', { stdio: 'inherit' });
+    execSync('git checkout ' + branchName, { stdio: 'inherit' });
+    execSync('git pull ' + upstream_url + ' ' + branchName,
+        { stdio: 'inherit' });
+    execSync('git push origin ' + branchName, { stdio: 'inherit' });
+    done();
   }
-  fs.mkdirSync(packageDistribution);
-}, 'package']));
+}
 
-// The default task builds Blockly.
-gulp.task('default', gulp.series(['build']));
+// Stash current state, check out develop, and sync with google/blockly.
+function syncDevelop() {
+  return syncBranch('develop');
+};
+
+// Stash current state, check out master, and sync with google/blockly.
+function syncMaster() {
+  return syncBranch('master');
+};
+
+// Helper function: get a name for a rebuild branch. Format: rebuild_mm_dd_yyyy.
+function getRebuildBranchName() {
+  var date = new Date();
+  var mm = date.getMonth() + 1; // Month, 0-11
+  var dd = date.getDate(); // Day of the month, 1-31
+  var yyyy = date.getFullYear();
+  return 'rebuild_' + mm + '_' + dd + '_' + yyyy;
+};
+
+// Helper function: get a name for a rebuild branch. Format: rebuild_yyyy_mm.
+function getRCBranchName() {
+  var date = new Date();
+  var mm = date.getMonth() + 1; // Month, 0-11
+  var yyyy = date.getFullYear();
+  return 'rc_' + yyyy + '_' + mm;
+};
+
+// Recompile and push to origin.
+const recompile = gulp.series(
+  syncDevelop,
+  function(done) {
+    var branchName = getRebuildBranchName();
+    console.log('make-rebuild-branch: creating branch ' + branchName);
+    execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
+    done();
+  },
+  build,
+  typings,
+  function(done) {
+    console.log('push-rebuild-branch: committing rebuild');
+    execSync('git commit -am "Rebuild"', { stdio: 'inherit' });
+    var branchName = getRebuildBranchName();
+    execSync('git push origin ' + branchName, { stdio: 'inherit' });
+    console.log('Branch ' + branchName + ' pushed to GitHub.');
+    console.log('Next step: create a pull request against develop.');
+    done();
+    }
+);
+
+// Create and push an RC branch.
+// Note that this pushes to google/blockly.
+const createRC = gulp.series(
+  syncDevelop,
+  function(done) {
+    var branchName = getRCBranchName();
+    execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
+    execSync('git push ' + upstream_url + ' ' + branchName,
+        { stdio: 'inherit' });
+    execSync('git checkout -b gh-pages');
+    execSync('git push ' + upstream_url + ' gh-pages');
+    done();
+  },
+);
+
+// See https://docs.npmjs.com/cli/version.
+const preversion = gulp.series(
+  syncMaster,
+  function(done) {
+    // Create a branch named bump_version for the bump and rebuild.
+    execSync('git checkout -b bump_version', { stdio: 'inherit' });
+    done();
+  },
+);
+
+// See https://docs.npmjs.com/cli/version
+function postversion(done) {
+  // Push both the branch and tag to google/blockly.
+  execSync('git push ' + upstream_url + ' bump_version',
+      { stdio: 'inherit' });
+  var tagName = 'v' + packageJson.version;
+  execSync('git push ' + upstream_url + ' ' + tagName,
+      { stdio: 'inherit' });
+  done();
+};
+
+module.exports = {
+  default: build,
+  build: build,
+  buildCore: buildCore,
+  buildBlocks: buildBlocks,
+  buildLangfiles: buildLangfiles,
+  buildUncompressed: buildUncompressed,
+  buildCompressed: buildCompressed,
+  buildGenerators: buildGenerators,
+  gitSyncDevelop: syncDevelop,
+  gitSyncMaster: syncMaster,
+  preversion: preversion,
+  postversion: postversion,
+  gitCreateRC: createRC,
+  gitRecompile: recompile,
+  typings: typings,
+  package: package
+};

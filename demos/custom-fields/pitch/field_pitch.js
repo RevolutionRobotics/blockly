@@ -2,18 +2,7 @@
  * @license
  * Copyright 2016 Google LLC
  * https://github.com/google/blockly-games
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -39,6 +28,20 @@ var CustomFields = CustomFields || {};
  */
 CustomFields.FieldPitch = function(text) {
   CustomFields.FieldPitch.superClass_.constructor.call(this, text);
+
+  /**
+   * Click event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.clickWrapper_ = null;
+
+  /**
+   * Move event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.moveWrapper_ = null;
 };
 Blockly.utils.object.inherits(CustomFields.FieldPitch, Blockly.FieldTextInput);
 
@@ -74,9 +77,8 @@ CustomFields.FieldPitch.prototype.showEditor_ = function() {
   var editor = this.dropdownCreate_();
   Blockly.DropDownDiv.getContentDiv().appendChild(editor);
 
-  var border = this.sourceBlock_.getColourBorder();
-  border = border.colourBorder || border.colourLight;
-  Blockly.DropDownDiv.setColour(this.sourceBlock_.getColour(), border);
+  Blockly.DropDownDiv.setColour(this.sourceBlock_.style.colourPrimary,
+      this.sourceBlock_.style.colourTertiary);
 
   Blockly.DropDownDiv.showPositionedByField(
       this, this.dropdownDispose_.bind(this));
@@ -112,8 +114,15 @@ CustomFields.FieldPitch.prototype.dropdownCreate_ = function() {
  * @private
  */
 CustomFields.FieldPitch.prototype.dropdownDispose_ = function() {
-  Blockly.unbindEvent_(this.clickWrapper_);
-  Blockly.unbindEvent_(this.moveWrapper_);
+  if (this.clickWrapper_) {
+    Blockly.unbindEvent_(this.clickWrapper_);
+    this.clickWrapper_ = null;
+  }
+  if (this.moveWrapper_) {
+    Blockly.unbindEvent_(this.moveWrapper_);
+    this.moveWrapper_ = null;
+  }
+  this.imageElement_ = null;
 };
 
 /**
@@ -173,7 +182,7 @@ CustomFields.FieldPitch.prototype.getText_ = function() {
 /**
  * Transform the provided value into a text to show in the HTML input.
  * @param {*} value The value stored in this field.
- * @returns {string} The text to show on the HTML input.
+ * @return {string} The text to show on the HTML input.
  */
 CustomFields.FieldPitch.prototype.getEditorText_ = function(value) {
   return this.valueToNote(value);
@@ -183,7 +192,7 @@ CustomFields.FieldPitch.prototype.getEditorText_ = function(value) {
  * Transform the text received from the HTML input (note) into a value
  * to store in this field.
  * @param {string} text Text received from the HTML input.
- * @returns {*} The value to store.
+ * @return {*} The value to store.
  */
 CustomFields.FieldPitch.prototype.getValueFromEditorText_ = function(text) {
   return this.noteToValue(text);

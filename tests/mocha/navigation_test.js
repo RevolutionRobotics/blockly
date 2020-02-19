@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -166,6 +155,7 @@ suite('Navigation', function() {
         ]
       }]);
       this.workspace = createNavigationWorkspace(true);
+      Blockly.mainWorkspace = this.workspace;
       Blockly.navigation.focusToolbox_();
       Blockly.navigation.focusFlyout_();
       this.mockEvent = {
@@ -329,7 +319,7 @@ suite('Navigation', function() {
           Blockly.ASTNode.createConnectionNode(this.basicBlock.previousConnection));
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.ENTER;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
-      var markedNode = this.workspace.getMarker().getCurNode();
+      var markedNode = this.workspace.getMarker(Blockly.navigation.MARKER_NAME).getCurNode();
       chai.assert.equal(markedNode.getLocation(), this.basicBlock.previousConnection);
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_WS);
@@ -346,10 +336,29 @@ suite('Navigation', function() {
 
   suite('Test key press', function() {
     setup(function() {
-      this.workspace = new Blockly.Workspace({readOnly: false});
+      Blockly.defineBlocksWithJsonArray([{
+        "type": "basic_block",
+        "message0": "%1",
+        "args0": [
+          {
+            "type": "field_dropdown",
+            "name": "OP",
+            "options": [
+              ["%{BKY_MATH_ADDITION_SYMBOL}", "ADD"],
+              ["%{BKY_MATH_SUBTRACTION_SYMBOL}", "MINUS"],
+              ["%{BKY_MATH_MULTIPLICATION_SYMBOL}", "MULTIPLY"],
+              ["%{BKY_MATH_DIVISION_SYMBOL}", "DIVIDE"],
+              ["%{BKY_MATH_POWER_SYMBOL}", "POWER"]
+            ]
+          }
+        ]
+      }]);
+      this.workspace = createNavigationWorkspace(true);
+      this.workspace.getCursor().drawer_ = null;
+      this.basicBlock = this.workspace.newBlock('basic_block');
       Blockly.user.keyMap.setKeyMap(Blockly.user.keyMap.createDefaultKeyMap());
       Blockly.mainWorkspace = this.workspace;
-      Blockly.keyboardAccessibilityMode = true;
+      Blockly.getMainWorkspace().keyboardAccessibilityMode = true;
       Blockly.navigation.currentState_ = Blockly.navigation.STATE_WS;
 
       this.mockEvent = {
@@ -359,12 +368,10 @@ suite('Navigation', function() {
       };
     });
     test('Action does not exist', function() {
-      var block = new Blockly.Block(this.workspace);
-      var field = new Blockly.FieldDropdown([['a','b'], ['c','d']]);
-      field.setSourceBlock(block);
+      var block = this.workspace.getTopBlocks()[0];
+      var field = block.inputList[0].fieldRow[0];
       sinon.spy(field, 'onBlocklyAction');
       this.workspace.getCursor().setCurNode(Blockly.ASTNode.createFieldNode(field));
-
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.N;
       var isHandled = Blockly.navigation.onKeyPress(this.mockEvent);
       chai.assert.isFalse(isHandled);
@@ -374,9 +381,9 @@ suite('Navigation', function() {
     });
 
     test('Action exists - field handles action', function() {
-      var block = new Blockly.Block(this.workspace);
-      var field = new Blockly.FieldDropdown([['a','b'], ['c','d']]);
-      field.setSourceBlock(block);
+      var block = this.workspace.getTopBlocks()[0];
+      var field = block.inputList[0].fieldRow[0];
+
       sinon.stub(field, 'onBlocklyAction').callsFake(function(){
         return true;
       });
@@ -390,9 +397,8 @@ suite('Navigation', function() {
     });
 
     test('Action exists - field does not handle action', function() {
-      var block = new Blockly.Block(this.workspace);
-      var field = new Blockly.FieldDropdown([['a','b'], ['c','d']]);
-      field.setSourceBlock(block);
+      var block = this.workspace.getTopBlocks()[0];
+      var field = block.inputList[0].fieldRow[0];
       sinon.spy(field, 'onBlocklyAction');
       this.workspace.getCursor().setCurNode(Blockly.ASTNode.createFieldNode(field));
 
@@ -405,26 +411,26 @@ suite('Navigation', function() {
     });
 
     test('Toggle Action Off', function() {
-      this.mockEvent.keyCode = 'Control75';
+      this.mockEvent.keyCode = 'ShiftControl75';
       sinon.spy(Blockly.navigation, 'onBlocklyAction');
-      Blockly.keyboardAccessibilityMode = true;
+      Blockly.getMainWorkspace().keyboardAccessibilityMode = true;
 
       var isHandled = Blockly.navigation.onKeyPress(this.mockEvent);
       chai.assert.isTrue(isHandled);
       chai.assert.isTrue(Blockly.navigation.onBlocklyAction.calledOnce);
-      chai.assert.isFalse(Blockly.keyboardAccessibilityMode);
+      chai.assert.isFalse(Blockly.getMainWorkspace().keyboardAccessibilityMode);
       Blockly.navigation.onBlocklyAction.restore();
     });
 
     test('Toggle Action On', function() {
-      this.mockEvent.keyCode = 'Control75';
+      this.mockEvent.keyCode = 'ShiftControl75';
       sinon.stub(Blockly.navigation, 'focusWorkspace_');
-      Blockly.keyboardAccessibilityMode = false;
+      Blockly.getMainWorkspace().keyboardAccessibilityMode = false;
 
       var isHandled = Blockly.navigation.onKeyPress(this.mockEvent);
       chai.assert.isTrue(isHandled);
       chai.assert.isTrue(Blockly.navigation.focusWorkspace_.calledOnce);
-      chai.assert.isTrue(Blockly.keyboardAccessibilityMode);
+      chai.assert.isTrue(Blockly.getMainWorkspace().keyboardAccessibilityMode);
       Blockly.navigation.focusWorkspace_.restore();
       this.workspace.dispose();
     });
@@ -456,10 +462,11 @@ suite('Navigation', function() {
           "tooltip": "",
           "helpUrl": ""
         }]);
-        this.workspace = new Blockly.Workspace({readOnly: true});
-        this.workspace.setCursor(new Blockly.Cursor());
+        this.workspace = Blockly.inject('blocklyDiv', {readOnly: true});
+
         Blockly.mainWorkspace = this.workspace;
-        Blockly.keyboardAccessibilityMode = true;
+        this.workspace.getCursor().drawer_ = null;
+        Blockly.getMainWorkspace().keyboardAccessibilityMode = true;
         Blockly.navigation.currentState_ = Blockly.navigation.STATE_WS;
 
         this.fieldBlock1 = this.workspace.newBlock('field_block');
@@ -525,7 +532,7 @@ suite('Navigation', function() {
     test('Insert from flyout with a valid connection marked', function() {
       var previousConnection = this.basicBlock.previousConnection;
       var prevNode = Blockly.ASTNode.createConnectionNode(previousConnection);
-      this.workspace.getMarker().setCurNode(prevNode);
+      this.workspace.getMarker(Blockly.navigation.MARKER_NAME).setCurNode(prevNode);
 
       Blockly.navigation.focusToolbox_();
       Blockly.navigation.focusFlyout_();
@@ -557,7 +564,7 @@ suite('Navigation', function() {
 
     test('Connect two blocks that are on the workspace', function() {
       var targetNode = Blockly.ASTNode.createConnectionNode(this.basicBlock.previousConnection);
-      this.workspace.getMarker().setCurNode(targetNode);
+      this.workspace.getMarker(Blockly.navigation.MARKER_NAME).setCurNode(targetNode);
 
       var sourceNode = Blockly.ASTNode.createConnectionNode(this.basicBlock2.nextConnection);
       this.workspace.getCursor().setCurNode(sourceNode);

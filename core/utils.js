@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2012 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -30,6 +19,8 @@
 goog.provide('Blockly.utils');
 
 goog.require('Blockly.Msg');
+goog.require('Blockly.constants');
+goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.string');
@@ -121,7 +112,7 @@ Blockly.utils.getInjectionDivXY_ = function(element) {
     if ((' ' + classes + ' ').indexOf(' injectionDiv ') != -1) {
       break;
     }
-    element = element.parentNode;
+    element = /** @type {!Element} */ (element.parentNode);
   }
   return new Blockly.utils.Coordinate(x, y);
 };
@@ -190,6 +181,7 @@ Blockly.utils.mouseToSvg = function(e, svg, matrix) {
 Blockly.utils.getScrollDeltaPixels = function(e) {
   switch (e.deltaMode) {
     case 0x00:  // Pixel mode.
+    default:
       return {
         x: e.deltaX,
         y: e.deltaY
@@ -236,7 +228,7 @@ Blockly.utils.replaceMessageReferences = function(message) {
   var interpolatedResult = Blockly.utils.tokenizeInterpolation_(message, false);
   // When parseInterpolationTokens == false, interpolatedResult should be at
   // most length 1.
-  return interpolatedResult.length ? interpolatedResult[0] : '';
+  return interpolatedResult.length ? String(interpolatedResult[0]) : '';
 };
 
 /**
@@ -573,7 +565,7 @@ Blockly.utils.getBlockTypeCounts = function(block, opt_stripFollowing) {
       descendants.splice(index, descendants.length - index);
     }
   }
-  for (var i = 0, checkBlock; checkBlock = descendants[i]; i++) {
+  for (var i = 0, checkBlock; (checkBlock = descendants[i]); i++) {
     if (typeCountsMap[checkBlock.type]) {
       typeCountsMap[checkBlock.type]++;
     } else {
@@ -617,4 +609,42 @@ Blockly.utils.screenToWsCoordinates = function(ws, screenCoordinates) {
   // The position in main workspace coordinates.
   var finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
   return finalOffsetMainWs;
+};
+
+/**
+ * Parse a block colour from a number or string, as provided in a block
+ * definition.
+ * @param {number|string} colour HSV hue value (0 to 360), #RRGGBB string,
+ *     or a message reference string pointing to one of those two values.
+ * @return {{hue: ?number, hex: string}} An object containing the colour as
+ *     a #RRGGBB string, and the hue if the input was an HSV hue value.
+ * @throws {Error} If the colour cannot be parsed.
+ */
+Blockly.utils.parseBlockColour = function(colour) {
+  var dereferenced = (typeof colour == 'string') ?
+      Blockly.utils.replaceMessageReferences(colour) : colour;
+
+  var hue = Number(dereferenced);
+  if (!isNaN(hue) && 0 <= hue && hue <= 360) {
+    return {
+      hue: hue,
+      hex: Blockly.utils.colour.hsvToHex(hue, Blockly.HSV_SATURATION,
+          Blockly.HSV_VALUE * 255)
+    };
+  } else {
+    var hex = Blockly.utils.colour.parse(dereferenced);
+    if (hex) {
+      // Only store hue if colour is set as a hue.
+      return {
+        hue: null,
+        hex: hex
+      };
+    } else {
+      var errorMsg = 'Invalid colour: "' + dereferenced + '"';
+      if (colour != dereferenced) {
+        errorMsg += ' (from "' + colour + '")';
+      }
+      throw Error(errorMsg);
+    }
+  }
 };

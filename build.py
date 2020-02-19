@@ -202,6 +202,8 @@ class Gen_compressed(threading.Thread):
       if filename == "core/blockly.js":
         code = code.replace("Blockly.VERSION = 'uncompiled';",
                             "Blockly.VERSION = '%s';" % blocklyVersion)
+      # Strip out all requireType calls.
+      code = re.sub(r"goog.requireType(.*)", "", code)
       params.append(("js_code", code.encode("utf-8")))
       f.close()
 
@@ -235,6 +237,7 @@ goog.provide('Blockly.FieldNumber');
 goog.provide('Blockly.FieldTextInput');
 goog.provide('Blockly.FieldVariable');
 goog.provide('Blockly.Mutator');
+goog.provide('Blockly.Warning');
 """))
     # Read in all the source files.
     filenames = glob.glob(os.path.join("blocks", "*.js"))
@@ -266,6 +269,7 @@ goog.provide('Blockly.Mutator');
     # with the compiler.
     params.append(("js_code", """
 goog.provide('Blockly.Generator');
+goog.provide('Blockly.utils.global');
 goog.provide('Blockly.utils.string');
 """))
     filenames = glob.glob(
@@ -280,7 +284,7 @@ goog.provide('Blockly.utils.string');
 
     # Remove Blockly.Generator and Blockly.utils.string to be compatible
     # with Blockly.
-    remove = r"var Blockly=\{[^;]*\};\s*Blockly.utils.string={};\n?"
+    remove = r"var Blockly=\{[^;]*\};\s*Blockly.utils.global={};\s*Blockly.utils.string={};\n?"
     self.do_compile(params, target_filename, filenames, remove)
 
   def do_compile(self, params, target_filename, filenames, remove):
@@ -380,18 +384,7 @@ goog.provide('Blockly.utils.string');
 
  (Copyright \\d+ (Google LLC|Massachusetts Institute of Technology))
 ( All rights reserved.
-)?
- Licensed under the Apache License, Version 2.0 \\(the "License"\\);
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
+)? SPDX-License-Identifier: Apache-2.0
 \\*/""")
     return re.sub(apache2, "", code)
 

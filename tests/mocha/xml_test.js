@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 suite('XML', function() {
@@ -442,7 +431,7 @@ suite('XML', function() {
         this.workspace.createVariable('name1', '', 'id1');
         var blocksArray = Blockly.Variables.flyoutCategoryBlocks(this.workspace);
         try {
-          for (var i = 0, xml; xml = blocksArray[i]; i++) {
+          for (var i = 0, xml; (xml = blocksArray[i]); i++) {
             Blockly.Xml.domToBlock(xml, this.workspace);
           }
         } finally {
@@ -509,7 +498,7 @@ suite('XML', function() {
         var blocksArray = Blockly.VariablesDynamic
             .flyoutCategoryBlocks(this.workspace);
         try {
-          for (var i = 0, xml; xml = blocksArray[i]; i++) {
+          for (var i = 0, xml; (xml = blocksArray[i]); i++) {
             Blockly.Xml.domToBlock(xml, this.workspace);
           }
         } finally {
@@ -657,7 +646,8 @@ suite('XML', function() {
         comments: true
       };
       this.renderedWorkspace = Blockly.inject('blocklyDiv', options);
-      this.headlessWorkspace = new Blockly.Workspace(options);
+      this.headlessWorkspace =
+          new Blockly.Workspace(new Blockly.Options(options));
     });
     teardown(function() {
       this.renderedWorkspace.dispose();

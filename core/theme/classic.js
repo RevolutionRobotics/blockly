@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2018 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -31,47 +20,56 @@ Blockly.Themes.Classic = {};
 Blockly.Themes.Classic.defaultBlockStyles = {
   "colour_blocks":{
     "colourPrimary": "#f8bc08",
-    "colourSecondary":"#FFFFFF",
-    "colourTertiary":"#f8bc08"
+    "colourSecondary":"#d7ab07",
+    "colourTertiary":"#c69a06"
   },
   "motor_blocks": {
     "colourPrimary": "#e60312",
-    "colourSecondary":"#FFFFFF",
-    "colourTertiary":"#e60312"
+    "colourSecondary":"#d50201",
+    "colourTertiary":"#c40100"
+  },
+  "sensor_blocks":{
+    "colourPrimary": "#f8bc08",
+    "colourSecondary":"#d7ab07",
+    "colourTertiary":"#c69a06"
   },
   "time_blocks": {
     "colourPrimary" : "#868a8c",
-    "colourSecondary":"#FFFFFF",
-    "colourTertiary":"#868a8c"
+    "colourSecondary":"#75797b",
+    "colourTertiary":"#64676a"
   },
   "light_blocks": {
-    "colourPrimary": "#e51777"
+    "colourPrimary": "#e51777",
+    "colourSecondary":"#d40666",
+    "colourTertiary":"#c30555"
   },
   "sound_blocks": {
-    "colourPrimary" : "#5e2882"
+    "colourPrimary" : "#5e2882",
+    "colourSecondary":"#4d1771",
+    "colourTertiary":"#3c0660"
   },
   "list_blocks": {
     "colourPrimary": "260"
   },
   "logic_blocks": {
     "colourPrimary": "#0264ff",
-    "colourSecondary":"#FFFFFF",
-    "colourTertiary":"#0264ff"
+    "colourSecondary":"#0155cc",
+    "colourTertiary":"#0144aa"
   },
   "loop_blocks": {
     "colourPrimary": "#dd7d3a",
-    "colourSecondary":"#FFFFFF",
-    "colourTertiary":"#dd7d3a"
+    "colourSecondary":"#cc6c29",
+    "colourTertiary":"#bb5b18"
   },
   "math_blocks": {
     "colourPrimary": "#4dc88f",
-    "colourSecondary":"#FFFFFF",
-    "colourTertiary":"#4dc88f"
+    "colourSecondary":"#3ca77e",
+    "colourTertiary":"#2b976d"
   },
   "procedure_blocks": {
     "colourPrimary": "#6ab3c1",
-    "colourSecondary":"#FFFFFF",
-    "colourTertiary":"#6ab3c1"
+    "colourSecondary":"#59a2b0",
+    "colourTertiary":"#4891a9"
   },
   "text_blocks": {
     "colourPrimary": "#000000",
@@ -80,13 +78,13 @@ Blockly.Themes.Classic.defaultBlockStyles = {
   },
   "variable_blocks": {
     "colourPrimary": "#cc7be6",
-    "colourSecondary":"#FFFFFF",
-    "colourTertiary":"#cc7be6"
+    "colourSecondary":"#bb6ad5",
+    "colourTertiary":"#aa59c4"
   },
   "variable_dynamic_blocks":{
     "colourPrimary": "#cc7be6",
-    "colourSecondary":"#FFFFFF",
-    "colourTertiary":"#cc7be6"
+    "colourSecondary":"#bb6ad5",
+    "colourTertiary":"#aa59c4"
   },
   "hat_blocks": {
     "colourPrimary": "330",
@@ -131,5 +129,5 @@ Blockly.Themes.Classic.categoryStyles = {
 };
 
 Blockly.Themes.Classic =
-    new Blockly.Theme(Blockly.Themes.Classic.defaultBlockStyles,
+    new Blockly.Theme('classic', Blockly.Themes.Classic.defaultBlockStyles,
         Blockly.Themes.Classic.categoryStyles);

@@ -124,9 +124,12 @@ Blockly.Blocks['block_light_traffic'] = {
 Blockly.Blocks['block_set_all_leds'] = {
   init: function () {
     this.appendDummyInput()
-      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.LIGHTS, 15, 15, '*'), 'LIGHT_IMAGE')
-      .appendField('set lights')
-      .appendField(new Blockly.FieldColour('#ff0000'), 'COLOR');
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.LIGHTS, 15, 15, '*'), 'LIGHT_IMAGE');
+
+    var colorValueInput = this.appendValueInput('COLOR')
+      .setCheck('Colour')
+      .appendField('set lights');
+    createShadowElement(this.workspace, 'colour_picker', colorValueInput);
 
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
