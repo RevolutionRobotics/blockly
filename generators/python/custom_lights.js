@@ -48,7 +48,7 @@ Blockly.Python['block_light_traffic'] = function (block) {
 
 Blockly.Python['block_set_all_leds'] = function (block) {
     var value_color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_ATOMIC);
-    return setAllLedsImpl(`'${value_color}'`);
+    return setAllLedsImpl(value_color);
 };
 
 Blockly.Python['block_set_leds_black_small'] = Blockly.Python['block_set_leds_black'];
