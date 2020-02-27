@@ -220,3 +220,15 @@ Blockly.Python['block_stop_all_motors'] = function (block) {
     return `for ${loop_var} in robot.motors:\n` +
         Blockly.Python.INDENT + `${loop_var}.stop(action='${dropdown_action})\n`;
 };
+
+Blockly.Python['block_read_motor_position'] = function (block) {
+    var text_name = block.getFieldValue('NAME_INPUT');
+
+    return [`robot.motors["${text_name}"].pos`, Blockly.Python.ORDER_MEMBER];
+};
+
+Blockly.Python['block_reset_motor_position'] = function (block) {
+    var text_name = block.getFieldValue('NAME_INPUT');
+
+    return `robot.motors["${text_name}"].pos = 0\n`;
+};

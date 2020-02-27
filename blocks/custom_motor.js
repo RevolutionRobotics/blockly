@@ -748,3 +748,31 @@ Blockly.Blocks['block_stop_all_motors'] = {
     this.setHelpUrl('');
   }
 };
+
+Blockly.Blocks['block_read_motor_position'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.ANGLE, 15, 15, '*'), 'ENGINE_IMAGE')
+      .appendField(new Blockly.FieldTextInput('motor1'), 'NAME_INPUT')
+      .appendField('angle');
+    this.setOutput(true, 'Number');
+    this.setStyle('motor_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['block_reset_motor_position'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.ANGLE, 15, 15, '*'), 'ENGINE_IMAGE')
+      .appendField('clear')
+      .appendField(new Blockly.FieldTextInput('motor1'), 'NAME_INPUT')
+      .appendField('angle');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('motor_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};

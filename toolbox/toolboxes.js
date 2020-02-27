@@ -111,6 +111,8 @@ toolboxes["level3"] = {
         '    <block type="block_set_speed"></block>' +
         '    <block type="block_motor"></block>' +
         '    <block type="spin_motor"></block>' +
+        '    <block type="block_read_motor_position"></block>' +
+        '    <block type="block_reset_motor_position"></block>' +
         '    <block type="block_stop_motor"></block>' +
         '    <block type="block_stop_all_motors"></block>' +
         '</category>' +
