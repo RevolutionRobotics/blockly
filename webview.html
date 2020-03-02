@@ -51,7 +51,8 @@
       'block_bumper'
     ]
 
-    var iOSBlocklyBrowser = window.navigator.userAgent === 'iOS-Blockly';
+    var iosUserAgents = [ 'iPhone', 'iPad', 'iPod' ];
+    var iOSBlocklyBrowser = iosUserAgents.indexOf(window.navigator.userAgent) !== -1;
 
     function getNameInputValues() {
       return NAME_INPUT_BLOCK_TYPES
