@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2011 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -43,9 +32,9 @@ goog.require('Blockly.utils.dom');
 Blockly.ScrollbarPair = function(workspace) {
   this.workspace_ = workspace;
   this.hScroll = new Blockly.Scrollbar(
-      workspace, true, true, 'blocklyMainWorkspaceScrollbar');
+      workspace, true, true, 'blocklyMainWorkspaceScrollbar', null);
   this.vScroll = new Blockly.Scrollbar(
-      workspace, false, true, 'blocklyMainWorkspaceScrollbar');
+      workspace, false, true, 'blocklyMainWorkspaceScrollbar', null);
   this.corner_ = Blockly.utils.dom.createSvgElement(
       'rect',
       {
@@ -194,13 +183,15 @@ Blockly.ScrollbarPair.prototype.getRatio_ = function(handlePosition, viewSize) {
  * @param {boolean} horizontal True if horizontal, false if vertical.
  * @param {boolean=} opt_pair True if scrollbar is part of a horiz/vert pair.
  * @param {string=} opt_class A class to be applied to this scrollbar.
+ * @param {string=} scrollbar_handle_class A class to be applied to this scrollbar handler.
  * @constructor
  */
-Blockly.Scrollbar = function(workspace, horizontal, opt_pair, opt_class) {
+Blockly.Scrollbar = function(workspace, horizontal, opt_pair, opt_class, scrollbar_handle_class) {
   this.workspace_ = workspace;
   this.pair_ = opt_pair || false;
   this.horizontal_ = horizontal;
   this.oldHostMetrics_ = null;
+  this.scrollbarHandlerClass = scrollbar_handle_class;
 
   this.createDom_(opt_class);
 
@@ -254,7 +245,8 @@ Blockly.Scrollbar.prototype.origin_ = new Blockly.utils.Coordinate(0, 0);
  * Units are CSS pixels, with (0, 0) at the top left of the browser window.
  * For a horizontal scrollbar this is the x coordinate of the mouse down event;
  * for a vertical scrollbar it's the y coordinate of the mouse down event.
- * @type {Blockly.utils.Coordinate}
+ * @type {number}
+ * @private
  */
 Blockly.Scrollbar.prototype.startDragMouse_ = 0;
 
@@ -299,15 +291,15 @@ Blockly.Scrollbar.prototype.containerVisible_ = true;
  * Width of vertical scrollbar or height of horizontal scrollbar in CSS pixels.
  * Scrollbars should be larger on touch devices.
  */
-Blockly.Scrollbar.scrollbarThickness = 15;
+Blockly.Scrollbar.scrollbarThickness = 8;
 if (Blockly.Touch.TOUCH_ENABLED) {
-  Blockly.Scrollbar.scrollbarThickness = 25;
+  Blockly.Scrollbar.scrollbarThickness = 8;
 }
 
 /**
- * @param {!Object} first An object containing computed measurements of a
+ * @param {Object} first An object containing computed measurements of a
  *    workspace.
- * @param {!Object} second Another object containing computed measurements of a
+ * @param {Object} second Another object containing computed measurements of a
  *    workspace.
  * @return {boolean} Whether the two sets of metrics are equivalent.
  * @private
@@ -359,6 +351,7 @@ Blockly.Scrollbar.prototype.dispose = function() {
  * Set the length of the scrollbar's handle and change the SVG attribute
  * accordingly.
  * @param {number} newLength The new scrollbar handle length in CSS pixels.
+ * @private
  */
 Blockly.Scrollbar.prototype.setHandleLength_ = function(newLength) {
   this.handleLength_ = newLength;
@@ -620,14 +613,17 @@ Blockly.Scrollbar.prototype.createDom_ = function(opt_class) {
   this.svgHandle_ = Blockly.utils.dom.createSvgElement(
       'rect',
       {
-        'class': 'blocklyScrollbarHandle',
+        'class': this.scrollbarHandlerClass ? this.scrollbarHandlerClass : 'blocklyScrollbarHandle',
         'rx': radius,
         'ry': radius
       },
       this.svgGroup_);
-  this.workspace_.getThemeManager().subscribe(this.svgHandle_, 'scrollbar', 'fill');
-  this.workspace_.getThemeManager().subscribe(this.svgHandle_, 'scrollbarOpacity', 'fill-opacity');
-  Blockly.utils.dom.insertAfter(this.outerSvg_, this.workspace_.getParentSvg());
+  this.workspace_.getThemeManager().subscribe(
+      this.svgHandle_, 'scrollbarColour', 'fill');
+  this.workspace_.getThemeManager().subscribe(
+      this.svgHandle_, 'scrollbarOpacity', 'fill-opacity');
+  Blockly.utils.dom.insertAfter(this.outerSvg_,
+      this.workspace_.getParentSvg());
 };
 
 /**
@@ -709,7 +705,8 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
     e.stopPropagation();
     return;
   }
-  var mouseXY = Blockly.utils.mouseToSvg(e, this.workspace_.getParentSvg(),
+  var mouseXY = Blockly.utils.mouseToSvg(e,
+      this.workspace_.getParentSvg(),
       this.workspace_.getInverseScreenCTM());
   var mouseLocation = this.horizontal_ ? mouseXY.x : mouseXY.y;
 

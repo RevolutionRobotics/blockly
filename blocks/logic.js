@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2012 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -554,14 +543,14 @@ Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN = {
     var blockB = this.getInputTargetBlock('B');
     // Disconnect blocks that existed prior to this change if they don't match.
     if (blockA && blockB &&
-        !blockA.outputConnection.checkType_(blockB.outputConnection)) {
+        !blockA.outputConnection.checkType(blockB.outputConnection)) {
       // Mismatch between two inputs.  Revert the block connections,
       // bumping away the newly connected block(s).
       Blockly.Events.setGroup(e.group);
       var prevA = this.prevBlocks_[0];
       if (prevA !== blockA) {
         blockA.unplug();
-        if (prevA && !prevA.isShadow()) {
+        if (prevA && !prevA.isDisposed() && !prevA.isShadow()) {
           // The shadow block is automatically replaced during unplug().
           this.getInput('A').connection.connect(prevA.outputConnection);
         }
@@ -569,7 +558,7 @@ Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN = {
       var prevB = this.prevBlocks_[1];
       if (prevB !== blockB) {
         blockB.unplug();
-        if (prevB && !prevB.isShadow()) {
+        if (prevB && !prevB.isDisposed() && !prevB.isShadow()) {
           // The shadow block is automatically replaced during unplug().
           this.getInput('B').connection.connect(prevB.outputConnection);
         }
@@ -621,7 +610,7 @@ Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN = {
     if ((blockA || blockB) && parentConnection) {
       for (var i = 0; i < 2; i++) {
         var block = (i == 1) ? blockA : blockB;
-        if (block && !block.outputConnection.checkType_(parentConnection)) {
+        if (block && !block.outputConnection.checkType(parentConnection)) {
           // Ensure that any disconnections are grouped with the causing event.
           Blockly.Events.setGroup(e.group);
           if (parentConnection === this.prevParentConnection_) {

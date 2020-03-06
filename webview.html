@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<!-- HTML file to host Blockly in a mobile WebView. -->
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <!-- Auto generated from source -->
+  <script src="blockly_compressed.js"></script>
+  <script src="blocks_compressed.js"></script>
+  <!-- For real time generation -->
+  <script src="python_compressed.js"></script>
+  <!-- TODO: Select msg file based on locale. -->
+  <script src="msg/js/en.js"></script>
+  <script src="toolbox/toolboxes.js"></script>
+  <script src="toolbox/tabs.js"></script>
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <div id="blocklyDiv"></div>
+  <script>
+    var initialLevel = 1;
+    var workspace = Blockly.inject('blocklyDiv', {
+      toolbox: toolboxes['level' + initialLevel].xml,
+      media: './media/',
+      renderer: 'zelos',
+      sounds: false,
+      zoom:
+         {controls: false,
+          wheel: true,
+          startScale: 0.7,
+          maxScale: 3,
+          minScale: 0.3,
+          scaleSpeed: 1.2}
+    });
+
+    var METHOD_SIGNATURE = {
+      LOAD_XML_PROGRAM: 'NativeBridge.loadXMLProgram', // Native -> JS, xmlString: String
+      SAVE_PROGRAM: 'NativeBridge.saveProgram', // Native -> JS
+      CLEAR_WORKSPACE: 'NativeBridge.clearWorkspace', // Native -> JS
+      ON_XML_PROGRAM_SAVED: 'NativeBridge.onXMLProgramSaved', //  JS -> Native, xmlString: String
+      ON_PYTHON_PROGRAM_SAVED: 'NativeBridge.onPythonProgramSaved', //  JS -> Native, pythonString: String
+      ON_VARIABLES_EXPORTED: 'NativeBridge.onVariablesExported' //  JS -> Native, variables: String in 'var1,var2,var3'
+    };
+
+    var NAME_INPUT_BLOCK_TYPES = [
+      'block_motor',
+      'block_stop_motor',
+      'spin_motor',
+      'block_ultrasonic_sensor',
+      'block_bumper'
+    ]
+
+    var iosUserAgents = [ 'iPhone', 'iPad', 'iPod' ];
+    var iOSBlocklyBrowser = iosUserAgents.indexOf(window.navigator.userAgent) !== -1;
+
+    function getNameInputValues() {
+      return NAME_INPUT_BLOCK_TYPES
+        .map(function (blockType) {
+          var blocks = workspace.getBlocksByType(blockType);
+          return blocks
+            .map(function (block) {
+              return block.getFieldValue('NAME_INPUT');
+            })
+            .filter(function (name) {
+              return name !== ''
+            })
+            .join();
+        })
+        .filter(function (nameInput) {
+          return nameInput !== ''
+        })
+        .join();
+    }
+
+    function createIOSJavascriptBridge(callback) {
+      if (iOSBlocklyBrowser) {
+        if (window.WKWebViewJavascriptBridge) {
+          return callback(WKWebViewJavascriptBridge)
+        }
+        if (window.WKWVJBCallbacks) {
+          return window.WKWVJBCallbacks.push(callback)
+        }
+        window.WKWVJBCallbacks = [callback]
+        window.webkit.messageHandlers.iOS_Native_InjectJavascript.postMessage(null)
+      }
+    }
+
+    function redraw() {
+      var workspace = Blockly.mainWorkspace;
+
+      var childBlock = workspace.newBlock('text');
+      childBlock.setFieldValue('Loading...', 'TEXT');
+      childBlock.initSvg();
+      childBlock.render();
+
+      setTimeout(() => {
+        workspace.clear();
+      });
+    };
+
+    window.addEventListener('load', (event) => {
+      redraw();
+    });
+
+    function loadXMLProgram(xmlString) {
+      var xml = Blockly.Xml.textToDom(xmlString);
+      Blockly.mainWorkspace.clear();
+      Blockly.Xml.domToWorkspace(xml, Blockly.mainWorkspace);
+    };
+
+    function saveProgram() {
+      saveProgramWithBridge()
+    };
+
+    function saveProgramWithBridge(bridge) {
+      var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+      var xmlText = Blockly.Xml.domToText(xml);
+      var variables = getNameInputValues();
+      var pythonCode = Blockly.Python.workspaceToCode(Blockly.mainWorkspace);
+
+      if (iOSBlocklyBrowser && bridge) {
+        bridge.callHandler(METHOD_SIGNATURE.ON_PYTHON_PROGRAM_SAVED, {
+          parameter: pythonCode
+        })
+        bridge.callHandler(METHOD_SIGNATURE.ON_XML_PROGRAM_SAVED, {
+          parameter: xmlText
+        })
+        bridge.callHandler(METHOD_SIGNATURE.ON_VARIABLES_EXPORTED, {
+          parameter: variables
+        })
+        return
+      }
+
+      NativeBridge.onXMLProgramSaved(xmlText);
+      NativeBridge.onPythonProgramSaved(pythonCode);
+      NativeBridge.onVariablesExported(variables);
+    }
+
+    function clearWorkspace() {
+      Blockly.mainWorkspace.clear();
+    }
+
+    function closeToolbox() {
+      Blockly.mainWorkspace.toolbox_.flyout_.hide();
+      restoreCategories();
+    }
+
+    function restoreCategories() {
+      var elements = document.getElementsByClassName('blocklyTreeRow blocklyTreeSelected');
+
+      [].forEach.call(elements, function (el) {
+        el.classList.remove("blocklyTreeSelected");
+        el.style.removeProperty("background-color");
+      });
+    }
+
+    createIOSJavascriptBridge(function (bridge) {
+      bridge.registerHandler(METHOD_SIGNATURE.LOAD_XML_PROGRAM, function (xmlString) {
+        loadXMLProgram(xmlString)
+      })
+
+      bridge.registerHandler(METHOD_SIGNATURE.SAVE_PROGRAM, function () {
+        saveProgramWithBridge(bridge)
+      })
+
+      bridge.registerHandler(METHOD_SIGNATURE.CLEAR_WORKSPACE, function () {
+        clearWorkspace()
+      })
+    });
+
+    renderTabs(initialLevel);
+
+  </script>
+</body>
+
+</html>

@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -30,11 +19,19 @@ goog.require('Blockly.Theme');
 
 /**
  * Class for storing and updating a workspace's theme and UI components.
+ * @param {!Blockly.WorkspaceSvg} workspace The main workspace.
  * @param {!Blockly.Theme} theme The workspace theme.
  * @constructor
  * @package
  */
-Blockly.ThemeManager = function(theme) {
+Blockly.ThemeManager = function(workspace, theme) {
+
+  /**
+   * The main workspace.
+   * @type {!Blockly.WorkspaceSvg}
+   * @private
+   */
+  this.workspace_ = workspace;
 
   /**
    * The Blockly theme to use.
@@ -82,12 +79,17 @@ Blockly.ThemeManager.prototype.getTheme = function() {
  * @package
  */
 Blockly.ThemeManager.prototype.setTheme = function(theme) {
-  if (this.theme_ === theme) {
-    // No change.
-    return;
-  }
-
+  var prevTheme = this.theme_;
   this.theme_ = theme;
+
+  // Set the theme name onto the injection div.
+  var injectionDiv = this.workspace_.getInjectionDiv();
+  if (injectionDiv) {
+    if (prevTheme) {
+      Blockly.utils.dom.removeClass(injectionDiv, prevTheme.name + '-theme');
+    }
+    Blockly.utils.dom.addClass(injectionDiv, this.theme_.name + '-theme');
+  }
 
   // Refresh all subscribed workspaces.
   for (var i = 0, workspace; (workspace = this.subscribedWorkspaces_[i]); i++) {
@@ -96,7 +98,7 @@ Blockly.ThemeManager.prototype.setTheme = function(theme) {
 
   // Refresh all registered Blockly UI components.
   for (var i = 0, keys = Object.keys(this.componentDB_),
-    key; key = keys[i]; i++) {
+    key; (key = keys[i]); i++) {
     for (var j = 0, component; (component = this.componentDB_[key][j]); j++) {
       var element = component.element;
       var propertyName = component.propertyName;
@@ -104,6 +106,8 @@ Blockly.ThemeManager.prototype.setTheme = function(theme) {
       element.style[propertyName] = style || '';
     }
   }
+
+  Blockly.hideChaff();
 };
 
 /**

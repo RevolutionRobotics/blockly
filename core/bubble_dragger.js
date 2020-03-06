@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2018 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -92,6 +81,7 @@ Blockly.BubbleDragger = function(bubble, workspace) {
 /**
  * Sever all links from this object.
  * @package
+ * @suppress {checkTypes}
  */
 Blockly.BubbleDragger.prototype.dispose = function() {
   this.draggingBubble_ = null;
@@ -178,12 +168,12 @@ Blockly.BubbleDragger.prototype.updateCursorDuringBubbleDrag_ = function() {
   if (this.wouldDeleteBubble_) {
     this.draggingBubble_.setDeleteStyle(true);
     if (this.deleteArea_ == Blockly.DELETE_AREA_TRASH && trashcan) {
-      trashcan.setOpen_(true);
+      trashcan.setOpen(true);
     }
   } else {
     this.draggingBubble_.setDeleteStyle(false);
     if (trashcan) {
-      trashcan.setOpen_(false);
+      trashcan.setOpen(false);
     }
   }
 };
@@ -218,10 +208,10 @@ Blockly.BubbleDragger.prototype.endBubbleDrag = function(
   }
   this.workspace_.setResizesEnabled(true);
 
-  if (this.workspace_.toolbox_) {
+  if (this.workspace_.getToolbox()) {
     var style = this.draggingBubble_.isDeletable() ? 'blocklyToolboxDelete' :
         'blocklyToolboxGrab';
-    this.workspace_.toolbox_.removeStyle(style);
+    this.workspace_.getToolbox().removeStyle(style);
   }
   Blockly.Events.setGroup(false);
 };
@@ -232,7 +222,8 @@ Blockly.BubbleDragger.prototype.endBubbleDrag = function(
  */
 Blockly.BubbleDragger.prototype.fireMoveEvent_ = function() {
   if (this.draggingBubble_.isComment) {
-    var event = new Blockly.Events.CommentMove(this.draggingBubble_);
+    var event = new Blockly.Events.CommentMove(
+        /** @type {!Blockly.WorkspaceCommentSvg} */ (this.draggingBubble_));
     event.setOldCoordinate(this.startXY_);
     event.recordNew();
     Blockly.Events.fire(event);
@@ -265,6 +256,7 @@ Blockly.BubbleDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
   }
   return result;
 };
+
 /**
  * Move the bubble onto the drag surface at the beginning of a drag.  Move the
  * drag surface to preserve the apparent location of the bubble.

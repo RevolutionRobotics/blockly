@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 suite('Number Fields', function() {
@@ -247,11 +236,10 @@ suite('Number Fields', function() {
           numberField.setValue(123.456);
           assertValue(numberField, 123);
         });
-        test('null', function() {
+        test('Null', function() {
           var numberField = new Blockly.FieldNumber
               .fromJson({ precision: null});
-          numberField.setValue(123.456);
-          assertValue(numberField, 123.456);
+          assertEquals(numberField.getPrecision(), 0);
         });
       });
       suite('Min', function() {
@@ -282,11 +270,10 @@ suite('Number Fields', function() {
           numberField.setValue(20);
           assertValue(numberField, 20);
         });
-        test('null', function() {
+        test('Null', function() {
           var numberField = new Blockly.FieldNumber
               .fromJson({ min: null});
-          numberField.setValue(-20);
-          assertValue(numberField, -20);
+          assertEquals(numberField.getMin(), -Infinity);
         });
       });
       suite('Max', function() {
@@ -320,8 +307,7 @@ suite('Number Fields', function() {
         test('null', function() {
           var numberField = new Blockly.FieldNumber
               .fromJson({ max: null});
-          numberField.setValue(20);
-          assertValue(numberField, 20);
+          assertEquals(numberField.getMax(), Infinity);
         });
       });
     });
@@ -332,10 +318,14 @@ suite('Number Fields', function() {
       this.numberField.htmlInput_ = Object.create(null);
       this.numberField.htmlInput_.oldValue_ = '1';
       this.numberField.htmlInput_.untypedDefaultValue_ = 1;
+      this.stub = sinon.stub(this.numberField, 'resizeEditor_');
     });
     teardown(function() {
       this.numberField.setValidator(null);
       this.numberField.htmlInput_ = null;
+      if (this.stub) {
+        this.stub.restore();
+      }
     });
     suite('Null Validator', function() {
       setup(function() {

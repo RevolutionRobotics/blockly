@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -24,19 +13,30 @@
 goog.provide('Blockly.blockRendering.Renderer');
 
 goog.require('Blockly.blockRendering.ConstantProvider');
+goog.require('Blockly.blockRendering.MarkerSvg');
 goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.blockRendering.IPathObject');
 goog.require('Blockly.blockRendering.PathObject');
 goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.CursorSvg');
+goog.require('Blockly.InsertionMarkerManager');
+
+goog.requireType('Blockly.blockRendering.Debug');
 
 
 /**
  * The base class for a block renderer.
+ * @param {string} name The renderer name.
  * @package
  * @constructor
  */
-Blockly.blockRendering.Renderer = function() {
+Blockly.blockRendering.Renderer = function(name) {
+
+  /**
+   * The renderer name.
+   * @type {string}
+   * @package
+   */
+  this.name = name;
 
   /**
    * The renderer's constant provider.
@@ -89,6 +89,7 @@ Blockly.blockRendering.Renderer.prototype.makeDrawer_ = function(block, info) {
 /**
  * Create a new instance of the renderer's debugger.
  * @return {!Blockly.blockRendering.Debug} The renderer debugger.
+ * @suppress {strictModuleDepCheck} Debug renderer only included in playground.
  * @protected
  */
 Blockly.blockRendering.Renderer.prototype.makeDebugger_ = function() {
@@ -99,27 +100,31 @@ Blockly.blockRendering.Renderer.prototype.makeDebugger_ = function() {
 };
 
 /**
- * Create a new instance of the renderer's cursor drawer.
- * @param {!Blockly.WorkspaceSvg} workspace The workspace the cursor belongs to.
- * @param {boolean=} opt_marker True if the cursor is a marker. A marker is used
- *     to save a location and is an immovable cursor. False or undefined if the
- *     cursor is not a marker.
- * @return {!Blockly.CursorSvg} The cursor drawer.
+ * Create a new instance of the renderer's marker drawer.
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace the marker belongs to.
+ * @param {!Blockly.Marker} marker The marker.
+ * @return {!Blockly.blockRendering.MarkerSvg} The object in charge of drawing
+ *     the marker.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.makeCursorDrawer = function(
-    workspace, opt_marker) {
-  return new Blockly.CursorSvg(workspace, opt_marker);
+Blockly.blockRendering.Renderer.prototype.makeMarkerDrawer = function(
+    workspace, marker) {
+  return new Blockly.blockRendering.MarkerSvg(workspace, this.getConstants(), marker);
 };
 
 /**
  * Create a new instance of a renderer path object.
  * @param {!SVGElement} root The root SVG element.
+ * @param {!Blockly.Theme.BlockStyle} style The style object to use for
+ *     colouring.
  * @return {!Blockly.blockRendering.IPathObject} The renderer path object.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.makePathObject = function(root) {
-  return new Blockly.blockRendering.PathObject(root);
+Blockly.blockRendering.Renderer.prototype.makePathObject = function(root,
+    style) {
+  return new Blockly.blockRendering.PathObject(root, style,
+      /** @type {!Blockly.blockRendering.ConstantProvider} */ (this.constants_));
+
 };
 
 /**
@@ -133,6 +138,84 @@ Blockly.blockRendering.Renderer.prototype.getConstants = function() {
     /** @type {!Blockly.blockRendering.ConstantProvider} */
     (this.constants_));
 };
+
+/**
+ * Determine whether or not to highlight a connection.
+ * @param {Blockly.Connection} _conn The connection to determine whether or not
+ *     to highlight.
+ * @return {boolean} True if we should highlight the connection.
+ * @package
+ */
+Blockly.blockRendering.Renderer.prototype.shouldHighlightConnection =
+    function(_conn) {
+    /* eslint-disable indent */
+  return true;
+}; /* eslint-enable indent */
+
+/**
+ * Checks if an orphaned block can connect to the "end" of the topBlock's
+ * block-clump. If the clump is a row the end is the last input. If the clump
+ * is a stack, the end is the last next connection. If the clump is neither,
+ * then this returns false.
+ * @param {!Blockly.BlockSvg} topBlock The top block of the block clump we want to try and
+ *     connect to.
+ * @param {!Blockly.BlockSvg} orphanBlock The orphan block that wants to find
+ *     a home.
+ * @param {number} localType The type of the connection being dragged.
+ * @return {boolean} Whether there is a home for the orphan or not.
+ * @package
+ */
+Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
+    function(topBlock, orphanBlock, localType) {
+      var orphanConnection = null;
+      var lastConnection = null;
+      if (localType == Blockly.OUTPUT_VALUE) {  // We are replacing an output.
+        orphanConnection = orphanBlock.outputConnection;
+        // TODO:  I don't think this function necessarily has the correct logic,
+        //  but for now it is being kept for behavioral backwards-compat.
+        lastConnection = Blockly.Connection
+            .lastConnectionInRow(
+                /** @type {!Blockly.Block} **/ (topBlock), orphanBlock);
+      } else {  // We are replacing a previous.
+        orphanConnection = orphanBlock.previousConnection;
+        // TODO: This lives on the block while lastConnectionInRow lives on
+        //  on the connection. Something is fishy.
+        lastConnection = topBlock.lastConnectionInStack();
+      }
+
+      if (!lastConnection) {
+        return false;
+      }
+      return orphanConnection.checkType(lastConnection);
+    };
+
+/**
+ * Chooses a connection preview method based on the available connection, the
+ * current dragged connection, and the block being dragged.
+ * @param {!Blockly.RenderedConnection} closest The available connection.
+ * @param {!Blockly.RenderedConnection} local The connection currently being
+ *     dragged.
+ * @param {!Blockly.BlockSvg} topBlock The block currently being dragged.
+ * @return {!Blockly.InsertionMarkerManager.PREVIEW_TYPE} The preview type
+ *     to display.
+ * @package
+ */
+Blockly.blockRendering.Renderer.prototype.getConnectionPreviewMethod =
+    function(closest, local, topBlock) {
+      if (local.type == Blockly.OUTPUT_VALUE ||
+          local.type == Blockly.PREVIOUS_STATEMENT) {
+        if (!closest.isConnected() ||
+            this.orphanCanConnectAtEnd(
+                topBlock,
+                /** @type {!Blockly.BlockSvg} */ (closest.targetBlock()),
+                local.type)) {
+          return Blockly.InsertionMarkerManager.PREVIEW_TYPE.INSERTION_MARKER;
+        }
+        return Blockly.InsertionMarkerManager.PREVIEW_TYPE.REPLACEMENT_FADE;
+      }
+
+      return Blockly.InsertionMarkerManager.PREVIEW_TYPE.INSERTION_MARKER;
+    };
 
 /**
  * Render the block.

@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2011 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -31,13 +20,13 @@ goog.require('Blockly.Xml');
 
 /**
  * Class for a trash can.
- * @param {!Blockly.Workspace} workspace The workspace to sit in.
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace to sit in.
  * @constructor
  */
 Blockly.Trashcan = function(workspace) {
   /**
    * The workspace the trashcan sits in.
-   * @type {!Blockly.Workspace}
+   * @type {!Blockly.WorkspaceSvg}
    * @private
    */
   this.workspace_ = workspace;
@@ -49,19 +38,26 @@ Blockly.Trashcan = function(workspace) {
    */
   this.contents_ = [];
 
+  /**
+   * The trashcan flyout.
+   * @type {Blockly.Flyout}
+   * @package
+   */
+  this.flyout = null;
 
   if (this.workspace_.options.maxTrashcanContents <= 0) {
     return;
   }
   // Create flyout options.
-  var flyoutWorkspaceOptions = {
-    scrollbars: true,
-    disabledPatternId: this.workspace_.options.disabledPatternId,
-    parentWorkspace: this.workspace_,
-    RTL: this.workspace_.RTL,
-    oneBasedIndex: this.workspace_.options.oneBasedIndex,
-    renderer: this.workspace_.options.renderer
-  };
+  var flyoutWorkspaceOptions = new Blockly.Options(
+      /** @type {!Blockly.BlocklyOptions} */
+      ({
+        'scrollbars': true,
+        'parentWorkspace': this.workspace_,
+        'rtl': this.workspace_.RTL,
+        'oneBasedIndex': this.workspace_.options.oneBasedIndex,
+        'renderer': this.workspace_.options.renderer
+      }));
   // Create vertical or horizontal flyout.
   if (this.workspace_.horizontalLayout) {
     flyoutWorkspaceOptions.toolboxPosition =
@@ -70,7 +66,7 @@ Blockly.Trashcan = function(workspace) {
     if (!Blockly.HorizontalFlyout) {
       throw Error('Missing require for Blockly.HorizontalFlyout');
     }
-    this.flyout_ = new Blockly.HorizontalFlyout(flyoutWorkspaceOptions);
+    this.flyout = new Blockly.HorizontalFlyout(flyoutWorkspaceOptions);
   } else {
     flyoutWorkspaceOptions.toolboxPosition =
       this.workspace_.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT ?
@@ -78,63 +74,63 @@ Blockly.Trashcan = function(workspace) {
     if (!Blockly.VerticalFlyout) {
       throw Error('Missing require for Blockly.VerticalFlyout');
     }
-    this.flyout_ = new Blockly.VerticalFlyout(flyoutWorkspaceOptions);
+    this.flyout = new Blockly.VerticalFlyout(flyoutWorkspaceOptions);
   }
   this.workspace_.addChangeListener(this.onDelete_.bind(this));
 };
 
 /**
  * Width of both the trash can and lid images.
- * @type {number}
+ * @const {number}
  * @private
  */
 Blockly.Trashcan.prototype.WIDTH_ = 47;
 
 /**
  * Height of the trashcan image (minus lid).
- * @type {number}
+ * @const {number}
  * @private
  */
 Blockly.Trashcan.prototype.BODY_HEIGHT_ = 44;
 
 /**
  * Height of the lid image.
- * @type {number}
+ * @const {number}
  * @private
  */
 Blockly.Trashcan.prototype.LID_HEIGHT_ = 16;
 
 /**
  * Distance between trashcan and bottom edge of workspace.
- * @type {number}
+ * @const {number}
  * @private
  */
 Blockly.Trashcan.prototype.MARGIN_BOTTOM_ = 20;
 
 /**
  * Distance between trashcan and right edge of workspace.
- * @type {number}
+ * @const {number}
  * @private
  */
 Blockly.Trashcan.prototype.MARGIN_SIDE_ = 20;
 
 /**
  * Extent of hotspot on all sides beyond the size of the image.
- * @type {number}
+ * @const {number}
  * @private
  */
 Blockly.Trashcan.prototype.MARGIN_HOTSPOT_ = 10;
 
 /**
  * Location of trashcan in sprite image.
- * @type {number}
+ * @const {number}
  * @private
  */
 Blockly.Trashcan.prototype.SPRITE_LEFT_ = 0;
 
 /**
  * Location of trashcan in sprite image.
- * @type {number}
+ * @const {number}
  * @private
  */
 Blockly.Trashcan.prototype.SPRITE_TOP_ = 32;
@@ -142,10 +138,46 @@ Blockly.Trashcan.prototype.SPRITE_TOP_ = 32;
 /**
  * The openness of the lid when the trashcan contains blocks.
  *    (0.0 = closed, 1.0 = open)
- * @type {number}
+ * @const {number}
  * @private
  */
-Blockly.Trashcan.prototype.HAS_BLOCKS_LID_ANGLE = 0.1;
+Blockly.Trashcan.prototype.HAS_BLOCKS_LID_ANGLE_ = 0.1;
+
+/**
+ * The length of the open/close animation in milliseconds.
+ * @const {number}
+ * @private
+ */
+Blockly.Trashcan.ANIMATION_LENGTH_ = 80;
+
+/**
+ * The number of frames in the animation.
+ * @const {number}
+ * @private
+ */
+Blockly.Trashcan.ANIMATION_FRAMES_ = 4;
+
+/**
+ * The minimum (resting) opacity of the trashcan and lid.
+ * @const {number}
+ * @private
+ */
+Blockly.Trashcan.OPACITY_MIN_ = 0.4;
+
+/**
+ * The maximum (hovered) opacity of the trashcan and lid.
+ * @const {number}
+ * @private
+ */
+Blockly.Trashcan.OPACITY_MAX_ = 0.8;
+
+/**
+ * The maximum angle the trashcan lid can opens to. At the end of the open
+ * animation the lid will be open to this angle.
+ * @const {number}
+ * @private
+ */
+Blockly.Trashcan.MAX_LID_ANGLE_ = 45;
 
 /**
  * Current open/close state of the lid.
@@ -284,24 +316,20 @@ Blockly.Trashcan.prototype.createDom = function() {
  */
 Blockly.Trashcan.prototype.init = function(verticalSpacing) {
   if (this.workspace_.options.maxTrashcanContents > 0) {
-    Blockly.utils.dom.insertAfter(this.flyout_.createDom('svg'),
+    Blockly.utils.dom.insertAfter(this.flyout.createDom('svg'),
         this.workspace_.getParentSvg());
-    this.flyout_.init(this.workspace_);
-    this.flyout_.isBlockCreatable_ = function() {
-      // All blocks, including disabled ones, can be dragged from the
-      // trashcan flyout.
-      return true;
-    };
+    this.flyout.init(this.workspace_);
   }
 
   this.verticalSpacing_ = this.MARGIN_BOTTOM_ + verticalSpacing;
-  this.setOpen_(false);
+  this.setOpen(false);
   return this.verticalSpacing_ + this.BODY_HEIGHT_ + this.LID_HEIGHT_;
 };
 
 /**
  * Dispose of this trash can.
  * Unlink from all DOM elements to prevent memory leaks.
+ * @suppress {checkTypes}
  */
 Blockly.Trashcan.prototype.dispose = function() {
   if (this.svgGroup_) {
@@ -311,6 +339,29 @@ Blockly.Trashcan.prototype.dispose = function() {
   this.svgLid_ = null;
   this.workspace_ = null;
   clearTimeout(this.lidTask_);
+};
+
+/**
+ * Returns true if the trashcan contents-flyout is currently open.
+ * @return {boolean} True if the trashcan contents-flyout is currently open.
+ */
+Blockly.Trashcan.prototype.contentsIsOpen = function() {
+  return this.flyout.isVisible();
+};
+
+/**
+ * Empties the trashcan's contents. If the contents-flyout is currently open
+ * it will be closed.
+ */
+Blockly.Trashcan.prototype.emptyContents = function() {
+  if (!this.contents_.length) {
+    return;
+  }
+  this.contents_.length = 0;
+  this.setMinOpenness_(0);
+  if (this.contentsIsOpen()) {
+    this.flyout.hide();
+  }
 };
 
 /**
@@ -370,9 +421,9 @@ Blockly.Trashcan.prototype.getClientRect = function() {
 /**
  * Flip the lid open or shut.
  * @param {boolean} state True if open.
- * @private
+ * @package
  */
-Blockly.Trashcan.prototype.setOpen_ = function(state) {
+Blockly.Trashcan.prototype.setOpen = function(state) {
   if (this.isOpen == state) {
     return;
   }
@@ -386,14 +437,23 @@ Blockly.Trashcan.prototype.setOpen_ = function(state) {
  * @private
  */
 Blockly.Trashcan.prototype.animateLid_ = function() {
-  this.lidOpen_ += this.isOpen ? 0.2 : -0.2;
+  var frames = Blockly.Trashcan.ANIMATION_FRAMES_;
+
+  var delta = 1 / (frames + 1);
+  this.lidOpen_ += this.isOpen ? delta : -delta;
   this.lidOpen_ = Math.min(Math.max(this.lidOpen_, this.minOpenness_), 1);
-  this.setLidAngle_(this.lidOpen_ * 45);
-  // Linear interpolation between 0.4 and 0.8.
-  var opacity = 0.4 + this.lidOpen_ * (0.8 - 0.4);
+
+  this.setLidAngle_(this.lidOpen_ * Blockly.Trashcan.MAX_LID_ANGLE_);
+
+  var minOpacity = Blockly.Trashcan.OPACITY_MIN_;
+  var maxOpacity = Blockly.Trashcan.OPACITY_MAX_;
+  // Linear interpolation between min and max.
+  var opacity = minOpacity + this.lidOpen_ * (maxOpacity - minOpacity);
   this.svgGroup_.style.opacity = opacity;
+
   if (this.lidOpen_ > this.minOpenness_ && this.lidOpen_ < 1) {
-    this.lidTask_ = setTimeout(this.animateLid_.bind(this), 20);
+    this.lidTask_ = setTimeout(this.animateLid_.bind(this),
+        Blockly.Trashcan.ANIMATION_LENGTH_ / frames);
   }
 };
 
@@ -412,11 +472,25 @@ Blockly.Trashcan.prototype.setLidAngle_ = function(lidAngle) {
 };
 
 /**
+ * Sets the minimum openness of the trashcan lid. If the lid is currently
+ * closed, this will update lid's position.
+ * @param {number} newMin The new minimum openness of the lid. Should be between
+ *     0 and 1.
+ * @private
+ */
+Blockly.Trashcan.prototype.setMinOpenness_ = function(newMin) {
+  this.minOpenness_ = newMin;
+  if (!this.isOpen) {
+    this.setLidAngle_(newMin * Blockly.Trashcan.MAX_LID_ANGLE_);
+  }
+};
+
+/**
  * Flip the lid shut.
  * Called externally after a drag.
  */
 Blockly.Trashcan.prototype.close = function() {
-  this.setOpen_(false);
+  this.setOpen(false);
 };
 
 /**
@@ -428,10 +502,15 @@ Blockly.Trashcan.prototype.click = function() {
   }
 
   var xml = [];
-  for (var i = 0, text; text = this.contents_[i]; i++) {
+  for (var i = 0, text; (text = this.contents_[i]); i++) {
     xml[i] = Blockly.Xml.textToDom(text);
   }
-  this.flyout_.show(xml);
+  // TODO: Localize remove 'Loading...' element
+  xml = xml.filter(function(element) {
+    return element.textContent !== 'Loading...';
+  });
+
+  this.flyout.show(xml);
 };
 
 /**
@@ -440,7 +519,7 @@ Blockly.Trashcan.prototype.click = function() {
  */
 Blockly.Trashcan.prototype.mouseOver_ = function() {
   if (this.contents_.length) {
-    this.setOpen_(true);
+    this.setOpen(true);
   }
 };
 
@@ -451,8 +530,8 @@ Blockly.Trashcan.prototype.mouseOver_ = function() {
  */
 Blockly.Trashcan.prototype.mouseOut_ = function() {
   // No need to do a .hasBlocks check here because if it doesn't the trashcan
-  // wont be open in the first place, and setOpen_ won't run.
-  this.setOpen_(false);
+  // won't be open in the first place, and setOpen won't run.
+  this.setOpen(false);
 };
 
 /**
@@ -476,8 +555,7 @@ Blockly.Trashcan.prototype.onDelete_ = function(event) {
       this.contents_.pop();
     }
 
-    this.minOpenness_ = this.HAS_BLOCKS_LID_ANGLE;
-    this.setLidAngle_(this.minOpenness_ * 45);
+    this.setMinOpenness_(this.HAS_BLOCKS_LID_ANGLE_);
   }
 };
 
@@ -501,6 +579,12 @@ Blockly.Trashcan.prototype.cleanBlockXML_ = function(xml) {
       node.removeAttribute('x');
       node.removeAttribute('y');
       node.removeAttribute('id');
+      node.removeAttribute('disabled');
+      if (node.nodeName == 'comment') {  // Future proof just in case.
+        node.removeAttribute('h');
+        node.removeAttribute('w');
+        node.removeAttribute('pinned');
+      }
     }
 
     // Try to go down the tree

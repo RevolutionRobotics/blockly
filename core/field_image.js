@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2012 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -115,6 +104,13 @@ Blockly.FieldImage = function(src, width, height,
   if (typeof opt_onClick == 'function') {
     this.clickHandler_ = opt_onClick;
   }
+
+  /**
+   * The rendered field's image element.
+   * @type {SVGImageElement}
+   * @private
+   */
+  this.imageElement_ = null;
 };
 Blockly.utils.object.inherits(Blockly.FieldImage, Blockly.Field);
 
@@ -173,16 +169,21 @@ Blockly.FieldImage.prototype.configure_ = function(config) {
  * @package
  */
 Blockly.FieldImage.prototype.initView = function() {
-  this.imageElement_ = Blockly.utils.dom.createSvgElement(
-      'image',
-      {
-        'height': this.imageHeight_ + 'px',
-        'width': this.size_.width + 'px',
-        'alt': this.altText_
-      },
-      this.fieldGroup_);
+  this.imageElement_ = /** @type {!SVGImageElement} */
+      (Blockly.utils.dom.createSvgElement(
+          'image',
+          {
+            'height': this.imageHeight_ + 'px',
+            'width': this.size_.width + 'px',
+            'alt': this.altText_
+          },
+          this.fieldGroup_));
   this.imageElement_.setAttributeNS(Blockly.utils.dom.XLINK_NS,
       'xlink:href', /** @type {string} */ (this.value_));
+
+  if (this.clickHandler_) {
+    this.imageElement_.style.cursor = 'pointer';
+  }
 };
 
 /**
@@ -208,7 +209,7 @@ Blockly.FieldImage.prototype.doValueUpdate_ = function(newValue) {
   this.value_ = newValue;
   if (this.imageElement_) {
     this.imageElement_.setAttributeNS(Blockly.utils.dom.XLINK_NS,
-        'xlink:href', this.value_ || '');
+        'xlink:href', String(this.value_));
   }
 };
 
@@ -239,6 +240,7 @@ Blockly.FieldImage.prototype.setAlt = function(alt) {
 /**
  * If field click is called, and click handler defined,
  * call the handler.
+ * @protected
  */
 Blockly.FieldImage.prototype.showEditor_ = function() {
   if (this.clickHandler_) {

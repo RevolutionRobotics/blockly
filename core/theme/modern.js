@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2018 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -56,7 +45,7 @@ Blockly.Themes.Modern.defaultBlockStyles = {
     "colourTertiary": "#495284"
   },
   "procedure_blocks": {
-    "colourPrimary": "#995ba5",
+    "colourPrimary": "#6ab3c1",
     "colourSecondary": "#d6bddb",
     "colourTertiary": "#7a4984"
   },
@@ -66,12 +55,12 @@ Blockly.Themes.Modern.defaultBlockStyles = {
     "colourTertiary": "#498470"
   },
   "variable_blocks": {
-    "colourPrimary": "#a55b99",
+    "colourPrimary": "#cc7be6",
     "colourSecondary": "#dbbdd6",
     "colourTertiary": "#84497a"
   },
   "variable_dynamic_blocks": {
-    "colourPrimary": "#a55b99",
+    "colourPrimary": "#cc7be6",
     "colourSecondary": "#dbbdd6",
     "colourTertiary": "#84497a"
   },
@@ -100,20 +89,20 @@ Blockly.Themes.Modern.categoryStyles = {
     "colour": "#5b67a5"
   },
   "procedure_category": {
-    "colour": "#995ba5"
+    "colour": "#6ab3c1",
   },
   "text_category": {
     "colour": "#5ba58c"
   },
   "variable_category": {
-    "colour": "#a55b99"
+    "colour": "#cc7be6",
   },
-  "variable_dynamic_category": {
-    "colour": "#a55b99"
+  "variable_dynamic_category":{
+    "colour": "#cc7be6",
   }
 };
 
 // This style is still being fleshed out and may change.
 Blockly.Themes.Modern =
-    new Blockly.Theme(Blockly.Themes.Modern.defaultBlockStyles,
+    new Blockly.Theme('modern', Blockly.Themes.Modern.defaultBlockStyles,
         Blockly.Themes.Modern.categoryStyles);

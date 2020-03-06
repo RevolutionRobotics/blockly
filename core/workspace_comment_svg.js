@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2017 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -23,6 +12,7 @@
 
 goog.provide('Blockly.WorkspaceCommentSvg');
 
+goog.require('Blockly.Css');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.CommentCreate');
 goog.require('Blockly.Events.CommentDelete');
@@ -49,6 +39,21 @@ goog.require('Blockly.WorkspaceComment');
  */
 Blockly.WorkspaceCommentSvg = function(workspace, content, height, width,
     opt_id) {
+
+  /**
+   * Mouse up event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onMouseUpWrapper_ = null;
+
+  /**
+   * Mouse move event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onMouseMoveWrapper_ = null;
+
   // Create core elements for the block.
   /**
    * @type {SVGElement}
@@ -170,9 +175,9 @@ Blockly.WorkspaceCommentSvg.prototype.pathMouseDown_ = function(e) {
 /**
  * Show the context menu for this workspace comment.
  * @param {!Event} e Mouse event.
- * @private
+ * @package
  */
-Blockly.WorkspaceCommentSvg.prototype.showContextMenu_ = function(e) {
+Blockly.WorkspaceCommentSvg.prototype.showContextMenu = function(e) {
   if (this.workspace.options.readOnly) {
     return;
   }
@@ -343,9 +348,9 @@ Blockly.WorkspaceCommentSvg.prototype.translate = function(x, y) {
  * Move this comment to its workspace's drag surface, accounting for
  * positioning.  Generally should be called at the same time as
  * setDragging(true).  Does nothing if useDragSurface_ is false.
- * @private
+ * @package
  */
-Blockly.WorkspaceCommentSvg.prototype.moveToDragSurface_ = function() {
+Blockly.WorkspaceCommentSvg.prototype.moveToDragSurface = function() {
   if (!this.useDragSurface_) {
     return;
   }
@@ -368,7 +373,7 @@ Blockly.WorkspaceCommentSvg.prototype.moveToDragSurface_ = function() {
  *     on the workspace canvas, in workspace coordinates.
  * @private
  */
-Blockly.WorkspaceCommentSvg.prototype.moveOffDragSurface_ = function(newXY) {
+Blockly.WorkspaceCommentSvg.prototype.moveOffDragSurface = function(newXY) {
   if (!this.useDragSurface_) {
     return;
   }
@@ -465,6 +470,17 @@ Blockly.WorkspaceCommentSvg.prototype.updateMovable = function() {
 Blockly.WorkspaceCommentSvg.prototype.setMovable = function(movable) {
   Blockly.WorkspaceCommentSvg.superClass_.setMovable.call(this, movable);
   this.updateMovable();
+};
+
+/**
+ * Set whether this comment is editable or not.
+ * @param {boolean} editable True if editable.
+ */
+Blockly.WorkspaceCommentSvg.prototype.setEditable = function(editable) {
+  Blockly.WorkspaceCommentSvg.superClass_.setEditable.call(this, editable);
+  if (this.textarea_) {
+    this.textarea_.readOnly = !editable;
+  }
 };
 
 /**
@@ -595,3 +611,68 @@ Blockly.WorkspaceCommentSvg.prototype.toXmlWithXY = function(opt_noId) {
   element.setAttribute('w', this.getWidth());
   return element;
 };
+
+/**
+ * CSS for workspace comment.  See css.js for use.
+ */
+Blockly.Css.register([
+  /* eslint-disable indent */
+  '.blocklyCommentForeignObject {',
+    'position: relative;',
+    'z-index: 0;',
+  '}',
+
+  '.blocklyCommentRect {',
+    'fill: #E7DE8E;',
+    'stroke: #bcA903;',
+    'stroke-width: 1px',
+  '}',
+
+  '.blocklyCommentTarget {',
+    'fill: transparent;',
+    'stroke: #bcA903;',
+  '}',
+
+  '.blocklyCommentTargetFocused {',
+    'fill: none;',
+  '}',
+
+  '.blocklyCommentHandleTarget {',
+    'fill: none;',
+  '}',
+
+  '.blocklyCommentHandleTargetFocused {',
+    'fill: transparent;',
+  '}',
+
+  '.blocklyFocused>.blocklyCommentRect {',
+    'fill: #B9B272;',
+    'stroke: #B9B272;',
+  '}',
+
+  '.blocklySelected>.blocklyCommentTarget {',
+    'stroke: #fc3;',
+    'stroke-width: 3px;',
+  '}',
+
+  '.blocklyCommentDeleteIcon {',
+    'cursor: pointer;',
+    'fill: #000;',
+    'display: none',
+  '}',
+
+  '.blocklySelected > .blocklyCommentDeleteIcon {',
+    'display: block',
+  '}',
+
+  '.blocklyDeleteIconShape {',
+    'fill: #000;',
+    'stroke: #000;',
+    'stroke-width: 1px;',
+  '}',
+
+  '.blocklyDeleteIconShape.blocklyDeleteIconHighlighted {',
+    'stroke: #fc3;',
+  '}'
+  /* eslint-enable indent */
+]);

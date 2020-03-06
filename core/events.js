@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2016 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -194,7 +183,7 @@ Blockly.Events.fire = function(event) {
 Blockly.Events.fireNow_ = function() {
   var queue = Blockly.Events.filter(Blockly.Events.FIRE_QUEUE_, true);
   Blockly.Events.FIRE_QUEUE_.length = 0;
-  for (var i = 0, event; event = queue[i]; i++) {
+  for (var i = 0, event; (event = queue[i]); i++) {
     if (!event.workspaceId) {
       continue;
     }
@@ -220,7 +209,7 @@ Blockly.Events.filter = function(queueIn, forward) {
   var mergedQueue = [];
   var hash = Object.create(null);
   // Merge duplicates.
-  for (var i = 0, event; event = queue[i]; i++) {
+  for (var i = 0, event; (event = queue[i]); i++) {
     if (!event.isNull()) {
       var key = [event.type, event.blockId, event.workspaceId].join(' ');
 
@@ -266,7 +255,7 @@ Blockly.Events.filter = function(queueIn, forward) {
   }
   // Move mutation events to the top of the queue.
   // Intentionally skip first event.
-  for (var i = 1, event; event = queue[i]; i++) {
+  for (var i = 1, event; (event = queue[i]); i++) {
     if (event.type == Blockly.Events.CHANGE &&
         event.element == 'mutation') {
       queue.unshift(queue.splice(i, 1)[0]);
@@ -280,7 +269,7 @@ Blockly.Events.filter = function(queueIn, forward) {
  * in the undo stack.  Called by Blockly.Workspace.clearUndo.
  */
 Blockly.Events.clearPendingUndo = function() {
-  for (var i = 0, event; event = Blockly.Events.FIRE_QUEUE_[i]; i++) {
+  for (var i = 0, event; (event = Blockly.Events.FIRE_QUEUE_[i]); i++) {
     event.recordUndo = false;
   }
 };
@@ -338,7 +327,7 @@ Blockly.Events.setGroup = function(state) {
 Blockly.Events.getDescendantIds = function(block) {
   var ids = [];
   var descendants = block.getDescendants(false);
-  for (var i = 0, descendant; descendant = descendants[i]; i++) {
+  for (var i = 0, descendant; (descendant = descendants[i]); i++) {
     ids[i] = descendant.id;
   }
   return ids;
@@ -390,6 +379,9 @@ Blockly.Events.fromJson = function(json, workspace) {
     case Blockly.Events.COMMENT_DELETE:
       event = new Blockly.Events.CommentDelete(null);
       break;
+    case Blockly.Events.FINISHED_LOADING:
+      event = new Blockly.Events.FinishedLoading(workspace);
+      break;
     default:
       throw Error('Unknown event type.');
   }
@@ -417,7 +409,7 @@ Blockly.Events.disableOrphans = function(event) {
       var parent = block.getParent();
       if (parent && parent.isEnabled()) {
         var children = block.getDescendants(false);
-        for (var i = 0, child; child = children[i]; i++) {
+        for (var i = 0, child; (child = children[i]); i++) {
           child.setEnabled(true);
         }
       } else if ((block.outputConnection || block.previousConnection) &&
