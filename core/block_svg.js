@@ -727,7 +727,7 @@ Blockly.BlockSvg.prototype.generateContextMenu = function() {
           break;
 
         case ACTION_TYPE.DUPLICATE_BLOCK:
-          Blockly.duplicate_(block);
+          Blockly.duplicate(block);
           break;
 
         case ACTION_TYPE.HELP:
