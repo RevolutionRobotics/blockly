@@ -56,3 +56,22 @@ Blockly.Blocks['block_bumper'] = {
     this.setHelpUrl('');
   }
 };
+
+Blockly.Blocks['block_on_button_pressed'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField(new Blockly.FieldImage(CUSTOM_IMAGES.BUMPER, 15, 15, '*'), 'BUMPER_IMAGE')
+      .appendField('always when')
+      .appendField(new Blockly.FieldTextInput('button'), 'NAME_INPUT')
+      .appendField('is pressed');
+    this.appendStatementInput('STATEMENT')
+      .setCheck(null)
+      .appendField('do');
+    this.setInputsInline(false);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(false, null);
+    this.setStyle('sensor_blocks');
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};
