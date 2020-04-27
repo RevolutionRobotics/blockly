@@ -18,6 +18,9 @@ toolboxes["level1"] = {
         '    <block type="block_turn_left_180"></block>' +
         '    <block type="block_turn_right_180"></block>' +
         '</category>'+
+        '<category name="sensors" colour="#f8bc08">' +
+        '    <block type="block_on_button_pressed"></block>' +
+        '</category>' +
         '<category name="lights" colour="#e51777">' +
         '    <block type="block_set_leds_white"></block>' +
         '    <block type="block_set_leds_red"></block>' +
@@ -41,6 +44,7 @@ toolboxes["level1"] = {
         '</xml>',
     icons: [
         'motorIcon',
+        'sensorIcon',
         'lightIcon',
         'soundIcon',
         'timeIcon'
